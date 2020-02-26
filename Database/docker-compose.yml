@@ -8,7 +8,7 @@ services:
       - POSTGRES_USER=Giraf
       - POSTGRES_PASSWORD=Giraf123
       - POSTGRES_DB=giraf
-      - PG_REP_USER=Rep
+      - PG_REP_USER=rep
       - PG_REP_PASSWORD=Rep123
     ports:
       - 5432:5432
@@ -22,7 +22,7 @@ services:
       - POSTGRES_USER=Giraf
       - POSTGRES_PASSWORD=Giraf123
       - POSTGRES_DB=giraf
-      - PG_REP_USER=Rep
+      - PG_REP_USER=rep
       - PG_REP_PASSWORD=Rep123
       - PG_MASTER_HOST=pg_master
     networks:
