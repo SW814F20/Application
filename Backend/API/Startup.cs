@@ -32,7 +32,23 @@ namespace API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "App Planner API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "App Planner API",
+                    Version = "v1",
+                    Description = "Dotnet core 3.1 Web API for the App Planner App",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "SW814F20",
+                        Email = "SW814F20@cs.aau.dk",
+                        Url = new Uri("https://github.com/SW814F20"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "GNU General Public License, version 2",
+                        Url = new Uri("https://www.gnu.org/licenses/old-licenses/gpl-2.0.html"),
+                    }
+                });
             });
             services.AddDbContext<APIContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
