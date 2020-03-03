@@ -14,12 +14,13 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   injector: ^1.0.6
   rxdart: ^0.21.0
   auto_size_text: ^1.1.1
+  font_awesome_flutter: ^8.7.0
   flutter:
     sdk: flutter
 

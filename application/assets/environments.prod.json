@@ -1,4 +1,5 @@
 {
   "SERVER_HOST": "api_url",
-  "DEBUG": false
+  "DEBUG": false,
+  "MOCK": false
 }

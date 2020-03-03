@@ -1,3 +1,5 @@
+import 'package:application/blocs/ApplicationBloc.dart';
+import 'package:application/blocs/AuthenticationBloc.dart';
 import 'package:injector/injector.dart';
 import 'package:application/di.dart';
 import 'package:application/providers/environment_provider.dart' as environment;
@@ -10,6 +12,8 @@ class Bootstrap {
   /// NB:
   /// Singleton restricts the instantiation of a class to one 'single' instance
   static void register() {
+    bool mock() => environment.getVar<bool>('MOCK');
+
     /*
     di.registerSingleton((_) {
       return Api(environment.getVar('SERVER_HOST'));
@@ -19,5 +23,17 @@ class Bootstrap {
       return AuthBloc(i.getDependency<Api>());
     });
     */
+
+    di.registerSingleton((Injector i) {
+      return AuthenticationBloc();
+    });
+
+    di.registerSingleton((Injector i) {
+      ApplicationBloc bloc = new ApplicationBloc();
+      if (mock()) {
+        bloc.mockData();
+      }
+      return bloc;
+    });
   }
 }

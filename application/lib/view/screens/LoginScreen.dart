@@ -1,12 +1,21 @@
+import 'package:application/blocs/AuthenticationBloc.dart';
+import 'package:application/routes.dart';
+import 'package:application/view/screens/AppSelectionScreen.dart';
 import 'package:application/view/screens/BaseScreen.dart';
+import 'package:application/view/widgets/NotifyDIalog.dart';
 import 'package:flutter/material.dart';
 import 'package:application/providers/environment_provider.dart' as environment;
+import 'package:application/di.dart';
 
 class LoginScreen extends BaseScreen {
+  final AuthenticationBloc authenticationBloc =
+      di.getDependency<AuthenticationBloc>();
+
   Widget build(BuildContext context) {
+    this.context = context;
     return Scaffold(
       backgroundColor: Colors.orange,
-      body: this.body(context),
+      body: this.content(),
     );
   }
 
@@ -17,14 +26,16 @@ class LoginScreen extends BaseScreen {
   final TextEditingController passwordCtrl = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  @override
-  Widget body(BuildContext context) {
+
+  Widget content() {
     return Center(
       child: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-            child: this.isKeyboardShown(context)
+            padding: this.isInLandscapemode()
+                ? EdgeInsets.fromLTRB(0, 10, 0, 0)
+                : EdgeInsets.fromLTRB(0, 100, 0, 0),
+            child: this.isKeyboardShown()
                 ? Container()
                 : Image(
                     image: AssetImage('assets/giraf_splash_logo.png'),
@@ -40,7 +51,7 @@ class LoginScreen extends BaseScreen {
                     child: Column(
                       children: <Widget>[
                         Padding(
-                          padding: this.isInPortraitMode(context)
+                          padding: this.isInPortraitMode()
                               ? const EdgeInsets.fromLTRB(0, 20, 0, 10)
                               : const EdgeInsets.fromLTRB(0, 0, 0, 5),
                           child: Container(
@@ -104,6 +115,7 @@ class LoginScreen extends BaseScreen {
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
+                                  this.loginAttempt(context);
                                   // This is where the action for the submit happens
                                 },
                                 color: const Color.fromRGBO(48, 81, 118, 1),
@@ -146,5 +158,41 @@ class LoginScreen extends BaseScreen {
         ],
       ),
     );
+  }
+
+  void loginAttempt(BuildContext context) {
+    String username = this.usernameCtrl.text;
+    String password = this.passwordCtrl.text;
+    authenticationBloc.login(username, password);
+    if (authenticationBloc.loggedIn()) {
+      /*
+      showDialog<Center>(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return NotifyDialog(
+              title: 'Successful',
+              description: 'Correct username and password',
+              key: Key('CorrectUsernameAndPassword'),
+              function: () => Routes.push(context,
+                  new AppSelectionScreen(authenticationBloc.getLoggedInUser())),
+            );
+          });
+          */
+      Routes.push(context,
+          new AppSelectionScreen(authenticationBloc.getLoggedInUser()));
+      // Login successful
+    } else {
+      showDialog<Center>(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return NotifyDialog(
+                title: 'Error',
+                description: 'Wrong username and/or password',
+                key: Key('WrongUsernameOrPassword'));
+          });
+      // Login failed
+    }
   }
 }

@@ -2,5 +2,6 @@
   "SERVER_HOST": "api_url",
   "DEBUG": true,
   "USERNAME": "admin",
-  "PASSWORD": "1234"
+  "PASSWORD": "1234",
+  "MOCK": true
 }
