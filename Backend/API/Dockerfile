@@ -16,7 +16,7 @@ RUN dotnet publish -c Release -o out
 #------------------------------------------#
 
 # Using microsoft aps net core 3.1 as hosting envionment
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS runtime-env
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime-env
 WORKDIR /srv
 
 # COPY from build envionment into local container.

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 namespace API.Models
 {
     public class APIContext : DbContext
@@ -7,6 +8,8 @@ namespace API.Models
         {
         }
         public DbSet<User> User { get; set; }
+        public DbSet<Group> Group { get; set; }
+        public DbSet<App> App { get; set; }
 
     }
 }

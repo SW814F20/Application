@@ -1,19 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using System.IO;
+using System.Reflection;
 
 namespace API
 {
@@ -49,7 +44,14 @@ namespace API
                         Url = new Uri("https://www.gnu.org/licenses/old-licenses/gpl-2.0.html"),
                     }
                 });
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
+
+
+
             services.AddDbContext<APIContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
             options => options.SetPostgresVersion(new Version(9, 6))));
