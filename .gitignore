@@ -19,7 +19,3 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
-
-# Do not track binary and object files from dotnet
-Backend/API/bin/**
-Backend/API/obj/**
