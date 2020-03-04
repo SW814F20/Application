@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:application/providers/environment_provider.dart' as environment;
 import 'package:application/di.dart';
 
+// ignore: must_be_immutable
 class LoginScreen extends BaseScreen {
   final AuthenticationBloc authenticationBloc =
       di.getDependency<AuthenticationBloc>();

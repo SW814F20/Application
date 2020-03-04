@@ -10,6 +10,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// ignore: must_be_immutable
 class AppSelectionScreen extends BaseScreen {
   AppSelectionScreen(this.loggedInUser);
 
@@ -17,7 +18,19 @@ class AppSelectionScreen extends BaseScreen {
 
   List<Application> apps() => applicationBloc.data;
 
-  User loggedInUser;
+  final User loggedInUser;
+
+  int appsEachRowPortrait() => this.isTablet() ? 3 : 3;
+
+  int appsEachRowLandscape() => this.isTablet() ? 5 : 6;
+
+  double appCircleSize() => appContainerSize() * 0.8;
+
+  double appContainerSize() => this.isInLandscapemode()
+      ? (this.getScreenWidth() * 0.9 - (8 * this.appsEachRowLandscape())) /
+          this.appsEachRowLandscape()
+      : (this.getScreenWidth() * 0.9 - (8 * this.appsEachRowPortrait())) /
+          this.appsEachRowPortrait();
 
   @override
   Widget appBar() {
@@ -38,7 +51,8 @@ class AppSelectionScreen extends BaseScreen {
   }
 
   Widget content() {
-    return Center(
+    return Container(
+      alignment: Alignment.topCenter,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -49,48 +63,64 @@ class AppSelectionScreen extends BaseScreen {
   }
 
   Widget getAppSelectionOption(Application application) {
-    return Center(
-        child: Padding(
-      padding: const EdgeInsets.all(8),
-      child: Container(
-        child: GestureDetector(
-          onTap: () => {Routes.push(this.context, new TaskScreen(application))},
-          child: Center(
-            child: Container(
-              height: 100,
-              width: 100,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: 70,
-                    height: 70,
-                    child: CircleAvatar(
-                      backgroundColor: application.color,
+    return Container(
+      child: Center(
+          child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Container(
+          child: GestureDetector(
+            onTap: () =>
+                {Routes.push(this.context, new TaskScreen(application))},
+            child: Center(
+              child: Container(
+                height: appContainerSize(),
+                width: appContainerSize(),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: appCircleSize(),
+                      height: appCircleSize(),
+                      child: CircleAvatar(
+                        backgroundColor: application.color,
+                        child: Text(
+                          getAvatarString(application.appName),
+                          style: TextStyle(fontSize: 46),
+                        ),
+                      ),
                     ),
-                  ),
-                  AutoSizeText(
-                    application.appName,
-                    maxLines: 1,
-                    overflow: TextOverflow.clip,
-                  )
-                ],
+                    AutoSizeText(
+                      application.appName,
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    ));
+      )),
+    );
+  }
+
+  String getAvatarString(String appName) {
+    List<String> strings = appName.split(" ");
+    if (strings.length == 1) {
+      return strings[0].substring(0, 2).toUpperCase();
+    } else if (strings.length >= 2) {
+      return strings[0].substring(0, 1).toUpperCase() +
+          strings[1].substring(0, 1).toUpperCase();
+    } else {
+      return "-";
+    }
   }
 
   Column getAppRows() {
-    int appsEachRowPortrait = this.isTablet() ? 7 : 3;
-    int appsEachRowLandscape = this.isTablet() ? 10 : 6;
-
     List<List<Widget>> rows = [new List<Widget>()];
     if (this.isInLandscapemode()) {
       int rowCount = 0;
       for (var i = 0; i < apps().length; i++) {
-        if (i % appsEachRowLandscape == 0 && i > 0) {
+        if (i % appsEachRowLandscape() == 0 && i > 0) {
           rows.add(new List<Widget>());
           rowCount += 1;
         }
@@ -99,7 +129,7 @@ class AppSelectionScreen extends BaseScreen {
     } else if (this.isInPortraitMode()) {
       int rowCount = 0;
       for (var i = 0; i < apps().length; i++) {
-        if (i % appsEachRowPortrait == 0 && i > 0) {
+        if (i % appsEachRowPortrait() == 0 && i > 0) {
           rows.add(new List<Widget>());
           rowCount += 1;
         }
@@ -109,11 +139,13 @@ class AppSelectionScreen extends BaseScreen {
     List<Widget> outputRows = new List<Widget>();
     for (List<Widget> element in rows) {
       outputRows.add(new Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: element,
       ));
     }
 
     Column column = Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: outputRows,
     );
 

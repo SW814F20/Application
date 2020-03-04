@@ -70,8 +70,11 @@ class TaskScreen extends BaseScreen {
     ]);
   }
 
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
   Widget convertTaskToWidget(Task task) {
     return Container(
+      alignment: Alignment.topCenter,
       decoration: BoxDecoration(border: Border.all()),
       child: GestureDetector(
         onTap: () => Routes.push(this.context, new PlaceholderScreen()),
@@ -80,8 +83,18 @@ class TaskScreen extends BaseScreen {
           child: Row(
             children: <Widget>[
               Expanded(
+                flex: 25,
+                child: Text(
+                  capitalize(task.taskPriority.toString().substring(9)),
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              Expanded(
                 flex: 90,
-                child: Text(task.taskName),
+                child: Text(
+                  task.taskName,
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
               Expanded(
                 flex: 10,
@@ -118,6 +131,7 @@ class TaskScreen extends BaseScreen {
       children: <Widget>[
         _columnHeader(),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Expanded(
                 flex: 33,
@@ -179,7 +193,10 @@ class TaskScreen extends BaseScreen {
             child: Column(
               children: <Widget>[
                 FaIcon(FontAwesomeIcons.hourglass),
-                Text("Not started"),
+                Text(
+                  "Not started",
+                  style: TextStyle(fontSize: 16),
+                ),
               ],
             ),
           )),
@@ -191,7 +208,10 @@ class TaskScreen extends BaseScreen {
             child: Column(
               children: <Widget>[
                 FaIcon(FontAwesomeIcons.cog),
-                Text("WIP"),
+                Text(
+                  "WIP",
+                  style: TextStyle(fontSize: 16),
+                ),
               ],
             ),
           )),
@@ -203,7 +223,10 @@ class TaskScreen extends BaseScreen {
             child: Column(
               children: <Widget>[
                 FaIcon(FontAwesomeIcons.check),
-                Text("Done"),
+                Text(
+                  "Done",
+                  style: TextStyle(fontSize: 16),
+                ),
               ],
             ),
           )),

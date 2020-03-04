@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class BaseScreen extends StatelessWidget {
   Size getScreenSize() {
     return MediaQuery.of(this.context).size;
@@ -31,6 +32,14 @@ class BaseScreen extends StatelessWidget {
 
     var isTablet = diagonal > 1100.0;
     return isTablet;
+  }
+
+  double getScreenWidth() {
+    return MediaQuery.of(context).size.width;
+  }
+
+  double getScreenHeight() {
+    return MediaQuery.of(context).size.height;
   }
 
   bool isPhone() {
