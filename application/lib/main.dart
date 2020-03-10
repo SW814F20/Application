@@ -9,12 +9,14 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (_isInDebugMode) {
     // If in DEBUG mode
-    environment.setFile('assets/environments.json').whenComplete(() {});
-    _runApp();
+    environment.setFile('assets/environments.json').whenComplete(() {
+      _runApp();
+    });
   } else {
     // Else Production
-    environment.setFile('assets/environments.prod.json').whenComplete(() {});
-    _runApp();
+    environment.setFile('assets/environments.prod.json').whenComplete(() {
+      _runApp();
+    });
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:application/model/Application.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
+import 'package:application/view/screens/NewTaskScreen.dart';
 import 'package:application/view/screens/PlaceholderScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -180,6 +181,9 @@ class TaskScreen extends BaseScreen {
         icon: FaIcon(FontAwesomeIcons.arrowLeft),
         onPressed: () => Routes.pop(this.context),
       ),
+      actions: <Widget>[
+        createNewTaskButton(),
+      ],
     );
   }
 
@@ -241,6 +245,9 @@ class TaskScreen extends BaseScreen {
         icon: FaIcon(FontAwesomeIcons.arrowLeft),
         onPressed: () => Routes.pop(this.context),
       ),
+      actions: <Widget>[
+        createNewTaskButton(),
+      ],
       bottom: TabBar(
         tabs: [
           Tab(
@@ -266,6 +273,13 @@ class TaskScreen extends BaseScreen {
           )),
         ],
       ),
+    );
+  }
+
+  Widget createNewTaskButton() {
+    return IconButton(
+      icon: FaIcon(FontAwesomeIcons.plus),
+      onPressed: () => {Routes.push(context, new NewTaskScreen(this.app))},
     );
   }
 }
