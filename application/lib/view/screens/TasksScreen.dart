@@ -10,21 +10,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class TaskScreen extends BaseScreen {
   TaskScreen(this.app);
 
-  Application app;
+  final Application app;
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
-    return this.isInPortraitMode()
-        ? DefaultTabController(length: 3, child: generateScaffolding())
-        : generateScaffolding();
+    this.contextObject.setOutput(context);
+    return this.isInPortraitMode() ? DefaultTabController(length: 3, child: generateScaffolding()) : generateScaffolding();
   }
 
   Widget generateScaffolding() {
     return Scaffold(
-      appBar: this.isInPortraitMode()
-          ? generateAppBarPortrait()
-          : generateAppBarLandscape(),
+      appBar: this.isInPortraitMode() ? generateAppBarPortrait() : generateAppBarLandscape(),
       body: content(),
     );
   }
@@ -35,10 +31,8 @@ class TaskScreen extends BaseScreen {
   }
 
   Widget contentPortrait() {
-    List<Widget> notStartedWidgets =
-        convertTasksToWidgets(getTasks(Status.notStarted));
-    List<Widget> workInProgressWidgets =
-        convertTasksToWidgets(getTasks(Status.workInProgress));
+    List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
+    List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
     List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
     return TabBarView(children: [
       Container(
@@ -78,7 +72,7 @@ class TaskScreen extends BaseScreen {
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(border: Border.all()),
       child: GestureDetector(
-        onTap: () => Routes.push(this.context, new PlaceholderScreen()),
+        onTap: () => Routes.push(this.contextObject.getOutput(), new PlaceholderScreen()),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
           child: Row(
@@ -99,9 +93,7 @@ class TaskScreen extends BaseScreen {
               ),
               Expanded(
                 flex: 10,
-                child: task.newInformation
-                    ? FaIcon(FontAwesomeIcons.exclamation)
-                    : Container(),
+                child: task.newInformation ? FaIcon(FontAwesomeIcons.exclamation) : Container(),
               ),
             ],
           ),
@@ -123,10 +115,8 @@ class TaskScreen extends BaseScreen {
   }
 
   Widget contentLandscape() {
-    List<Widget> notStartedWidgets =
-        convertTasksToWidgets(getTasks(Status.notStarted));
-    List<Widget> workInProgressWidgets =
-        convertTasksToWidgets(getTasks(Status.workInProgress));
+    List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
+    List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
     List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
     return Column(
       children: <Widget>[
@@ -179,7 +169,7 @@ class TaskScreen extends BaseScreen {
       title: Text(this.app.appName + " - Select Task"),
       leading: IconButton(
         icon: FaIcon(FontAwesomeIcons.arrowLeft),
-        onPressed: () => Routes.pop(this.context),
+        onPressed: () => Routes.pop(this.contextObject.getOutput()),
       ),
       actions: <Widget>[
         createNewTaskButton(),
@@ -243,7 +233,7 @@ class TaskScreen extends BaseScreen {
       title: Text(this.app.appName + " - Select Task"),
       leading: IconButton(
         icon: FaIcon(FontAwesomeIcons.arrowLeft),
-        onPressed: () => Routes.pop(this.context),
+        onPressed: () => Routes.pop(this.contextObject.getOutput()),
       ),
       actions: <Widget>[
         createNewTaskButton(),
@@ -279,7 +269,7 @@ class TaskScreen extends BaseScreen {
   Widget createNewTaskButton() {
     return IconButton(
       icon: FaIcon(FontAwesomeIcons.plus),
-      onPressed: () => {Routes.push(context, new NewTaskScreen(this.app))},
+      onPressed: () => {Routes.push(this.contextObject.getOutput(), new NewTaskScreen(this.app))},
     );
   }
 }

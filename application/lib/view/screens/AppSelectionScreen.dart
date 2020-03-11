@@ -6,11 +6,11 @@ import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/screens/NewAppScreen.dart';
 import 'package:application/view/screens/TasksScreen.dart';
+import 'package:application/view/widgets/ConfirmDIalog.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// ignore: must_be_immutable
 class AppSelectionScreen extends BaseScreen {
   AppSelectionScreen(this.loggedInUser);
 
@@ -27,10 +27,18 @@ class AppSelectionScreen extends BaseScreen {
   double appCircleSize() => appContainerSize() * 0.8;
 
   double appContainerSize() => this.isInLandscapemode()
-      ? (this.getScreenWidth() * 0.9 - (8 * this.appsEachRowLandscape())) /
-          this.appsEachRowLandscape()
-      : (this.getScreenWidth() * 0.9 - (8 * this.appsEachRowPortrait())) /
-          this.appsEachRowPortrait();
+      ? (this.getScreenWidth() * 0.9 - (8 * this.appsEachRowLandscape())) / this.appsEachRowLandscape()
+      : (this.getScreenWidth() * 0.9 - (8 * this.appsEachRowPortrait())) / this.appsEachRowPortrait();
+
+  @override
+  Widget build(BuildContext context) {
+    return new WillPopScope(
+        onWillPop: () async {
+          logoutConfirm();
+          return true;
+        },
+        child: super.build(context));
+  }
 
   @override
   Widget appBar() {
@@ -39,12 +47,12 @@ class AppSelectionScreen extends BaseScreen {
       title: Text("Select Application"),
       leading: IconButton(
         icon: FaIcon(FontAwesomeIcons.lock),
-        onPressed: () => Routes.reset(this.context),
+        onPressed: () => logoutConfirm(),
       ),
       actions: <Widget>[
         IconButton(
           icon: FaIcon(FontAwesomeIcons.plus),
-          onPressed: () => {Routes.push(context, new NewAppScreen())},
+          onPressed: () => {Routes.push(this.contextObject.getOutput(), new NewAppScreen())},
         ),
       ],
     );
@@ -69,8 +77,7 @@ class AppSelectionScreen extends BaseScreen {
         padding: const EdgeInsets.all(8),
         child: Container(
           child: GestureDetector(
-            onTap: () =>
-                {Routes.push(this.context, new TaskScreen(application))},
+            onTap: () => {Routes.push(this.contextObject.getOutput(), new TaskScreen(application))},
             child: Center(
               child: Container(
                 height: appContainerSize(),
@@ -108,8 +115,7 @@ class AppSelectionScreen extends BaseScreen {
     if (strings.length == 1) {
       return strings[0].substring(0, 2).toUpperCase();
     } else if (strings.length >= 2) {
-      return strings[0].substring(0, 1).toUpperCase() +
-          strings[1].substring(0, 1).toUpperCase();
+      return strings[0].substring(0, 1).toUpperCase() + strings[1].substring(0, 1).toUpperCase();
     } else {
       return "-";
     }
@@ -150,5 +156,19 @@ class AppSelectionScreen extends BaseScreen {
     );
 
     return column;
+  }
+
+  void logoutConfirm() {
+    showDialog<Center>(
+        barrierDismissible: false,
+        context: this.contextObject.getOutput(),
+        builder: (BuildContext context) {
+          return ConfirmDialog(
+              title: 'Logout',
+              description: 'Are you sure you want to logout?',
+              key: Key('LogoutConfirmDialogKey'),
+              functionAbort: () => {},
+              functionConfirm: () => {Routes.reset(this.contextObject.getOutput())});
+        });
   }
 }

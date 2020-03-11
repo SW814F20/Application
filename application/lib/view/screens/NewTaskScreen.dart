@@ -19,7 +19,7 @@ class NewTaskScreen extends BaseScreen {
     "Task name",
   );
 
-  RoundedCombobox taskPriority = RoundedCombobox<Priority>(
+  final RoundedCombobox taskPriority = RoundedCombobox<Priority>(
     [
       KeyValuePair(Priority.low, "Low"),
       KeyValuePair(Priority.medium, "Medium"),
@@ -43,7 +43,7 @@ class NewTaskScreen extends BaseScreen {
               taskPriority,
               Button(
                 text: "Create Task",
-                onPressed: () => {CreateTask()},
+                onPressed: () => {createTask()},
               ),
             ],
           ),
@@ -52,12 +52,12 @@ class NewTaskScreen extends BaseScreen {
     );
   }
 
-  void CreateTask() {
-    this.app.tasks.add(new Task(
-        taskName: this.taskName.getValue(),
-        taskPriority: this.taskPriority.getValue(),
-        taskStatus: Status.notStarted));
-    Routes.pop(this.context);
+  void createTask() {
+    this
+        .app
+        .tasks
+        .add(new Task(taskName: this.taskName.getValue(), taskPriority: this.taskPriority.getValue(), taskStatus: Status.notStarted));
+    Routes.pop(this.contextObject.getOutput());
   }
 
   @override

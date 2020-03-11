@@ -4,7 +4,6 @@ import 'package:application/view/widgets/PrimaryButtonWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// ignore: must_be_immutable
 class PlaceholderScreen extends BaseScreen {
   @override
   Widget content() {
@@ -29,7 +28,7 @@ class PlaceholderScreen extends BaseScreen {
         centerTitle: true,
         leading: IconButton(
           icon: FaIcon(FontAwesomeIcons.arrowLeft),
-          onPressed: () => Routes.pop(this.context),
+          onPressed: () => Routes.pop(this.contextObject.getOutput()),
         ));
   }
 }

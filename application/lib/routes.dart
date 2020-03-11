@@ -6,8 +6,7 @@ class Routes {
   /// Push the given route onto the navigator that most tightly encloses the
   /// given context.
   static bool push<T extends Object>(BuildContext context, Widget widget) {
-    Navigator.of(context).push<T>(
-        MaterialPageRoute<T>(builder: (BuildContext context) => widget));
+    Navigator.of(context).push<T>(MaterialPageRoute<T>(builder: (BuildContext context) => widget));
     return true;
   }
 
@@ -21,7 +20,7 @@ class Routes {
   /// initialRoute.
   static void goHome(BuildContext context) {
     Navigator.of(context).popUntil((Route<dynamic> route) {
-      return route.settings.isInitialRoute;
+      return route.isFirst;
     });
   }
 

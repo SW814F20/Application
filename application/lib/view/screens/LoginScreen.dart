@@ -2,18 +2,17 @@ import 'package:application/blocs/AuthenticationBloc.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/AppSelectionScreen.dart';
 import 'package:application/view/screens/BaseScreen.dart';
+import 'package:application/view/screens/RegisterUserScreen.dart';
 import 'package:application/view/widgets/NotifyDIalog.dart';
 import 'package:flutter/material.dart';
 import 'package:application/providers/environment_provider.dart' as environment;
 import 'package:application/di.dart';
 
-// ignore: must_be_immutable
 class LoginScreen extends BaseScreen {
-  final AuthenticationBloc authenticationBloc =
-      di.getDependency<AuthenticationBloc>();
+  final AuthenticationBloc authenticationBloc = di.getDependency<AuthenticationBloc>();
 
   Widget build(BuildContext context) {
-    this.context = context;
+    this.contextObject.setOutput(context);
     return Scaffold(
       backgroundColor: Colors.orange,
       body: this.content(),
@@ -33,9 +32,7 @@ class LoginScreen extends BaseScreen {
       child: Column(
         children: <Widget>[
           Padding(
-            padding: this.isInLandscapemode()
-                ? EdgeInsets.fromLTRB(0, 10, 0, 0)
-                : EdgeInsets.fromLTRB(0, 100, 0, 0),
+            padding: this.isInLandscapemode() ? EdgeInsets.fromLTRB(0, 10, 0, 0) : EdgeInsets.fromLTRB(0, 100, 0, 0),
             child: this.isKeyboardShown()
                 ? Container()
                 : Image(
@@ -52,27 +49,22 @@ class LoginScreen extends BaseScreen {
                     child: Column(
                       children: <Widget>[
                         Padding(
-                          padding: this.isInPortraitMode()
-                              ? const EdgeInsets.fromLTRB(0, 20, 0, 10)
-                              : const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          padding:
+                              this.isInPortraitMode() ? const EdgeInsets.fromLTRB(0, 20, 0, 10) : const EdgeInsets.fromLTRB(0, 0, 0, 5),
                           child: Container(
                             decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.grey, width: 1),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20.0)),
+                                border: Border.all(color: Colors.grey, width: 1),
+                                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                                 color: Colors.white),
-                            padding:
-                                const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
                             child: TextField(
                               key: const Key('UsernameKey'),
                               style: const TextStyle(fontSize: 30),
                               keyboardType: TextInputType.text,
                               controller: usernameCtrl,
                               decoration: const InputDecoration.collapsed(
-                                hintText: 'Brugernavn',
-                                hintStyle: TextStyle(
-                                    color: Color.fromRGBO(170, 170, 170, 1)),
+                                hintText: 'Username',
+                                hintStyle: TextStyle(color: Color.fromRGBO(170, 170, 170, 1)),
                                 fillColor: Colors.white,
                               ),
                             ),
@@ -82,10 +74,8 @@ class LoginScreen extends BaseScreen {
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                           child: Container(
                             decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.grey, width: 1),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20.0)),
+                                border: Border.all(color: Colors.grey, width: 1),
+                                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                                 color: Colors.white),
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
@@ -94,9 +84,8 @@ class LoginScreen extends BaseScreen {
                               style: const TextStyle(fontSize: 30),
                               obscureText: true,
                               decoration: const InputDecoration.collapsed(
-                                hintText: 'Adgangskode',
-                                hintStyle: TextStyle(
-                                    color: Color.fromRGBO(170, 170, 170, 1)),
+                                hintText: 'Password',
+                                hintStyle: TextStyle(color: Color.fromRGBO(170, 170, 170, 1)),
                                 fillColor: Colors.white,
                               ),
                             ),
@@ -109,14 +98,18 @@ class LoginScreen extends BaseScreen {
                               scale: 1.5,
                               child: RaisedButton(
                                 key: const Key('LoginBtnKey'),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                                 child: const Text(
                                   'Login',
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
-                                  this.loginAttempt(context);
+                                  this
+                                      .authenticationBloc
+                                      .login(usernameCtrl.text, passwordCtrl.text)
+                                      .then((bool result) => (this.loginAttempt(this.contextObject.getOutput(), result)))
+                                      .timeout(Duration(seconds: 5), onTimeout: loginTimeout);
+
                                   // This is where the action for the submit happens
                                 },
                                 color: const Color.fromRGBO(48, 81, 118, 1),
@@ -125,30 +118,41 @@ class LoginScreen extends BaseScreen {
                           ),
                         ),
                         // Autologin button, only used for debugging
-                        environment.getVar<bool>('DEBUG')
+                        (environment.getVar<bool>('DEBUG')
                             ? Container(
                                 child: Transform.scale(
                                   scale: 1.2,
                                   child: RaisedButton(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                                     child: const Text(
                                       'Auto-Fill',
                                       key: Key('AutoLoginKey'),
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     onPressed: () {
-                                      usernameCtrl.text = environment
-                                          .getVar<String>('USERNAME');
-                                      passwordCtrl.text = environment
-                                          .getVar<String>('PASSWORD');
+                                      usernameCtrl.text = environment.getVar<String>('USERNAME');
+                                      passwordCtrl.text = environment.getVar<String>('PASSWORD');
                                     },
                                     color: const Color.fromRGBO(48, 81, 118, 1),
                                   ),
                                 ),
                               )
-                            : Container(),
+                            : Container()),
+                        Container(
+                          child: Transform.scale(
+                            scale: 1.2,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                              child: Text(
+                                'Create User',
+                                key: Key('CreateUserKey'),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () => {Routes.push(this.contextObject.getOutput(), RegisterUserScreen())},
+                              color: const Color.fromRGBO(48, 81, 118, 1),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -161,39 +165,31 @@ class LoginScreen extends BaseScreen {
     );
   }
 
-  void loginAttempt(BuildContext context) {
-    String username = this.usernameCtrl.text;
-    String password = this.passwordCtrl.text;
-    authenticationBloc.login(username, password);
-    if (authenticationBloc.loggedIn()) {
-      /*
-      showDialog<Center>(
-          barrierDismissible: false,
-          context: context,
-          builder: (BuildContext context) {
-            return NotifyDialog(
-              title: 'Successful',
-              description: 'Correct username and password',
-              key: Key('CorrectUsernameAndPassword'),
-              function: () => Routes.push(context,
-                  new AppSelectionScreen(authenticationBloc.getLoggedInUser())),
-            );
-          });
-          */
-      Routes.push(context,
-          new AppSelectionScreen(authenticationBloc.getLoggedInUser()));
+  void loginAttempt(BuildContext context, bool successful) {
+    if (successful) {
+      Routes.push(context, new AppSelectionScreen(authenticationBloc.getLoggedInUser()));
       // Login successful
     } else {
       showDialog<Center>(
           barrierDismissible: false,
           context: context,
           builder: (BuildContext context) {
-            return NotifyDialog(
-                title: 'Error',
-                description: 'Wrong username and/or password',
-                key: Key('WrongUsernameOrPassword'));
+            return NotifyDialog(title: 'Error', description: 'Wrong username and/or password', key: Key('WrongUsernameOrPassword'));
           });
       // Login failed
     }
+  }
+
+  void loginTimeout() {
+    showDialog<Center>(
+        barrierDismissible: false,
+        context: this.contextObject.getOutput(),
+        builder: (BuildContext context) {
+          return NotifyDialog(title: 'Timeout', description: 'The connection to the server timed out', key: Key('WrongUsernameOrPassword'));
+        });
+  }
+
+  void registerUserScreen() {
+    Routes.push(this.contextObject.getOutput(), new RegisterUserScreen());
   }
 }

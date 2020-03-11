@@ -5,6 +5,7 @@ import 'package:application/providers/environment_provider.dart' as environment;
 
 void main() {
   // Register all dependencies for injector
+
   Bootstrap.register();
   WidgetsFlutterBinding.ensureInitialized();
   if (_isInDebugMode) {
@@ -28,10 +29,7 @@ bool lastState = false;
 bool first = true;
 
 void _runApp() {
-  runApp(MaterialApp(
-      title: 'App Planner',
-      theme: ThemeData(fontFamily: 'Quicksand'),
-      home: LoginScreen()));
+  runApp(MaterialApp(title: 'App Planner', theme: ThemeData(fontFamily: 'Quicksand'), home: LoginScreen()));
 }
 
 bool get _isInDebugMode {

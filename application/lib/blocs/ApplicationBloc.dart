@@ -1,7 +1,10 @@
+import 'package:application/blocs/AuthenticationBloc.dart';
+import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
 import 'package:flutter/material.dart';
 
 class ApplicationBloc {
+  AuthenticationBloc authenticationBloc = di.getDependency<AuthenticationBloc>();
   List<Application> data = new List<Application>();
 
   void mockData() {

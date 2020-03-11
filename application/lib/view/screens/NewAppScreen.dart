@@ -11,10 +11,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// ignore: must_be_immutable
 class NewAppScreen extends BaseScreen {
-  RoundedTextField appNameInput =
-      new RoundedTextField("app_name", "Application name");
+  final RoundedTextField appNameInput = new RoundedTextField("app_name", "Application name");
   final ApplicationBloc applicationBloc = di.getDependency<ApplicationBloc>();
 
   Widget content() {
@@ -40,18 +38,14 @@ class NewAppScreen extends BaseScreen {
   void createApplication() {
     String applicationName = this.appNameInput.controller.text;
     applicationBloc.addApplication(
-        "8",
-        applicationName,
-        Color.fromRGBO(Random().nextInt(255), Random().nextInt(255),
-            Random().nextInt(255), 1));
+        "8", applicationName, Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1));
     showDialog<Center>(
         barrierDismissible: false,
-        context: context,
+        context: this.contextObject.getOutput(),
         builder: (BuildContext context) {
           return NotifyDialog(
             title: 'Application created',
-            description:
-                'The application ' + applicationName + ' has been created',
+            description: 'The application ' + applicationName + ' has been created',
             key: Key('applicationCreatedKey'),
             function: () => Routes.pop(context),
           );
@@ -65,7 +59,7 @@ class NewAppScreen extends BaseScreen {
       title: Text("Create new application"),
       leading: IconButton(
         icon: FaIcon(FontAwesomeIcons.arrowLeft),
-        onPressed: () => Routes.pop(this.context),
+        onPressed: () => Routes.pop(this.contextObject.getOutput()),
       ),
     );
   }
