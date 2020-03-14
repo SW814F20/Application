@@ -164,11 +164,14 @@ class AppSelectionScreen extends BaseScreen {
         context: this.contextObject.getOutput(),
         builder: (BuildContext context) {
           return ConfirmDialog(
-              title: 'Logout',
-              description: 'Are you sure you want to logout?',
-              key: Key('LogoutConfirmDialogKey'),
-              functionAbort: () => {},
-              functionConfirm: () => {Routes.reset(this.contextObject.getOutput())});
+            title: 'Logout',
+            description: 'Are you sure you want to logout?',
+            key: Key('LogoutConfirmDialogKey'),
+            functionAbort: () => {},
+            functionConfirm: () => {Routes.reset(this.contextObject.getOutput())},
+            confirmIcon: FaIcon(FontAwesomeIcons.lock),
+            abortIcon: FaIcon(FontAwesomeIcons.arrowRight),
+          );
         });
   }
 }

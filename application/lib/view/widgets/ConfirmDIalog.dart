@@ -2,6 +2,7 @@ import 'package:application/view/widgets/ButtonWidget.dart';
 import 'package:application/view/widgets/TitleHeader.dart';
 import 'package:flutter/material.dart';
 import 'package:application/routes.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// An AlertDialog for notifications, with a title and description as input.
 /// The only action that the dialog can do is pressing okay, as the
@@ -18,10 +19,15 @@ class ConfirmDialog extends StatelessWidget implements PreferredSizeWidget {
     this.functionAbort,
     this.confirmText = "Yes",
     this.abortText = "No",
+    this.abortIcon,
+    this.confirmIcon,
   }) : super(key: key);
 
   final String confirmText;
   final String abortText;
+
+  final FaIcon abortIcon;
+  final FaIcon confirmIcon;
 
   @override
   Size get preferredSize => const Size.fromHeight(56.0);
@@ -44,8 +50,8 @@ class ConfirmDialog extends StatelessWidget implements PreferredSizeWidget {
       shape: Border.all(color: const Color.fromRGBO(112, 112, 112, 1), width: 5.0),
       title: Center(
           child: TitleHeader(
-            title: title,
-          )),
+        title: title,
+      )),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -56,13 +62,13 @@ class ConfirmDialog extends StatelessWidget implements PreferredSizeWidget {
             children: <Widget>[
               Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                    child: Text(
-                      //if description is null, its replaced with empty.
-                      description ?? '',
-                      textAlign: TextAlign.center,
-                    ),
-                  ))
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                child: Text(
+                  //if description is null, its replaced with empty.
+                  description ?? '',
+                  textAlign: TextAlign.center,
+                ),
+              ))
             ],
           ),
           Padding(
@@ -73,10 +79,7 @@ class ConfirmDialog extends StatelessWidget implements PreferredSizeWidget {
                   Button(
                     key: const Key('NotifyDialogConfirmButton'),
                     text: confirmText,
-                    icon: const ImageIcon(
-                      AssetImage('assets/placeholder/placeholder.png'),
-                      color: Color.fromRGBO(0, 0, 0, 1),
-                    ),
+                    icon: confirmIcon,
                     onPressed: () {
                       Routes.pop(context);
                       functionConfirm();
@@ -85,10 +88,7 @@ class ConfirmDialog extends StatelessWidget implements PreferredSizeWidget {
                   Button(
                     key: const Key('NotifyDialogAbourtButton'),
                     text: abortText,
-                    icon: const ImageIcon(
-                      AssetImage('assets/placeholder/placeholder.png'),
-                      color: Color.fromRGBO(0, 0, 0, 1),
-                    ),
+                    icon: abortIcon,
                     onPressed: () {
                       Routes.pop(context);
                       functionAbort();

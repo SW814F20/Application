@@ -24,7 +24,7 @@ class Button extends StatefulWidget {
   final String text;
 
   /// The icon placed next to the text on the button.
-  final ImageIcon icon;
+  final Widget icon;
 
   /// The width of the button.
   final double width;
@@ -59,26 +59,19 @@ class _ButtonState extends State<Button> {
     _isEnabled = widget.isEnabled && widget.onPressed != null;
     _isPressed = false;
     if (widget.isEnabledStream != null) {
-      _isEnabledSubscription =
-          widget.isEnabledStream.listen(_handleIsEnabledStreamEvent);
+      _isEnabledSubscription = widget.isEnabledStream.listen(_handleIsEnabledStreamEvent);
     }
     super.initState();
   }
 
-  static const Gradient _gradientDefault = LinearGradient(
-      colors: <Color>[Color(0xFFFFCD59), Color(0xFFFF9D00)],
-      begin: Alignment(0.0, -1.0),
-      end: Alignment(0.0, 1.0));
+  static const Gradient _gradientDefault =
+      LinearGradient(colors: <Color>[Color(0xFFFFCD59), Color(0xFFFF9D00)], begin: Alignment(0.0, -1.0), end: Alignment(0.0, 1.0));
 
-  static const Gradient _gradientPressed = LinearGradient(
-      colors: <Color>[Color(0xFFD4AD2F), Color(0xFFFF9D00)],
-      begin: Alignment(0.0, -1.0),
-      end: Alignment(0.0, 1.0));
+  static const Gradient _gradientPressed =
+      LinearGradient(colors: <Color>[Color(0xFFD4AD2F), Color(0xFFFF9D00)], begin: Alignment(0.0, -1.0), end: Alignment(0.0, 1.0));
 
-  static const Gradient _gradientDisabled = LinearGradient(
-      colors: <Color>[Color(0x46FFCD59), Color(0xA6FF9D00)],
-      begin: Alignment(0.0, -1.0),
-      end: Alignment(0.0, 1.0));
+  static const Gradient _gradientDisabled =
+      LinearGradient(colors: <Color>[Color(0x46FFCD59), Color(0xA6FF9D00)], begin: Alignment(0.0, -1.0), end: Alignment(0.0, 1.0));
 
   static const Color _borderDefault = Color(0xFF8A6E00);
   static const Color _borderPressed = Color(0xFF493700);
@@ -99,19 +92,11 @@ class _ButtonState extends State<Button> {
         width: widget.width,
         height: widget.height,
         decoration: BoxDecoration(
-          gradient: _isEnabled
-              ? (_isPressed ? _gradientPressed : _gradientDefault)
-              : _gradientDisabled,
+          gradient: _isEnabled ? (_isPressed ? _gradientPressed : _gradientDefault) : _gradientDisabled,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: _isEnabled
-                  ? (_isPressed ? _borderPressed : _borderDefault)
-                  : _borderDisabled,
-              width: 1.2),
+          border: Border.all(color: _isEnabled ? (_isPressed ? _borderPressed : _borderDefault) : _borderDisabled, width: 1.2),
         ),
-        child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: _buildWidgetsOnButton()),
+        child: Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), child: _buildWidgetsOnButton()),
       ),
     );
   }
@@ -127,8 +112,7 @@ class _ButtonState extends State<Button> {
       widget.onPressed();
       // On a quick tap the pressed state is not shown, because the state
       // changes too fast, hence we introduce a delay.
-      _timer = Timer(const Duration(milliseconds: 100),
-          () => setState(() => _isPressed = false));
+      _timer = Timer(const Duration(milliseconds: 100), () => setState(() => _isPressed = false));
     }
   }
 

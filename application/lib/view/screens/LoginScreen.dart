@@ -1,4 +1,5 @@
 import 'package:application/blocs/AuthenticationBloc.dart';
+import 'package:application/model/Output.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/AppSelectionScreen.dart';
 import 'package:application/view/screens/BaseScreen.dart';
@@ -26,6 +27,8 @@ class LoginScreen extends BaseScreen {
   final TextEditingController passwordCtrl = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final Output<bool> _loginPressed = new Output(false);
 
   Widget content() {
     return Center(
@@ -104,11 +107,15 @@ class LoginScreen extends BaseScreen {
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
-                                  this
-                                      .authenticationBloc
-                                      .login(usernameCtrl.text, passwordCtrl.text)
-                                      .then((bool result) => (this.loginAttempt(this.contextObject.getOutput(), result)))
-                                      .timeout(Duration(seconds: 5), onTimeout: loginTimeout);
+                                  // This is to disallow multiple login attempts at the same time
+                                  if (!_loginPressed.getOutput()) {
+                                    _loginPressed.setOutput(true);
+                                    this
+                                        .authenticationBloc
+                                        .login(usernameCtrl.text, passwordCtrl.text)
+                                        .then((bool result) => (this.loginAttempt(this.contextObject.getOutput(), result)))
+                                        .timeout(Duration(seconds: 5), onTimeout: loginTimeout);
+                                  }
 
                                   // This is where the action for the submit happens
                                 },
@@ -167,9 +174,11 @@ class LoginScreen extends BaseScreen {
 
   void loginAttempt(BuildContext context, bool successful) {
     if (successful) {
+      _loginPressed.setOutput(false);
       Routes.push(context, new AppSelectionScreen(authenticationBloc.getLoggedInUser()));
       // Login successful
     } else {
+      _loginPressed.setOutput(false);
       showDialog<Center>(
           barrierDismissible: false,
           context: context,
@@ -181,6 +190,7 @@ class LoginScreen extends BaseScreen {
   }
 
   void loginTimeout() {
+    _loginPressed.setOutput(false);
     showDialog<Center>(
         barrierDismissible: false,
         context: this.contextObject.getOutput(),

@@ -5,22 +5,18 @@ import 'package:flutter/material.dart';
 
 class RoundedCombobox<T1> extends StatefulWidget {
   RoundedCombobox(this.options,
-      {this.padding = const EdgeInsets.fromLTRB(0, 10, 0, 10),
-      this.fontSize = 30,
-      this.label = false,
-      this.labelText = ""});
+      {this.padding = const EdgeInsets.fromLTRB(0, 10, 0, 10), this.fontSize = 30, this.label = false, this.labelText = ""});
   final double fontSize;
   final EdgeInsets padding;
   final bool label;
   final String labelText;
   final List<KeyValuePair<T1, String>> options;
-  final Output<T1> _output = Output<T1>();
+  final Output<T1> _output = Output<T1>(null);
 
   T1 getValue() => _output.getOutput();
 
   @override
-  RoundedComboboxState createState() =>
-      RoundedComboboxState<T1>(options, _output);
+  RoundedComboboxState createState() => RoundedComboboxState<T1>(options, _output);
 }
 
 class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
@@ -66,8 +62,7 @@ class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
               child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey, width: 1),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20.0)),
+                      borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                       color: Colors.white),
                   padding: const EdgeInsets.all(8.0),
                   child: _dropdownButton),

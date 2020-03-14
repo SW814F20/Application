@@ -45,7 +45,7 @@ class BaseScreen extends StatelessWidget {
     return !isTablet();
   }
 
-  final Output<BuildContext> contextObject = new Output<BuildContext>();
+  final Output<BuildContext> contextObject = new Output<BuildContext>(null);
 
   Widget build(BuildContext context) {
     contextObject.setOutput(context);
