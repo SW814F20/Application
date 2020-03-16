@@ -51,6 +51,7 @@ namespace API
                         Url = new Uri("https://www.gnu.org/licenses/old-licenses/gpl-2.0.html"),
                     }
                 });
+                c.CustomSchemaIds(x => x.FullName);
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -58,6 +59,7 @@ namespace API
             });
 
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IAppService, AppService>();
 
             services.AddDbContext<Helpers.DataContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),

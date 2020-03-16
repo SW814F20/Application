@@ -20,5 +20,7 @@ namespace API.Helpers
                     optionsBuilder => optionsBuilder.SetPostgresVersion(new Version(9, 6)));
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<App> Apps { get; set; }
     }
 }
