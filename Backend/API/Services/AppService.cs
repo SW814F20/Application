@@ -42,9 +42,9 @@ namespace API.Services
                 throw new AppException("The AppUrl is required");
 
             if (_context.Apps.Any(x => x.AppName == app.AppName))
-                throw new AppException("An app with name \"" + app.AppName + "\" is already taken");
+                throw new AppException("An app with name \"" + app.AppName + "\" already exists");
             if (_context.Apps.Any(x => x.AppUrl == app.AppUrl))
-                throw new AppException("An app with url \"" + app.AppUrl + "\" is already taken");
+                throw new AppException("An app with url \"" + app.AppUrl + "\" already exists");
 
             _context.Apps.Add(app);
             _context.SaveChanges();
@@ -67,7 +67,7 @@ namespace API.Services
             {
                 // throw error if the new AppName is already taken
                 if (_context.Apps.Any(x => x.AppName == appParam.AppName))
-                    throw new AppException("AppName " + appParam.AppName + " is already taken");
+                    throw new AppException("AppName " + appParam.AppName + " already exists");
 
                 app.AppName = appParam.AppName;
             }
