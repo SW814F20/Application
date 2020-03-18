@@ -13,6 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewAppScreen extends BaseScreen {
   final RoundedTextField appNameInput = new RoundedTextField("app_name", "Application name");
+  final RoundedTextField appUrlInput = new RoundedTextField("app_url", "Application URL");
   final ApplicationBloc applicationBloc = di.getDependency<ApplicationBloc>();
 
   Widget content() {
@@ -22,6 +23,7 @@ class NewAppScreen extends BaseScreen {
         child: Column(
           children: <Widget>[
             appNameInput,
+            appUrlInput,
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Button(
@@ -35,21 +37,38 @@ class NewAppScreen extends BaseScreen {
     );
   }
 
-  void createApplication() {
+  void createApplication() async {
     String applicationName = this.appNameInput.controller.text;
-    applicationBloc.addApplication(
-        "8", applicationName, Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1));
-    showDialog<Center>(
-        barrierDismissible: false,
-        context: this.contextObject.getOutput(),
-        builder: (BuildContext context) {
-          return NotifyDialog(
-            title: 'Application created',
-            description: 'The application ' + applicationName + ' has been created',
-            key: Key('applicationCreatedKey'),
-            function: () => Routes.pop(context),
-          );
-        });
+    String applicationUrl = this.appUrlInput.controller.text;
+    bool success = await applicationBloc.addApplication(
+        8, applicationName, Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1), applicationUrl);
+    if (success) {
+      showDialog<Center>(
+          barrierDismissible: false,
+          context: this.contextObject.getOutput(),
+          builder: (BuildContext context) {
+            return NotifyDialog(
+              title: 'Application created',
+              description: 'The application \'' + applicationName + '\' has been created',
+              key: Key('applicationCreatedKey'),
+              function: () => Routes.pop(context),
+            );
+          });
+    } else {
+      showDialog<Center>(
+          barrierDismissible: false,
+          context: this.contextObject.getOutput(),
+          builder: (BuildContext context) {
+            return NotifyDialog(
+              title: 'Application creation failed',
+              description: 'The application ' +
+                  applicationName +
+                  ' was not created, because an error happened.\nPlease check your connection and try again',
+              key: Key('applicationCreatedKey'),
+              function: () => {},
+            );
+          });
+    }
   }
 
   @override

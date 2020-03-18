@@ -3,5 +3,5 @@
   "DEBUG": true,
   "USERNAME": "Graatand",
   "PASSWORD": "password",
-  "MOCK": true
+  "MOCK": false
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:application/model/Application.dart';
 import 'package:application/model/KeyValuePair.dart';
 import 'package:application/model/User.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class BaseApi {
     Map<String, String> headers = new Map<String, String>();
     headers.addAll({HttpHeaders.contentTypeHeader: "application/json"});
     if (token != "") {
-      headers.addAll({HttpHeaders.authorizationHeader: token});
+      headers.addAll({HttpHeaders.authorizationHeader: "Bearer " + token});
     }
 
     http.Response response;
@@ -60,6 +61,34 @@ class BaseApi {
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response, then the user has been created.
+      return true;
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      // return false;
+      throw Exception('Failed to perform call');
+    }
+  }
+
+  Future<List<Application>> getApplications(String token) async {
+    http.Response response = await _getData("App", [], HttpMethod.GET, "", token: token);
+    if (response.statusCode == 200) {
+      dynamic body = jsonDecode(response.body);
+      List<Application> output = List<Application>();
+      for (var elem in body) {
+        output.add(Application.fromJson(elem));
+      }
+      return output;
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      // return false;
+      throw Exception('Failed to perform call');
+    }
+  }
+
+  Future<bool> createApplications(String appName, String appUrl, String token) async {
+    http.Response response =
+        await _getData("App/Create", [], HttpMethod.POST, "{\"appName\": \"$appName\",\"appUrl\": \"$appUrl/\"}", token: token);
+    if (response.statusCode == 200) {
       return true;
     } else {
       // If the server did not return a 200 OK response, then throw an exception.

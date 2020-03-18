@@ -1,7 +1,7 @@
 import 'package:application/blocs/ApplicationBloc.dart';
+import 'package:application/blocs/AuthenticationBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
-import 'package:application/model/User.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/screens/NewAppScreen.dart';
@@ -12,13 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppSelectionScreen extends BaseScreen {
-  AppSelectionScreen(this.loggedInUser);
-
+  final AuthenticationBloc authenticationBloc = di.getDependency<AuthenticationBloc>();
   final ApplicationBloc applicationBloc = di.getDependency<ApplicationBloc>();
 
   List<Application> apps() => applicationBloc.data;
-
-  final User loggedInUser;
 
   int appsEachRowPortrait() => this.isTablet() ? 3 : 3;
 
@@ -32,6 +29,7 @@ class AppSelectionScreen extends BaseScreen {
 
   @override
   Widget build(BuildContext context) {
+    var test = applicationBloc.getApplications();
     return new WillPopScope(
         onWillPop: () async {
           logoutConfirm();
