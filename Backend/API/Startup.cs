@@ -58,8 +58,10 @@ namespace API
                 c.IncludeXmlComments(xmlPath);
             });
 
+            // Add services to API
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAppService, AppService>();
+            services.AddTransient<IScreenService, ScreenService>();
 
             services.AddDbContext<Helpers.DataContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
