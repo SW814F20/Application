@@ -30,7 +30,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Create a new app
+        /// Create a new screen
         /// </summary>
         /// <param name="model"></param>
         /// <returns>HttpCode 200 if success or HttpCode 400 for BadRequest with exception message</returns>
@@ -40,7 +40,7 @@ namespace API.Controllers
             // map model to entity
             var screen = _mapper.Map<Entities.Screen>(model);
 
-            // Try to create the app.
+            // Try to create the screen.
             try
             {
                 _screenService.Create(screen);
@@ -54,9 +54,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get All Apps in the system
+        /// Get All Screens in the system
         /// </summary>
-        /// <returns>HttpCode 200 with a list of apps</returns>
+        /// <returns>HttpCode 200 with a list of screens</returns>
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -66,10 +66,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get information about a specific app based on the Id
+        /// Get information about a specific screen based on the Id
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>HttpCode 200 with the app model</returns>
+        /// <returns>HttpCode 200 with the screen model</returns>
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -79,7 +79,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Update an existing user with a new model.
+        /// Update an existing screen with a new model.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="model"></param>
@@ -90,7 +90,7 @@ namespace API.Controllers
             // Map the model to the entity and set the id within that model.
             var screen = _mapper.Map<Screen>(model);
             screen.Id = id;
-            // Try to update the app with the model passed from HttpPut
+            // Try to update the screen with the model passed from HttpPut
             try
             {
                 _screenService.Update(screen);
@@ -105,7 +105,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Delete a user based on their Id
+        /// Delete a screen based on their Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>HttpCode 200 for success</returns>
