@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using API.Entities;
@@ -31,6 +30,8 @@ namespace API.Services
             // validation
             if (string.IsNullOrWhiteSpace(screen.ScreenContent))
                 throw new AppException("Screen should contain some content");
+            if (string.IsNullOrWhiteSpace(screen.ScreenName))
+                throw new AppException("Screen name must not be empty");
 
             if (_context.Screens.Any(x => x.ScreenName == screen.ScreenName))
                 throw new AppException("A screen with name \"" + screen.ScreenName + "\" already exists");

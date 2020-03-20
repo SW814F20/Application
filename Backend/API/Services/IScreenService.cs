@@ -3,7 +3,7 @@ using API.Entities;
 
 namespace API.Services
 {
-    // Interface for the UserService
+    // Interface for the ScreenService
     public interface IScreenService
     {
         IEnumerable<Screen> GetAll();
