@@ -49,7 +49,7 @@ namespace API.Controllers
             try
             {
                 _appService.Create(app);
-                return Ok();
+                return Ok(app);
             }
             // return error message if there was an exception
             catch (AppException ex)
