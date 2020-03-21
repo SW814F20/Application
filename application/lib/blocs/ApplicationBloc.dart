@@ -9,7 +9,7 @@ class ApplicationBloc {
   BaseApi api = di.getDependency<BaseApi>();
   List<Application> data = new List<Application>();
 
-  void getApplications() async {
+  Future<void> getApplications() async {
     data = await api.getApplications(authenticationBloc.getLoggedInUser().token);
   }
 

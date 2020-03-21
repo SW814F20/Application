@@ -8,6 +8,7 @@ class Application {
       this.mock();
     }
   }
+
   Application.fromJson(Map<String, dynamic> json)
       : appName = json['appName'],
         appUrl = json['appUrl'],

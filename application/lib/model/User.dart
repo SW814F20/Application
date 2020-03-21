@@ -14,4 +14,15 @@ class User {
   bool getLoggedIn() {
     return this.token != null;
   }
+
+  String asJson(String password) {
+    return """
+    {
+      \"firstName\": \"$this->firstname\",
+      \"lastName\": \"$this->lastname\",
+      \"username\": \"$this->username\",
+      \"password\": \"$password\"
+    }
+  """;
+  }
 }

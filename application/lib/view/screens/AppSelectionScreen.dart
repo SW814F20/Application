@@ -29,7 +29,7 @@ class AppSelectionScreen extends BaseScreen {
 
   @override
   Widget build(BuildContext context) {
-    var test = applicationBloc.getApplications();
+    applicationBloc.getApplications();
     return new WillPopScope(
         onWillPop: () async {
           logoutConfirm();
