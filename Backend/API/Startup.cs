@@ -15,6 +15,8 @@ using API.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AutoMapper;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
 
 namespace API
 {
@@ -51,6 +53,33 @@ namespace API
                         Url = new Uri("https://www.gnu.org/licenses/old-licenses/gpl-2.0.html"),
                     }
                 });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+
+                        },
+                        new List<string>()
+                    }
+                });
                 c.CustomSchemaIds(x => x.FullName);
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -76,15 +105,15 @@ namespace API
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
-                    {
-                        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    })
-                    .AddJwtBearer(x =>
-                    {
-                        x.Events = new JwtBearerEvents
                         {
-                            OnTokenValidated = context =>
+                            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                        })
+                        .AddJwtBearer(x =>
+                        {
+                            x.Events = new JwtBearerEvents
+                            {
+                                OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                         var userId = int.Parse(context.Principal.Identity.Name);
@@ -96,17 +125,17 @@ namespace API
                         }
                         return Task.CompletedTask;
                     }
-                        };
-                        x.RequireHttpsMetadata = false;
-                        x.SaveToken = true;
-                        x.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(key),
-                            ValidateIssuer = false,
-                            ValidateAudience = false
-                        };
-                    });
+                            };
+                            x.RequireHttpsMetadata = false;
+                            x.SaveToken = true;
+                            x.TokenValidationParameters = new TokenValidationParameters
+                            {
+                                ValidateIssuerSigningKey = true,
+                                IssuerSigningKey = new SymmetricSecurityKey(key),
+                                ValidateIssuer = false,
+                                ValidateAudience = false
+                            };
+                        });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
