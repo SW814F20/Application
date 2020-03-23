@@ -3,34 +3,34 @@ import 'package:application/model/Output.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class RoundedCombobox<T1> extends StatefulWidget {
+class RoundedCombobox<T> extends StatefulWidget {
   RoundedCombobox(this.options,
       {this.padding = const EdgeInsets.fromLTRB(0, 10, 0, 10), this.fontSize = 30, this.label = false, this.labelText = ''});
   final double fontSize;
   final EdgeInsets padding;
   final bool label;
   final String labelText;
-  final List<KeyValuePair<T1, String>> options;
-  final Output<T1> _output = Output<T1>(null);
+  final List<KeyValuePair<T, String>> options;
+  final Output<T> _output = Output<T>(null);
 
-  T1 getValue() => _output.getOutput();
+  T getValue() => _output.getOutput();
 
   @override
-  RoundedComboboxState createState() => RoundedComboboxState<T1>(options, _output);
+  RoundedComboboxState createState() => RoundedComboboxState<T>(options, _output);
 }
 
-class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
+class RoundedComboboxState<T> extends State<RoundedCombobox<T>> {
   RoundedComboboxState(this.options, this.output);
-  Output<T1> output;
+  Output<T> output;
 
-  List<DropdownMenuItem<T1>> _dropDownMenuItems() => getDropDownMenuItems();
-  List<KeyValuePair<T1, String>> options;
+  List<DropdownMenuItem<T>> _dropDownMenuItems() => getDropDownMenuItems();
+  List<KeyValuePair<T, String>> options;
 
-  T1 _selectedItem;
+  T _selectedItem;
 
-  List<DropdownMenuItem<T1>> getDropDownMenuItems() {
+  List<DropdownMenuItem<T>> getDropDownMenuItems() {
     return widget.options
-        .map((option) => DropdownMenuItem<T1>(
+        .map((option) => DropdownMenuItem<T>(
             value: option.key,
             child: Text(
               option.value,
@@ -74,10 +74,10 @@ class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
     );
   }
 
-  void changedDropDownItem(T1 selectedTopic) {
+  void changedDropDownItem(T selectedTopic) {
     setState(() {
       output.setOutput(selectedTopic);
-      _dropdownButton = DropdownButton<T1>(
+      _dropdownButton = DropdownButton<T>(
         value: output.getOutput(),
         items: _dropDownMenuItems(),
         onChanged: changedDropDownItem,
@@ -85,7 +85,7 @@ class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
     });
   }
 
-  T1 getValue() {
+  T getValue() {
     return _selectedItem;
   }
 
@@ -93,7 +93,7 @@ class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
   void initState() {
     /// defaults the selected item to the first item in the provided items
     output.setOutput(options[0].key);
-    _dropdownButton = DropdownButton<T1>(
+    _dropdownButton = DropdownButton<T>(
       value: output.getOutput(),
       items: _dropDownMenuItems(),
       onChanged: changedDropDownItem,

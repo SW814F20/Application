@@ -6,9 +6,11 @@ class User {
         token = json['token'];
 
   final String username;
+
   final String firstName;
+
   final String lastName;
-  //final String email;
+
   final String token;
 
   bool getLoggedIn() {

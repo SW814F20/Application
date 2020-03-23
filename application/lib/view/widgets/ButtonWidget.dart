@@ -2,13 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// A button for the Giraf application.
 class Button extends StatefulWidget {
-  /// A button for the Giraf application.
-  /// The button can contain some text and an icon both of which are optional.
-  /// isEnabled determines whether the button is enabled or disabled by default.
-  /// isEnabledStream is a stream which is listened to, to update the
-  /// enabled/disabled state of the button.
   const Button({
     Key key,
     this.text,
@@ -20,32 +14,18 @@ class Button extends StatefulWidget {
     this.isEnabledStream,
   }) : super(key: key);
 
-  /// The text placed at the center of the button.
   final String text;
 
-  /// The icon placed next to the text on the button.
   final Widget icon;
 
-  /// The width of the button.
   final double width;
 
-  /// The height of the button.
   final double height;
 
-  /// The function to be called when the button is pressed.
-  /// The function must be a void funtion with no input parameters.
-  /// If this is set to null, the button will be disabled.
   final VoidCallback onPressed;
 
-  /// Determines whether the button is enabled or disabled by default. If
-  /// isEnabledStream is also supplied, the latest emitted item from the stream
-  /// will determine whether the button is enabled. If the stream emits a null
-  /// value, isEnabled will be used instead.
   final bool isEnabled;
 
-  /// A stream which tells whether the button should be enabled or disabled.
-  /// If the stream emits a null value, the value of isEnabled will be used
-  /// instead.
   final Observable<bool> isEnabledStream;
 
   @override

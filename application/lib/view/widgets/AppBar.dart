@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({this.centerTitle = false, this.title = 'No title'});
+  const CustomAppBar({this.centerTitle = false, this.title = ''});
   final bool centerTitle;
   final String title;
 

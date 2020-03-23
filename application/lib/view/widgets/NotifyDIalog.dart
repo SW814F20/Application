@@ -3,23 +3,14 @@ import 'package:application/view/widgets/TitleHeader.dart';
 import 'package:flutter/material.dart';
 import 'package:application/routes.dart';
 
-/// An AlertDialog for notifications, with a title and description as input.
-/// The only action that the dialog can do is pressing okay, as the
-/// dialog is intended to only notify the user.
-/// Other dialogs can be seen at: https://github.com/aau-giraf/wiki/blob/master/design_guide/dialog.md
 class NotifyDialog extends StatelessWidget implements PreferredSizeWidget {
-  ///The dialog displays the title and description, with a button
-  ///to conform the notification, which simply closes the dialog.
   const NotifyDialog({Key key, @required this.title, this.description, this.function}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(56.0);
 
-  ///title of the dialogBox, displayed in the header of the dialogBox
   final String title;
 
-  ///description of the dialogBox, displayed under the header, describing the
-  ///encountered problem
   final String description;
 
   final Function function;
