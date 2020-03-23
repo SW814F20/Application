@@ -142,7 +142,7 @@ class _ButtonState extends State<Button> {
   Widget _buildWidgetsOnButton() {
     const TextStyle textStyle = TextStyle(color: Colors.black, fontSize: 20);
 
-    if (widget.text != null && widget.icon != null)
+    if (widget.text != null && widget.icon != null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -156,13 +156,13 @@ class _ButtonState extends State<Button> {
           ),
         ],
       );
-    else if (widget.text != null)
+    } else if (widget.text != null) {
       return Center(
           child: Text(
         widget.text,
         style: textStyle,
       ));
-    else if (widget.icon != null) {
+    } else if (widget.icon != null) {
       return Center(
         child: widget.icon,
       );

@@ -12,10 +12,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewAppScreen extends BaseScreen {
-  final RoundedTextField appNameInput = new RoundedTextField("app_name", "Application name");
-  final RoundedTextField appUrlInput = new RoundedTextField("app_url", "Application URL");
+  final RoundedTextField appNameInput = RoundedTextField('app_name', 'Application name');
+  final RoundedTextField appUrlInput = RoundedTextField('app_url', 'Application URL');
   final ApplicationBloc applicationBloc = di.getDependency<ApplicationBloc>();
 
+  @override
   Widget content() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -27,7 +28,7 @@ class NewAppScreen extends BaseScreen {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Button(
-                text: "Create Application",
+                text: 'Create Application',
                 onPressed: () => {createApplication()},
               ),
             )
@@ -38,34 +39,34 @@ class NewAppScreen extends BaseScreen {
   }
 
   void createApplication() async {
-    String applicationName = this.appNameInput.controller.text;
-    String applicationUrl = this.appUrlInput.controller.text;
-    bool success = await applicationBloc.addApplication(
+    final String applicationName = appNameInput.controller.text;
+    final String applicationUrl = appUrlInput.controller.text;
+    final bool success = await applicationBloc.addApplication(
         8, applicationName, Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1), applicationUrl);
     if (success) {
       showDialog<Center>(
           barrierDismissible: false,
-          context: this.contextObject.getOutput(),
+          context: contextObject.getOutput(),
           builder: (BuildContext context) {
             return NotifyDialog(
               title: 'Application created',
               description: 'The application \'' + applicationName + '\' has been created',
-              key: Key('applicationCreatedKey'),
+              key: const Key('applicationCreatedKey'),
               function: () => Routes.pop(context),
             );
           });
     } else {
       showDialog<Center>(
           barrierDismissible: false,
-          context: this.contextObject.getOutput(),
+          context: contextObject.getOutput(),
           builder: (BuildContext context) {
             return NotifyDialog(
               title: 'Application creation failed',
               description: 'The application ' +
                   applicationName +
                   ' was not created, because an error happened.\nPlease check your connection and try again',
-              key: Key('applicationCreatedKey'),
-              function: () => {},
+              key: const Key('applicationCreatedKey'),
+              function: () => <void>{},
             );
           });
     }
@@ -75,10 +76,10 @@ class NewAppScreen extends BaseScreen {
   Widget appBar() {
     return AppBar(
       centerTitle: true,
-      title: Text("Create new application"),
+      title: const Text('Create new application'),
       leading: IconButton(
         icon: FaIcon(FontAwesomeIcons.arrowLeft),
-        onPressed: () => Routes.pop(this.contextObject.getOutput()),
+        onPressed: () => Routes.pop(contextObject.getOutput()),
       ),
     );
   }

@@ -13,32 +13,33 @@ class RegisterUserScreen extends BaseScreen {
   final BaseApi api = di.getDependency<BaseApi>();
 
   final RoundedTextField username = RoundedTextField(
-    "usernameField",
-    "Username",
+    'usernameField',
+    'Username',
   );
 
   final RoundedTextField firstname = RoundedTextField(
-    "firstnameField",
-    "Firstname",
+    'firstnameField',
+    'Firstname',
   );
 
   final RoundedTextField lastname = RoundedTextField(
-    "lastnameField",
-    "Lastname",
+    'lastnameField',
+    'Lastname',
   );
 
   final RoundedTextField password = RoundedTextField(
-    "passwordField",
-    "Password",
+    'passwordField',
+    'Password',
     obscureText: true,
   );
 
   final RoundedTextField confirmPassword = RoundedTextField(
-    "confirmPasswordField",
-    "Confirm password",
+    'confirmPasswordField',
+    'Confirm password',
     obscureText: true,
   );
 
+  @override
   Widget content() {
     return Container(
       child: Padding(
@@ -53,7 +54,7 @@ class RegisterUserScreen extends BaseScreen {
               confirmPassword,
               PrimaryButton(
                 onPressed: createUser,
-                text: "Create user",
+                text: 'Create user',
               )
             ],
           ),
@@ -64,32 +65,32 @@ class RegisterUserScreen extends BaseScreen {
 
   @override
   Widget appBar() {
-    return CustomAppBar(
-      title: "Create new user",
+    return const CustomAppBar(
+      title: 'Create new user',
       centerTitle: true,
     );
   }
 
   Future<bool> createUser() async {
-    String username = this.username.getValue();
-    String firstname = this.firstname.getValue();
-    String lastname = this.lastname.getValue();
-    String password = this.password.getValue();
-    String passwordConfirm = this.confirmPassword.getValue();
+    final String username = this.username.getValue();
+    final String firstname = this.firstname.getValue();
+    final String lastname = this.lastname.getValue();
+    final String password = this.password.getValue();
+    final String passwordConfirm = confirmPassword.getValue();
 
     if (password == passwordConfirm) {
-      bool result = await api.createUser(username, firstname, lastname, password);
+      final bool result = await api.createUser(username, firstname, lastname, password);
       if (result) {
         // User created successful
         showDialog<Center>(
             barrierDismissible: false,
-            context: this.contextObject.getOutput(),
+            context: contextObject.getOutput(),
             builder: (BuildContext context) {
               return NotifyDialog(
                 title: 'Success',
                 description: 'User created successfuly!',
-                key: Key('UserCreated'),
-                function: () => {Routes.pop(this.contextObject.getOutput())},
+                key: const Key('UserCreated'),
+                function: () => {Routes.pop(contextObject.getOutput())},
               );
             });
         return true;
@@ -97,9 +98,9 @@ class RegisterUserScreen extends BaseScreen {
         // Server error
         showDialog<Center>(
             barrierDismissible: false,
-            context: this.contextObject.getOutput(),
+            context: contextObject.getOutput(),
             builder: (BuildContext context) {
-              return NotifyDialog(title: 'Server Error', description: 'User creation refused', key: Key('ServerError'));
+              return const NotifyDialog(title: 'Server Error', description: 'User creation refused', key: Key('ServerError'));
             });
         return false;
       }
@@ -107,9 +108,9 @@ class RegisterUserScreen extends BaseScreen {
       // Password and confirm password does not match
       showDialog<Center>(
           barrierDismissible: false,
-          context: this.contextObject.getOutput(),
+          context: contextObject.getOutput(),
           builder: (BuildContext context) {
-            return NotifyDialog(title: 'Input Error', description: 'Password does not match', key: Key('PasswordsDoesNotMatch'));
+            return const NotifyDialog(title: 'Input Error', description: 'Password does not match', key: Key('PasswordsDoesNotMatch'));
           });
       return false;
     }
@@ -118,9 +119,9 @@ class RegisterUserScreen extends BaseScreen {
   void serverTimeout() {
     showDialog<Center>(
         barrierDismissible: false,
-        context: this.contextObject.getOutput(),
+        context: contextObject.getOutput(),
         builder: (BuildContext context) {
-          return NotifyDialog(title: 'Server Error', description: 'Server timed out!\nPlease try again', key: Key('ServerError'));
+          return const NotifyDialog(title: 'Server Error', description: 'Server timed out!\nPlease try again', key: Key('ServerError'));
         });
   }
 }

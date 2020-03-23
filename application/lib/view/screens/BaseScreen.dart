@@ -6,47 +6,48 @@ import 'package:flutter/material.dart';
 
 class BaseScreen extends StatelessWidget {
   Size getScreenSize() {
-    return MediaQuery.of(this.contextObject.getOutput()).size;
+    return MediaQuery.of(contextObject.getOutput()).size;
   }
 
   bool isKeyboardShown() {
-    return MediaQuery.of(this.contextObject.getOutput()).viewInsets.bottom > 0;
+    return MediaQuery.of(contextObject.getOutput()).viewInsets.bottom > 0;
   }
 
   bool isInPortraitMode() {
-    return this.getOrientation() == Orientation.portrait;
+    return getOrientation() == Orientation.portrait;
   }
 
   bool isInLandscapemode() {
-    return this.getOrientation() == Orientation.landscape;
+    return getOrientation() == Orientation.landscape;
   }
 
   Orientation getOrientation() {
-    return MediaQuery.of(this.contextObject.getOutput()).orientation;
+    return MediaQuery.of(contextObject.getOutput()).orientation;
   }
 
   bool isTablet() {
-    var size = MediaQuery.of(this.contextObject.getOutput()).size;
-    var diagonal = sqrt((size.width * size.width) + (size.height * size.height));
+    final Size size = MediaQuery.of(contextObject.getOutput()).size;
+    final double diagonal = sqrt((size.width * size.width) + (size.height * size.height));
 
-    var isTablet = diagonal > 1100.0;
+    final bool isTablet = diagonal > 1100.0;
     return isTablet;
   }
 
   double getScreenWidth() {
-    return MediaQuery.of(this.contextObject.getOutput()).size.width;
+    return MediaQuery.of(contextObject.getOutput()).size.width;
   }
 
   double getScreenHeight() {
-    return MediaQuery.of(this.contextObject.getOutput()).size.height;
+    return MediaQuery.of(contextObject.getOutput()).size.height;
   }
 
   bool isPhone() {
     return !isTablet();
   }
 
-  final Output<BuildContext> contextObject = new Output<BuildContext>(null);
+  final Output<BuildContext> contextObject = Output<BuildContext>(null);
 
+  @override
   Widget build(BuildContext context) {
     contextObject.setOutput(context);
     return Scaffold(appBar: appBar(), body: content());

@@ -59,8 +59,7 @@ class _ButtonState extends State<PrimaryButton> {
     _isEnabled = widget.isEnabled && widget.onPressed != null;
     _isPressed = false;
     if (widget.isEnabledStream != null) {
-      _isEnabledSubscription =
-          widget.isEnabledStream.listen(_handleIsEnabledStreamEvent);
+      _isEnabledSubscription = widget.isEnabledStream.listen(_handleIsEnabledStreamEvent);
     }
     super.initState();
   }
@@ -99,19 +98,11 @@ class _ButtonState extends State<PrimaryButton> {
         width: widget.width,
         height: widget.height,
         decoration: BoxDecoration(
-          gradient: _isEnabled
-              ? (_isPressed ? _gradientPressed : _gradientDefault)
-              : _gradientDisabled,
+          gradient: _isEnabled ? (_isPressed ? _gradientPressed : _gradientDefault) : _gradientDisabled,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: _isEnabled
-                  ? (_isPressed ? _borderPressed : _borderDefault)
-                  : _borderDisabled,
-              width: 1.2),
+          border: Border.all(color: _isEnabled ? (_isPressed ? _borderPressed : _borderDefault) : _borderDisabled, width: 1.2),
         ),
-        child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: _buildWidgetsOnButton()),
+        child: Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), child: _buildWidgetsOnButton()),
       ),
     );
   }
@@ -127,8 +118,7 @@ class _ButtonState extends State<PrimaryButton> {
       widget.onPressed();
       // On a quick tap the pressed state is not shown, because the state
       // changes too fast, hence we introduce a delay.
-      _timer = Timer(const Duration(milliseconds: 100),
-          () => setState(() => _isPressed = false));
+      _timer = Timer(const Duration(milliseconds: 100), () => setState(() => _isPressed = false));
     }
   }
 
@@ -158,7 +148,7 @@ class _ButtonState extends State<PrimaryButton> {
   Widget _buildWidgetsOnButton() {
     const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 20);
 
-    if (widget.text != null && widget.icon != null)
+    if (widget.text != null && widget.icon != null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -172,13 +162,13 @@ class _ButtonState extends State<PrimaryButton> {
           ),
         ],
       );
-    else if (widget.text != null)
+    } else if (widget.text != null) {
       return Center(
           child: Text(
         widget.text,
         style: textStyle,
       ));
-    else if (widget.icon != null) {
+    } else if (widget.icon != null) {
       return Center(
         child: widget.icon,
       );

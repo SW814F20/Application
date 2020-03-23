@@ -12,11 +12,12 @@ import 'package:application/di.dart';
 class LoginScreen extends BaseScreen {
   final AuthenticationBloc authenticationBloc = di.getDependency<AuthenticationBloc>();
 
+  @override
   Widget build(BuildContext context) {
-    this.contextObject.setOutput(context);
+    contextObject.setOutput(context);
     return Scaffold(
       backgroundColor: Colors.orange,
-      body: this.content(),
+      body: content(),
     );
   }
 
@@ -28,17 +29,18 @@ class LoginScreen extends BaseScreen {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final Output<bool> _loginPressed = new Output(false);
+  final Output<bool> _loginPressed = Output(false);
 
+  @override
   Widget content() {
     return Center(
       child: Column(
         children: <Widget>[
           Padding(
-            padding: this.isInLandscapemode() ? EdgeInsets.fromLTRB(0, 10, 0, 0) : EdgeInsets.fromLTRB(0, 100, 0, 0),
-            child: this.isKeyboardShown()
+            padding: isInLandscapemode() ? const EdgeInsets.fromLTRB(0, 10, 0, 0) : const EdgeInsets.fromLTRB(0, 100, 0, 0),
+            child: isKeyboardShown()
                 ? Container()
-                : Image(
+                : const Image(
                     image: AssetImage('assets/giraf_splash_logo.png'),
                   ),
           ),
@@ -52,8 +54,7 @@ class LoginScreen extends BaseScreen {
                     child: Column(
                       children: <Widget>[
                         Padding(
-                          padding:
-                              this.isInPortraitMode() ? const EdgeInsets.fromLTRB(0, 20, 0, 10) : const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          padding: isInPortraitMode() ? const EdgeInsets.fromLTRB(0, 20, 0, 10) : const EdgeInsets.fromLTRB(0, 0, 0, 5),
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey, width: 1),
@@ -110,11 +111,10 @@ class LoginScreen extends BaseScreen {
                                   // This is to disallow multiple login attempts at the same time
                                   if (!_loginPressed.getOutput()) {
                                     _loginPressed.setOutput(true);
-                                    this
-                                        .authenticationBloc
+                                    authenticationBloc
                                         .login(usernameCtrl.text, passwordCtrl.text)
-                                        .then((bool result) => (this.loginAttempt(this.contextObject.getOutput(), result)))
-                                        .timeout(Duration(seconds: 5), onTimeout: loginTimeout);
+                                        .then((bool result) => loginAttempt(contextObject.getOutput(), result))
+                                        .timeout(const Duration(seconds: 5), onTimeout: loginTimeout);
                                   }
 
                                   // This is where the action for the submit happens
@@ -150,12 +150,12 @@ class LoginScreen extends BaseScreen {
                             scale: 1.2,
                             child: RaisedButton(
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                              child: Text(
+                              child: const Text(
                                 'Create User',
                                 key: Key('CreateUserKey'),
                                 style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () => {Routes.push(this.contextObject.getOutput(), RegisterUserScreen())},
+                              onPressed: () => {Routes.push(contextObject.getOutput(), RegisterUserScreen())},
                               color: const Color.fromRGBO(48, 81, 118, 1),
                             ),
                           ),
@@ -175,7 +175,7 @@ class LoginScreen extends BaseScreen {
   void loginAttempt(BuildContext context, bool successful) {
     if (successful) {
       _loginPressed.setOutput(false);
-      Routes.push(context, new AppSelectionScreen());
+      Routes.push(context, AppSelectionScreen());
       // Login successful
     } else {
       _loginPressed.setOutput(false);
@@ -183,7 +183,7 @@ class LoginScreen extends BaseScreen {
           barrierDismissible: false,
           context: context,
           builder: (BuildContext context) {
-            return NotifyDialog(title: 'Error', description: 'Wrong username and/or password', key: Key('WrongUsernameOrPassword'));
+            return const NotifyDialog(title: 'Error', description: 'Wrong username and/or password', key: Key('WrongUsernameOrPassword'));
           });
       // Login failed
     }
@@ -193,13 +193,14 @@ class LoginScreen extends BaseScreen {
     _loginPressed.setOutput(false);
     showDialog<Center>(
         barrierDismissible: false,
-        context: this.contextObject.getOutput(),
+        context: contextObject.getOutput(),
         builder: (BuildContext context) {
-          return NotifyDialog(title: 'Timeout', description: 'The connection to the server timed out', key: Key('WrongUsernameOrPassword'));
+          return const NotifyDialog(
+              title: 'Timeout', description: 'The connection to the server timed out', key: Key('WrongUsernameOrPassword'));
         });
   }
 
   void registerUserScreen() {
-    Routes.push(this.contextObject.getOutput(), new RegisterUserScreen());
+    Routes.push(contextObject.getOutput(), RegisterUserScreen());
   }
 }

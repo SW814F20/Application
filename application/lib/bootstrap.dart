@@ -24,7 +24,7 @@ class Bootstrap {
     });
 
     di.registerSingleton((Injector i) {
-      ApplicationBloc bloc = new ApplicationBloc();
+      final ApplicationBloc bloc = ApplicationBloc();
       if (mock()) {
         bloc.mockData();
       }

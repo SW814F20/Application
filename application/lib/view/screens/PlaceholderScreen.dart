@@ -11,11 +11,11 @@ class PlaceholderScreen extends BaseScreen {
       child: Column(
         children: <Widget>[
           PrimaryButton(
-            onPressed: () => {},
-            text: "Test button",
+            onPressed: () => <void>{},
+            text: 'Test button',
             isEnabled: true,
           ),
-          Text("This is a placeholder screen!"),
+          const Text('This is a placeholder screen!'),
         ],
       ),
     );
@@ -23,12 +23,12 @@ class PlaceholderScreen extends BaseScreen {
 
   @override
   Widget appBar() {
-    return new AppBar(
-        title: Text("Placeholder screen"),
+    return AppBar(
+        title: const Text('Placeholder screen'),
         centerTitle: true,
         leading: IconButton(
           icon: FaIcon(FontAwesomeIcons.arrowLeft),
-          onPressed: () => Routes.pop(this.contextObject.getOutput()),
+          onPressed: () => Routes.pop(contextObject.getOutput()),
         ));
   }
 }

@@ -25,18 +25,14 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
                 textAlign: TextAlign.center,
               )),
             ),
-            decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: <double>[
-                  0.33,
-                  0.66
-                ],
-                    colors: <Color>[
-                  Color.fromRGBO(254, 215, 108, 1),
-                  Color.fromRGBO(253, 187, 85, 1),
-                ])),
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, stops: <double>[
+              0.33,
+              0.66
+            ], colors: <Color>[
+              Color.fromRGBO(254, 215, 108, 1),
+              Color.fromRGBO(253, 187, 85, 1),
+            ])),
           ),
         ),
       ],

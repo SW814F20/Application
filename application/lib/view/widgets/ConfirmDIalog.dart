@@ -11,14 +11,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ConfirmDialog extends StatelessWidget implements PreferredSizeWidget {
   ///The dialog displays the title and description, with a button
   ///to conform the notification, which simply closes the dialog.
-  ConfirmDialog({
+  const ConfirmDialog({
     Key key,
     @required this.title,
     this.description,
     this.functionConfirm,
     this.functionAbort,
-    this.confirmText = "Yes",
-    this.abortText = "No",
+    this.confirmText = 'Yes',
+    this.abortText = 'No',
     this.abortIcon,
     this.confirmIcon,
   }) : super(key: key);

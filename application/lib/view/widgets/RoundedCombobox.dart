@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class RoundedCombobox<T1> extends StatefulWidget {
   RoundedCombobox(this.options,
-      {this.padding = const EdgeInsets.fromLTRB(0, 10, 0, 10), this.fontSize = 30, this.label = false, this.labelText = ""});
+      {this.padding = const EdgeInsets.fromLTRB(0, 10, 0, 10), this.fontSize = 30, this.label = false, this.labelText = ''});
   final double fontSize;
   final EdgeInsets padding;
   final bool label;
@@ -30,27 +30,28 @@ class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
 
   List<DropdownMenuItem<T1>> getDropDownMenuItems() {
     return widget.options
-        .map((option) => new DropdownMenuItem<T1>(
+        .map((option) => DropdownMenuItem<T1>(
             value: option.key,
-            child: new Text(
+            child: Text(
               option.value,
-              style: TextStyle(fontSize: this.widget.fontSize),
+              style: TextStyle(fontSize: widget.fontSize),
             )))
         .toList();
   }
 
   Widget _dropdownButton;
 
+  @override
   Widget build(BuildContext context) {
     return Flex(
       direction: Axis.horizontal,
       children: <Widget>[
-        this.widget.label
+        widget.label
             ? Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                 child: Text(
-                  this.widget.labelText,
-                  style: TextStyle(fontSize: this.widget.fontSize),
+                  widget.labelText,
+                  style: TextStyle(fontSize: widget.fontSize),
                 ),
               )
             : Container(),
@@ -58,7 +59,7 @@ class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
           flex: 100,
           child: Container(
             child: Padding(
-              padding: this.widget.padding,
+              padding: widget.padding,
               child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey, width: 1),
@@ -76,7 +77,7 @@ class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
   void changedDropDownItem(T1 selectedTopic) {
     setState(() {
       output.setOutput(selectedTopic);
-      this._dropdownButton = DropdownButton<T1>(
+      _dropdownButton = DropdownButton<T1>(
         value: output.getOutput(),
         items: _dropDownMenuItems(),
         onChanged: changedDropDownItem,
@@ -92,7 +93,7 @@ class RoundedComboboxState<T1> extends State<RoundedCombobox<T1>> {
   void initState() {
     /// defaults the selected item to the first item in the provided items
     output.setOutput(options[0].key);
-    this._dropdownButton = DropdownButton<T1>(
+    _dropdownButton = DropdownButton<T1>(
       value: output.getOutput(),
       items: _dropDownMenuItems(),
       onChanged: changedDropDownItem,

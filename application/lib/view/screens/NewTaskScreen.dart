@@ -15,19 +15,19 @@ class NewTaskScreen extends BaseScreen {
   final Application app;
 
   final RoundedTextField taskName = RoundedTextField(
-    "taskNameFieldKey",
-    "Task name",
+    'taskNameFieldKey',
+    'Task name',
   );
 
   final RoundedCombobox taskPriority = RoundedCombobox<Priority>(
     [
-      KeyValuePair(Priority.low, "Low"),
-      KeyValuePair(Priority.medium, "Medium"),
-      KeyValuePair(Priority.high, "High"),
-      KeyValuePair(Priority.critical, "Critical"),
+      KeyValuePair(Priority.low, 'Low'),
+      KeyValuePair(Priority.medium, 'Medium'),
+      KeyValuePair(Priority.high, 'High'),
+      KeyValuePair(Priority.critical, 'Critical'),
     ],
     label: true,
-    labelText: "Priority",
+    labelText: 'Priority',
   );
 
   @override
@@ -42,7 +42,7 @@ class NewTaskScreen extends BaseScreen {
               taskName,
               taskPriority,
               Button(
-                text: "Create Task",
+                text: 'Create Task',
                 onPressed: () => {createTask()},
               ),
             ],
@@ -53,17 +53,14 @@ class NewTaskScreen extends BaseScreen {
   }
 
   void createTask() {
-    this
-        .app
-        .tasks
-        .add(new Task(taskName: this.taskName.getValue(), taskPriority: this.taskPriority.getValue(), taskStatus: Status.notStarted));
-    Routes.pop(this.contextObject.getOutput());
+    app.tasks.add(Task(taskName: taskName.getValue(), taskPriority: taskPriority.getValue(), taskStatus: Status.notStarted));
+    Routes.pop(contextObject.getOutput());
   }
 
   @override
   Widget appBar() {
     return CustomAppBar(
-      title: app.appName + " - Create new task",
+      title: app.appName + ' - Create new task',
       centerTitle: true,
     );
   }

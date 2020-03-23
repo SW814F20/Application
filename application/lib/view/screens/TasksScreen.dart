@@ -14,26 +14,26 @@ class TaskScreen extends BaseScreen {
 
   @override
   Widget build(BuildContext context) {
-    this.contextObject.setOutput(context);
-    return this.isInPortraitMode() ? DefaultTabController(length: 3, child: generateScaffolding()) : generateScaffolding();
+    contextObject.setOutput(context);
+    return isInPortraitMode() ? DefaultTabController(length: 3, child: generateScaffolding()) : generateScaffolding();
   }
 
   Widget generateScaffolding() {
     return Scaffold(
-      appBar: this.isInPortraitMode() ? generateAppBarPortrait() : generateAppBarLandscape(),
+      appBar: isInPortraitMode() ? generateAppBarPortrait() : generateAppBarLandscape(),
       body: content(),
     );
   }
 
   @override
   Widget content() {
-    return this.isInPortraitMode() ? contentPortrait() : contentLandscape();
+    return isInPortraitMode() ? contentPortrait() : contentLandscape();
   }
 
   Widget contentPortrait() {
-    List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
-    List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
-    List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
+    final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
+    final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
+    final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
     return TabBarView(children: [
       Container(
         alignment: Alignment.topCenter,
@@ -42,7 +42,7 @@ class TaskScreen extends BaseScreen {
             children: notStartedWidgets,
           ),
         ),
-        color: Color.fromRGBO(200, 200, 200, 1),
+        color: const Color.fromRGBO(200, 200, 200, 1),
       ),
       Container(
         alignment: Alignment.topCenter,
@@ -72,7 +72,7 @@ class TaskScreen extends BaseScreen {
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(border: Border.all()),
       child: GestureDetector(
-        onTap: () => Routes.push(this.contextObject.getOutput(), new PlaceholderScreen()),
+        onTap: () => Routes.push(contextObject.getOutput(), PlaceholderScreen()),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
           child: Row(
@@ -81,14 +81,14 @@ class TaskScreen extends BaseScreen {
                 flex: 25,
                 child: Text(
                   capitalize(task.taskPriority.toString().substring(9)),
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
               ),
               Expanded(
                 flex: 90,
                 child: Text(
                   task.taskName,
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
               ),
               Expanded(
@@ -107,17 +107,17 @@ class TaskScreen extends BaseScreen {
   }
 
   List<Task> getTasks(Status status) {
-    return this.app.tasks.where((task) => task.taskStatus == status).toList();
+    return app.tasks.where((task) => task.taskStatus == status).toList();
   }
 
   List<Task> getAllTasks(Status status) {
-    return this.app.tasks;
+    return app.tasks;
   }
 
   Widget contentLandscape() {
-    List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
-    List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
-    List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
+    final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
+    final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
+    final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
     return Column(
       children: <Widget>[
         _columnHeader(),
@@ -133,7 +133,7 @@ class TaskScreen extends BaseScreen {
                       children: notStartedWidgets,
                     ),
                   ),
-                  color: Color.fromRGBO(200, 200, 200, 1),
+                  color: const Color.fromRGBO(200, 200, 200, 1),
                 )),
             Expanded(
                 flex: 33,
@@ -166,10 +166,10 @@ class TaskScreen extends BaseScreen {
   Widget generateAppBarLandscape() {
     return AppBar(
       centerTitle: true,
-      title: Text(this.app.appName + " - Select Task"),
+      title: Text(app.appName + ' - Select Task'),
       leading: IconButton(
         icon: FaIcon(FontAwesomeIcons.arrowLeft),
-        onPressed: () => Routes.pop(this.contextObject.getOutput()),
+        onPressed: () => Routes.pop(contextObject.getOutput()),
       ),
       actions: <Widget>[
         createNewTaskButton(),
@@ -187,8 +187,8 @@ class TaskScreen extends BaseScreen {
             child: Column(
               children: <Widget>[
                 FaIcon(FontAwesomeIcons.hourglass),
-                Text(
-                  "Not started",
+                const Text(
+                  'Not started',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -202,8 +202,8 @@ class TaskScreen extends BaseScreen {
             child: Column(
               children: <Widget>[
                 FaIcon(FontAwesomeIcons.cog),
-                Text(
-                  "WIP",
+                const Text(
+                  'WIP',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -217,8 +217,9 @@ class TaskScreen extends BaseScreen {
             child: Column(
               children: <Widget>[
                 FaIcon(FontAwesomeIcons.check),
-                Text(
-                  "Done",
+                const Text(
+                  // ignore: prefer_const_constructors
+                  'Done',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -230,10 +231,10 @@ class TaskScreen extends BaseScreen {
   Widget generateAppBarPortrait() {
     return AppBar(
       centerTitle: true,
-      title: Text(this.app.appName + " - Select Task"),
+      title: Text(app.appName + ' - Select Task'),
       leading: IconButton(
         icon: FaIcon(FontAwesomeIcons.arrowLeft),
-        onPressed: () => Routes.pop(this.contextObject.getOutput()),
+        onPressed: () => Routes.pop(contextObject.getOutput()),
       ),
       actions: <Widget>[
         createNewTaskButton(),
@@ -244,21 +245,21 @@ class TaskScreen extends BaseScreen {
               icon: Column(
             children: <Widget>[
               FaIcon(FontAwesomeIcons.hourglass),
-              Text("Not started"),
+              const Text('Not started'),
             ],
           )),
           Tab(
               icon: Column(
             children: <Widget>[
               FaIcon(FontAwesomeIcons.cog),
-              Text("WIP"),
+              const Text('WIP'),
             ],
           )),
           Tab(
               icon: Column(
             children: <Widget>[
               FaIcon(FontAwesomeIcons.check),
-              Text("Done"),
+              const Text('Done'),
             ],
           )),
         ],
@@ -269,7 +270,7 @@ class TaskScreen extends BaseScreen {
   Widget createNewTaskButton() {
     return IconButton(
       icon: FaIcon(FontAwesomeIcons.plus),
-      onPressed: () => {Routes.push(this.contextObject.getOutput(), new NewTaskScreen(this.app))},
+      onPressed: () => {Routes.push(contextObject.getOutput(), NewTaskScreen(app))},
     );
   }
 }

@@ -27,6 +27,6 @@ class Routes {
   static void reset(BuildContext context) {
     goHome(context);
     pop(context);
-    push(context, new LoginScreen());
+    push(context, LoginScreen());
   }
 }
