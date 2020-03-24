@@ -40,6 +40,8 @@ namespace API.Services
                 throw new AppException("The AppName is required");
             if (string.IsNullOrWhiteSpace(app.AppUrl))
                 throw new AppException("The AppUrl is required");
+            if (string.IsNullOrWhiteSpace(app.AppColor))
+                throw new AppException("The AppColor is required");
 
             if (_context.Apps.Any(x => x.AppName == app.AppName))
                 throw new AppException("An app with name \"" + app.AppName + "\" already exists");
@@ -71,6 +73,7 @@ namespace API.Services
 
                 app.AppName = appParam.AppName;
             }
+            app.AppColor = appParam.AppColor;
 
             _context.Apps.Update(app);
             _context.SaveChanges();

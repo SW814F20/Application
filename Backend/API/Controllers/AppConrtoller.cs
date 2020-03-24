@@ -1,13 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using System.IdentityModel.Tokens.Jwt;
 using API.Helpers;
 using Microsoft.Extensions.Options;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using API.Services;
 using API.Entities;
@@ -99,7 +94,7 @@ namespace API.Controllers
             try
             {
                 _appService.Update(app);
-                return Ok();
+                return Ok(app);
             }
             // Catch the exception and return a HttpBadRequest with the same message.
             catch (AppException ex)

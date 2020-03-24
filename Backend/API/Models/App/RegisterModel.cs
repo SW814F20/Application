@@ -9,5 +9,9 @@ namespace API.Models.App
 
         [Required]
         public string AppUrl { get; set; }
+
+        [Required]
+        public string AppColor { get; set; }
+
     }
 }
