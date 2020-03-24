@@ -1,6 +1,7 @@
 {
-  "SERVER_HOST": "api_url",
+  "SERVER_HOST": "http://thluha-1.personal.es.aau.dk/",
   "DEBUG": true,
-  "USERNAME": "admin",
-  "PASSWORD": "1234"
+  "USERNAME": "Graatand",
+  "PASSWORD": "password",
+  "MOCK": false
 }

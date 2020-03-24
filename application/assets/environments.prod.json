@@ -1,4 +1,5 @@
 {
-  "SERVER_HOST": "api_url",
-  "DEBUG": false
+  "SERVER_HOST": "http://thluha-1.personal.es.aau.dk/",
+  "DEBUG": false,
+  "MOCK": false
 }
