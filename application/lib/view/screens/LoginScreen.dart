@@ -1,4 +1,6 @@
+import 'package:application/blocs/ApplicationBloc.dart';
 import 'package:application/blocs/AuthenticationBloc.dart';
+import 'package:application/model/Application.dart';
 import 'package:application/model/Output.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/AppSelectionScreen.dart';
@@ -11,6 +13,7 @@ import 'package:application/di.dart';
 
 class LoginScreen extends BaseScreen {
   final AuthenticationBloc authenticationBloc = di.getDependency<AuthenticationBloc>();
+  final ApplicationBloc applicationBloc = di.getDependency<ApplicationBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +178,7 @@ class LoginScreen extends BaseScreen {
   void loginAttempt(BuildContext context, bool successful) {
     if (successful) {
       _loginPressed.setOutput(false);
-      Routes.push(context, AppSelectionScreen());
+      applicationBloc.getApplications().then((value) => (Routes.push(context, AppSelectionScreen(new Output<List<Application>>(value)))));
       // Login successful
     } else {
       _loginPressed.setOutput(false);
