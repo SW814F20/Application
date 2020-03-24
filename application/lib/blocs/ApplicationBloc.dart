@@ -9,8 +9,9 @@ class ApplicationBloc {
   BaseApi api = di.getDependency<BaseApi>();
   List<Application> data = <Application>[];
 
-  Future<void> getApplications() async {
+  Future<List<Application>> getApplications() async {
     data = await api.getApplications(authenticationBloc.getLoggedInUser().token);
+    return data;
   }
 
   void mockData() {

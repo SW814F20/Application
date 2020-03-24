@@ -2,6 +2,7 @@ import 'package:application/blocs/ApplicationBloc.dart';
 import 'package:application/blocs/AuthenticationBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
+import 'package:application/model/Output.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/screens/NewAppScreen.dart';
@@ -12,11 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppSelectionScreen extends BaseScreen {
+  AppSelectionScreen(this.apps);
   final AuthenticationBloc authenticationBloc = di.getDependency<AuthenticationBloc>();
   final ApplicationBloc applicationBloc = di.getDependency<ApplicationBloc>();
 
-  List<Application> apps() => applicationBloc.data;
-
+  final Output<List<Application>> apps;
   int appsEachRowPortrait() => isTablet() ? 3 : 3;
 
   int appsEachRowLandscape() => isTablet() ? 5 : 6;
@@ -29,7 +30,7 @@ class AppSelectionScreen extends BaseScreen {
 
   @override
   Widget build(BuildContext context) {
-    applicationBloc.getApplications();
+    applicationBloc.getApplications().then((value) => apps.setOutput(value));
     return WillPopScope(
         onWillPop: () async {
           logoutConfirm();
@@ -124,21 +125,21 @@ class AppSelectionScreen extends BaseScreen {
     final List<List<Widget>> rows = [<Widget>[]];
     if (isInLandscapemode()) {
       int rowCount = 0;
-      for (var i = 0; i < apps().length; i++) {
+      for (var i = 0; i < apps.getOutput().length; i++) {
         if (i % appsEachRowLandscape() == 0 && i > 0) {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(getAppSelectionOption(apps()[i]));
+        rows[rowCount].add(getAppSelectionOption(apps.getOutput()[i]));
       }
     } else if (isInPortraitMode()) {
       int rowCount = 0;
-      for (var i = 0; i < apps().length; i++) {
+      for (var i = 0; i < apps.getOutput().length; i++) {
         if (i % appsEachRowPortrait() == 0 && i > 0) {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(getAppSelectionOption(apps()[i]));
+        rows[rowCount].add(getAppSelectionOption(apps.getOutput()[i]));
       }
     }
     final List<Widget> outputRows = <Widget>[];
