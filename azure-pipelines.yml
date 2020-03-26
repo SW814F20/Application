@@ -9,14 +9,17 @@ trigger:
 pool: flutter
 
 steps:
+      - 
       - task: Bash@3
         displayName: 'Linter'
         inputs:
+          workingDirectory: $(projectDirectory)/application
           targetType: inline
           script: /root/flutter/bin/flutter analyze
       - task: Bash@3
         displayName: 'Flutter Build'
         inputs:
+          workingDirectory: $(projectDirectory)/application
           targetType: inline
           script: /root/flutter/bin/flutter build apk
       #- task: Bash@3
