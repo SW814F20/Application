@@ -9,7 +9,6 @@ trigger:
 pool: flutter
 
 steps:
-      - 
       - task: Bash@3
         displayName: 'Linter'
         inputs:
