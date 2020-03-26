@@ -10,26 +10,21 @@ pool:
   vmImage: 'macos-latest'
 
 steps:
-      #- task: FlutterInstall@0
-      - task: ShellScript@2
-        displayName: 'Flutter Install'
-        inputs:
-          scriptPath: '$(projectDirectory)/flutterinstall.sh'
       - task: Bash@3
         displayName: 'Linter'
         inputs:
           targetType: inline
-          script: $(projectDirectory)/flutter/bin/flutter analyze
+          script: /root/flutter/bin/flutter analyze
       - task: Bash@3
         displayName: 'Flutter Build'
         inputs:
           targetType: inline
-          script: $(projectDirectory)/flutter/bin/flutter build apk
-      - task: Bash@3
-        displayName: 'Flutter Test'
-        inputs:
-          targetType: inline
-          script: $(projectDirectory)/flutter/bin/flutter test
+          script: /root/flutter/bin/flutter build apk
+      #- task: Bash@3
+      #  displayName: 'Flutter Test'
+      #  inputs:
+      #    targetType: inline
+      #    script: $(projectDirectory)/root/flutter/bin/flutter test
       - task: CopyFiles@2
         inputs:
           contents: '**/*.apk'
