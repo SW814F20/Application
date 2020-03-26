@@ -62,6 +62,7 @@ namespace API
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAppService, AppService>();
             services.AddTransient<IScreenService, ScreenService>();
+            services.AddTransient<ITaskService, TaskService>();
 
             services.AddDbContext<Helpers.DataContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
