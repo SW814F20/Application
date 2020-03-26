@@ -178,7 +178,7 @@ class LoginScreen extends BaseScreen {
   void loginAttempt(BuildContext context, bool successful) {
     if (successful) {
       _loginPressed.setOutput(false);
-      applicationBloc.getApplications().then((value) => (Routes.push(context, AppSelectionScreen(new Output<List<Application>>(value)))));
+      applicationBloc.getApplications().then((value) => Routes.push(context, AppSelectionScreen(Output<List<Application>>(value))));
       // Login successful
     } else {
       _loginPressed.setOutput(false);
