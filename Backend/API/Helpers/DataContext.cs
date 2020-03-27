@@ -22,5 +22,6 @@ namespace API.Helpers
         public DbSet<User> Users { get; set; }
         public DbSet<App> Apps { get; set; }
         public DbSet<Screen> Screens { get; set; }
+        public DbSet<Task> Tasks { get; set; }
     }
 }
