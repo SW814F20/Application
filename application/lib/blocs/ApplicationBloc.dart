@@ -38,7 +38,7 @@ class ApplicationBloc {
     Color color,
     String url,
   ) async {
-    final bool success = await api.createApplications(name, url, authenticationBloc.getLoggedInUser().token);
+    final bool success = await api.createApplications(name, url, color, authenticationBloc.getLoggedInUser().token);
     if (success) {
       data.add(Application(id: id, appName: name, color: color, appUrl: url));
       return true;

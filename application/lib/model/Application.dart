@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:application/model/CustomColor.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/providers/environment_provider.dart' as environment;
 
@@ -12,7 +13,8 @@ class Application {
   Application.fromJson(Map<String, dynamic> json)
       : appName = json['appName'],
         appUrl = json['appUrl'],
-        id = json['id'];
+        id = json['id'],
+        color = CustomColor(json['appColor']);
 
   int id;
   String appName;
