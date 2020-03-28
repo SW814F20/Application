@@ -106,10 +106,10 @@ class BaseApi {
     final String appColor = color.toString();
     final String data = '''
     {
-  "appName": "$appName",
-  "appUrl": "$appUrl",
-  "appColor": "$appColor"
-}
+      "appName": "$appName",
+      "appUrl": "$appUrl",
+      "appColor": "$appColor"
+    }
     ''';
     final http.Response response = await _performCall('App/Create', [], HttpMethod.POST, data, token: token);
     if (response.statusCode == 200) {

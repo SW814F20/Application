@@ -1,17 +1,12 @@
-import 'package:application/blocs/AuthenticationBloc.dart';
-import 'package:application/di.dart';
+import 'package:application/blocs/ApiBloc.dart';
 import 'package:application/model/Application.dart';
-import 'package:application/providers/BaseApi.dart';
 import 'package:flutter/material.dart';
 
-class ApplicationBloc {
-  AuthenticationBloc authenticationBloc = di.getDependency<AuthenticationBloc>();
-  BaseApi api = di.getDependency<BaseApi>();
+class ApplicationBloc extends ApiBloc {
   List<Application> data = <Application>[];
 
-  Future<List<Application>> getApplications() async {
-    data = await api.getApplications(authenticationBloc.getLoggedInUser().token);
-    return data;
+  Future<List<Application>> getApplications() {
+    return api.getApplications(authenticationBloc.getLoggedInUser().token);
   }
 
   void mockData() {
