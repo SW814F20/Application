@@ -66,10 +66,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get information about a specific screen based on the Id
+        /// Get information about a specific task based on the Id
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>HttpCode 200 with the screen model</returns>
+        /// <returns>HttpCode 200 with the task model</returns>
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -79,7 +79,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Update an existing screen with a new model.
+        /// Update an existing task with a new model.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="model"></param>
@@ -90,7 +90,7 @@ namespace API.Controllers
             // Map the model to the entity and set the id within that model.
             var task = _mapper.Map<Task>(model);
             task.Id = id;
-            // Try to update the screen with the model passed from HttpPut
+            // Try to update the task with the model passed from HttpPut
             try
             {
                 _taskService.Update(task);
@@ -105,7 +105,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Delete a screen based on their Id
+        /// Delete a task based on Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>HttpCode 200 for success</returns>
