@@ -205,8 +205,8 @@ class BaseApi {
     }
   }
 
-  Future<List<Task>> getTasks(String token) async {
-    final http.Response response = await _performCall('Task', [], HttpMethod.GET, '', token: token);
+  Future<List<Task>> getTasks(int applicationId, String token) async {
+    final http.Response response = await _performCall('Task/$applicationId', [], HttpMethod.GET, '', token: token);
     if (response.statusCode == 200) {
       final dynamic body = jsonDecode(response.body);
       final List<Task> output = <Task>[];
