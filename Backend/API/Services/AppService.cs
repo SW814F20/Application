@@ -91,5 +91,10 @@ namespace API.Services
                 _context.SaveChanges();
             }
         }
+
+        public IEnumerable<Task> GetTask(int id)
+        {
+            return _context.Tasks.Where(t => t.AppId == id);
+        }
     }
 }
