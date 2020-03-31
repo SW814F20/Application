@@ -11,5 +11,6 @@ namespace API.Services
         App Create(App app);
         void Update(App app);
         void Delete(int id);
+        IEnumerable<Task> GetTask(int id);
     }
 }

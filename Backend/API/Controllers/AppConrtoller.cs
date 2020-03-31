@@ -115,5 +115,18 @@ namespace API.Controllers
             _appService.Delete(id);
             return Ok();
         }
+
+        /// <summary>
+        /// Returns all tasks associated to an app
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>HttpCode 200 for success with a list of all tasks for a given app id</returns>
+        [HttpGet("GetTask/{id}")]
+        public IActionResult GetTask(int id)
+        {
+            var tasks = _appService.GetTask(id);
+            var model = _mapper.Map<IList<Models.Task.TaskModel>>(tasks);
+            return Ok(model);
+        }
     }
 }
