@@ -128,5 +128,18 @@ namespace API.Controllers
             var model = _mapper.Map<IList<Models.Task.TaskModel>>(tasks);
             return Ok(model);
         }
+
+        /// <summary>
+        /// Returns all screens associated to an all tasks on that app 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>HttpCode 200 for success with a lis tof all screens for a given app id</returns>
+        [HttpGet("GetScreens/{id}")]
+        public IActionResult GetScreens(int id)
+        {
+            var screens = _appService.GetScreens(id);
+            var model = _mapper.Map<IList<Models.Screen.ScreenModel>>(screens);
+            return Ok(model);
+        }
     }
 }
