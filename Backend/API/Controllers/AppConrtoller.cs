@@ -125,6 +125,8 @@ namespace API.Controllers
         public IActionResult GetTask(int id)
         {
             var tasks = _appService.GetTask(id);
+            // Uses automapper to map the result as a list of Models.Taks.TaskModel 
+            // (typecast to ensure the correct datatype instead of Data Transfer Object)
             var model = _mapper.Map<IList<Models.Task.TaskModel>>(tasks);
             return Ok(model);
         }
@@ -133,7 +135,7 @@ namespace API.Controllers
         /// Returns all screens associated to an all tasks on that app 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>HttpCode 200 for success with a lis tof all screens for a given app id</returns>
+        /// <returns>HttpCode 200 for success with a list of all screens for a given app id</returns>
         [HttpGet("GetScreens/{id}")]
         public IActionResult GetScreens(int id)
         {
