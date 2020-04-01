@@ -1,4 +1,6 @@
-class User {
+import 'package:application/model/Json.dart';
+
+class User implements Json {
   User.fromJson(Map<String, dynamic> json)
       : firstName = json['firstName'],
         lastName = json['lastName'],
@@ -17,13 +19,13 @@ class User {
     return token != null;
   }
 
-  String asJson(String password) {
+  @override
+  String toJson() {
     return '''
     {
       \"firstName\": \"$this->firstname\",
       \"lastName\": \"$this->lastname\",
       \"username\": \"$this->username\",
-      \"password\": \"$password\"
     }
   ''';
   }

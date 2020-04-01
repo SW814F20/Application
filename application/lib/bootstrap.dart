@@ -13,8 +13,6 @@ class Bootstrap {
   /// NB:
   /// Singleton restricts the instantiation of a class to one 'single' instance
   static void register() {
-    bool mock() => environment.getVar<bool>('MOCK');
-
     di.registerSingleton((_) {
       return BaseApi(environment.getVar('SERVER_HOST'));
     });
@@ -25,9 +23,6 @@ class Bootstrap {
 
     di.registerSingleton((Injector i) {
       final ApplicationBloc bloc = ApplicationBloc();
-      if (mock()) {
-        bloc.mockData();
-      }
       return bloc;
     });
   }

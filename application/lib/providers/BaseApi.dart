@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:application/model/Application.dart';
 import 'package:application/model/KeyValuePair.dart';
 import 'package:application/model/Screen.dart';
+import 'package:application/model/Task.dart';
 import 'package:application/model/User.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 enum HttpMethod { GET, POST, PUT, DELETE }
@@ -100,8 +102,15 @@ class BaseApi {
     }
   }
 
-  Future<bool> createApplications(String appName, String appUrl, String token) async {
-    final String data = '{\"appName\": \"$appName\",\"appUrl\": \"$appUrl/\"}';
+  Future<bool> createApplications(String appName, String appUrl, Color color, String token) async {
+    final String appColor = color.toString();
+    final String data = '''
+    {
+      "appName": "$appName",
+      "appUrl": "$appUrl",
+      "appColor": "$appColor"
+    }
+    ''';
     final http.Response response = await _performCall('App/Create', [], HttpMethod.POST, data, token: token);
     if (response.statusCode == 200) {
       return true;
@@ -186,13 +195,63 @@ class BaseApi {
   }
 
   Future<bool> updateScreen(int id, String screenName, String screenContent, String token) async {
-    final String data = '''{"screenName": "$screenName","screenContent": "$screenContent"}''';
+    final String data = '''
+    {
+      "screenName": "$screenName",
+      "screenContent": "$screenContent"
+    }''';
     final http.Response response = await _performCall('Screen/$id', [], HttpMethod.PUT, data, token: token);
     if (response.statusCode == 200) {
       return true;
     } else {
       // If the server did not return a 200 OK response, then throw an exception.
       throw Exception('Failed to perform call');
+    }
+  }
+
+  Future<List<Task>> getTasks(int applicationId, String token) async {
+    final http.Response response = await _performCall('App/GetTask/$applicationId', [], HttpMethod.GET, '', token: token);
+    if (response.statusCode == 200) {
+      final dynamic body = jsonDecode(response.body);
+      final List<Task> output = <Task>[];
+      for (var elem in body) {
+        output.add(Task.fromJson(elem));
+      }
+      return output;
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      throw Exception('Failed to perform call');
+    }
+  }
+
+  Future<bool> createTask(String name, int appId, List<int> screenId, String description, String token) async {
+    final String ids = jsonEncode(screenId);
+    final String data = '''
+    {
+      "name": "$name",
+      "appId": $appId,
+      "screenId": $ids,
+      "description": "$description"
+    }
+    ''';
+    final http.Response response = await _performCall('Task/Create', [], HttpMethod.POST, data, token: token);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      throw Exception('Failed to perform call');
+    }
+
+    // TODO(tricky12321): This needs to be implemented, https://github.com/SW814F20/Application/issues/34
+    // ignore: dead_code, unused_element
+    Future<bool> deleteTask(String id, String token) async {
+      final http.Response response = await _performCall('Task/$id', [], HttpMethod.DELETE, '', token: token);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        // If the server did not return a 200 OK response, then throw an exception.
+        throw Exception('Failed to perform call');
+      }
     }
   }
 }

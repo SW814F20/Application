@@ -5,6 +5,7 @@ import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/widgets/AppBar.dart';
 import 'package:application/view/widgets/ButtonWidget.dart';
+import 'package:application/view/widgets/NotifyDIalog.dart';
 import 'package:application/view/widgets/RoundedCombobox.dart';
 import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,11 @@ class NewTaskScreen extends BaseScreen {
   final RoundedTextField taskName = RoundedTextField(
     'taskNameFieldKey',
     'Task name',
+  );
+
+  final RoundedTextField description = RoundedTextField(
+    'descriptionFieldKey',
+    'Description',
   );
 
   final RoundedCombobox taskPriority = RoundedCombobox<Priority>(
@@ -40,10 +46,11 @@ class NewTaskScreen extends BaseScreen {
           child: Column(
             children: <Widget>[
               taskName,
+              description,
               taskPriority,
               Button(
                 text: 'Create Task',
-                onPressed: () => {createTask()},
+                onPressed: createTask,
               ),
             ],
           ),
@@ -53,8 +60,36 @@ class NewTaskScreen extends BaseScreen {
   }
 
   void createTask() {
-    app.tasks.add(Task(taskName: taskName.getValue(), taskPriority: taskPriority.getValue(), taskStatus: Status.notStarted));
-    Routes.pop(contextObject.getOutput());
+    app.taskBloc.createTask(taskName.getValue(), app.id, [0], description.getValue()).then((value) => {returnCall(value)});
+  }
+
+  void returnCall(bool success) {
+    if (success) {
+      app.tasks.add(Task(taskName: taskName.getValue()));
+      showDialog<Center>(
+          barrierDismissible: false,
+          context: contextObject.getOutput(),
+          builder: (BuildContext context) {
+            return NotifyDialog(
+              title: 'Task created',
+              description: 'The task has been created',
+              key: const Key('applicationCreatedKey'),
+              function: () => Routes.pop(contextObject.getOutput()),
+            );
+          });
+    } else {
+      showDialog<Center>(
+          barrierDismissible: false,
+          context: contextObject.getOutput(),
+          builder: (BuildContext context) {
+            return NotifyDialog(
+              title: 'Task creation failed',
+              description: 'The task was not created, because an error happened.\nPlease check your connection and try again',
+              key: const Key('applicationCreatedKey'),
+              function: () => <void>{},
+            );
+          });
+    }
   }
 
   @override
