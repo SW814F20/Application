@@ -206,7 +206,7 @@ class BaseApi {
   }
 
   Future<List<Task>> getTasks(int applicationId, String token) async {
-    final http.Response response = await _performCall('Task/$applicationId', [], HttpMethod.GET, '', token: token);
+    final http.Response response = await _performCall('App/GetTask/$applicationId', [], HttpMethod.GET, '', token: token);
     if (response.statusCode == 200) {
       final dynamic body = jsonDecode(response.body);
       final List<Task> output = <Task>[];
@@ -221,8 +221,15 @@ class BaseApi {
   }
 
   Future<bool> createTask(String name, int appId, List<int> screenId, String description, String token) async {
-    final String ids = screenId.join(',');
-    final String data = '''{"name": "$name","appId": $appId,"screenId": [$ids],"description": "$description"''';
+    final String ids = jsonEncode(screenId);
+    final String data = '''
+    {
+    "name": "$name",
+    "appId": $appId,
+    "screenId": $ids,
+    "description": "$description"
+    }
+    ''';
     final http.Response response = await _performCall('Task/Create', [], HttpMethod.POST, data, token: token);
     if (response.statusCode == 200) {
       return true;

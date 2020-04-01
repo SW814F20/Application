@@ -8,4 +8,8 @@ class TaskBloc extends ApiBloc {
   Future<List<Task>> getTasks() {
     return api.getTasks(applicationId, authenticationBloc.getLoggedInUser().token);
   }
+
+  Future<bool> createTask(String taskName, int appId, List<int> screenId, String description) async {
+    return api.createTask(taskName, appId, screenId, description, authenticationBloc.getLoggedInUser().token);
+  }
 }

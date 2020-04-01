@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class ApplicationBloc extends ApiBloc {
   List<Application> data = <Application>[];
-
   Future<List<Application>> getApplications() {
     return api.getApplications(authenticationBloc.getLoggedInUser().token);
   }
