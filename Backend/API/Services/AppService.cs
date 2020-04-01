@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using API.Entities;
 using API.Helpers;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace API.Services
 {
@@ -95,6 +96,26 @@ namespace API.Services
         public IEnumerable<Task> GetTask(int id)
         {
             return _context.Tasks.Where(t => t.AppId == id);
+        }
+
+        public IEnumerable<Screen> GetScreens(int id)
+        {
+            var Tasks = GetTask(id);
+            var screenIds = new List<int> { };
+            var result = new List<Screen> { };
+            // Foreach task add all screen ids to a list.
+            foreach (var item in Tasks)
+            {
+                screenIds.AddRange(item.ScreenId);
+            }
+            // Foreach screen id in the list get the screen models associated to them and 
+            // add them to the result list
+            foreach (var item in screenIds)
+            {
+                result.AddRange(_context.Screens.Where(s => s.Id == item));
+            }
+            // return the result
+            return result;
         }
     }
 }
