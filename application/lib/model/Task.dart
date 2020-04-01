@@ -12,12 +12,18 @@ enum Priority { low, medium, high, critical }
 
 class Task implements Json {
   Task({this.taskName, this.appId, this.screenId, this.taskDescription = ''});
+
   @override
-  Task.fromJson(Map<String, dynamic> json)
-      : taskName = json['taskName'],
-        appId = json['appId'],
-        taskDescription = json['description'],
-        screenId = json['screenId'];
+  Task.fromJson(Map<String, dynamic> json) {
+    taskName = json['taskName'];
+    appId = json['appId'];
+    taskDescription = json['description'];
+    String test2 = jsonEncode(json['screenId']).replaceAll('[', '').replaceAll(']', '');
+    screenId = <int>[];
+    json['screenId'].forEach((dynamic element) {
+      screenId.add(0);
+    });
+  }
 
   String taskName;
   Status taskStatus;
