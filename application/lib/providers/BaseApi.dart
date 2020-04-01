@@ -238,6 +238,8 @@ class BaseApi {
       throw Exception('Failed to perform call');
     }
 
+    // TODO(tricky12321): This needs to be implemented, https://github.com/SW814F20/Application/issues/34
+    // ignore: dead_code, unused_element
     Future<bool> deleteTask(String id, String token) async {
       final http.Response response = await _performCall('Task/$id', [], HttpMethod.DELETE, '', token: token);
       if (response.statusCode == 200) {
