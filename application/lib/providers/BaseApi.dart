@@ -237,5 +237,15 @@ class BaseApi {
       // If the server did not return a 200 OK response, then throw an exception.
       throw Exception('Failed to perform call');
     }
+
+    Future<bool> deleteTask(String id, String token) async {
+      final http.Response response = await _performCall('Task/$id', [], HttpMethod.DELETE, '', token: token);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        // If the server did not return a 200 OK response, then throw an exception.
+        throw Exception('Failed to perform call');
+      }
+    }
   }
 }
