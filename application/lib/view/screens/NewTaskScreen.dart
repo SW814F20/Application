@@ -65,7 +65,7 @@ class NewTaskScreen extends BaseScreen {
 
   void returnCall(bool success) {
     if (success) {
-      app.tasks.add(Task(taskName: taskName.getValue(), taskPriority: taskPriority.getValue(), taskStatus: Status.notStarted));
+      app.tasks.add(Task(taskName: taskName.getValue()));
       showDialog<Center>(
           barrierDismissible: false,
           context: contextObject.getOutput(),

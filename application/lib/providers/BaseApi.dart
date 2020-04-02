@@ -195,7 +195,11 @@ class BaseApi {
   }
 
   Future<bool> updateScreen(int id, String screenName, String screenContent, String token) async {
-    final String data = '''{"screenName": "$screenName","screenContent": "$screenContent"}''';
+    final String data = '''
+    {
+      "screenName": "$screenName",
+      "screenContent": "$screenContent"
+    }''';
     final http.Response response = await _performCall('Screen/$id', [], HttpMethod.PUT, data, token: token);
     if (response.statusCode == 200) {
       return true;
@@ -224,10 +228,10 @@ class BaseApi {
     final String ids = jsonEncode(screenId);
     final String data = '''
     {
-    "name": "$name",
-    "appId": $appId,
-    "screenId": $ids,
-    "description": "$description"
+      "name": "$name",
+      "appId": $appId,
+      "screenId": $ids,
+      "description": "$description"
     }
     ''';
     final http.Response response = await _performCall('Task/Create', [], HttpMethod.POST, data, token: token);
