@@ -20,7 +20,7 @@ class Task implements Json {
     taskDescription = json['description'];
     screenId = <int>[];
     json['screenId'].forEach((dynamic element) {
-      screenId.add(0);
+      screenId.add(element);
     });
   }
 
