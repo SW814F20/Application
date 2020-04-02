@@ -18,7 +18,6 @@ class Task implements Json {
     taskName = json['taskName'];
     appId = json['appId'];
     taskDescription = json['description'];
-    String test2 = jsonEncode(json['screenId']).replaceAll('[', '').replaceAll(']', '');
     screenId = <int>[];
     json['screenId'].forEach((dynamic element) {
       screenId.add(0);
