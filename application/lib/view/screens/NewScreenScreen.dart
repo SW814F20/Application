@@ -1,5 +1,3 @@
-import 'package:application/di.dart';
-import 'package:application/providers/BaseApi.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/widgets/AppBar.dart';
@@ -61,16 +59,17 @@ class NewScreenScreen extends BaseScreen {
               );
             });
         return true;
-      } else {
-        // Server error
-        showDialog<Center>(
-            barrierDismissible: false,
-            context: contextObject.getOutput(),
-            builder: (BuildContext context) {
-              return const NotifyDialog(title: 'Server Error', description: 'Screen creation refused', key: Key('ServerError'));
-            });
-        return false;
       }
+      // } else {
+      //   // Server error
+      //   showDialog<Center>(
+      //       barrierDismissible: false,
+      //       context: contextObject.getOutput(),
+      //       builder: (BuildContext context) {
+      //         return const NotifyDialog(title: 'Server Error', description: 'Screen creation refused', key: Key('ServerError'));
+      //       });
+      //   return false;
+      // }
     } else {
       //Scree name is empty
       showDialog<Center>(
