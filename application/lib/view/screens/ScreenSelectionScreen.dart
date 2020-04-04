@@ -1,3 +1,4 @@
+import 'package:application/model/Screen.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/screens/NewScreenScreen.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../routes.dart';
 
 class ScreenSelectionScreen extends BaseScreen {
+  int screensEachRowPortrait() => isTablet() ? 3 : 3;
+
+  int screensEachRowLandscape() => isTablet() ? 5 : 6;
+
+  List<Screen> testObject = [
+    Screen(screenName: 'first', screenContent: ['Text', 'Text'], id: 1),
+    Screen(screenName: 'first', screenContent: ['Text', 'Flatbutton'], id: 2),
+    Screen(screenName: 'first', screenContent: [], id: 3),
+    Screen(screenName: 'first', screenContent: ['Text'], id: 4),
+  ];
+
   @override
   Widget build(BuildContext context) {
     contextObject.setOutput(context);
@@ -27,45 +39,97 @@ class ScreenSelectionScreen extends BaseScreen {
           ],
         ),
         body: Container(
-          child: convertItemsToScreen(),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              child: getScreenRows(),
+            ),
+          ),
         ));
   }
 
-  Widget convertItemsToScreen() {
+  Column getScreenRows() {
+    final List<List<Widget>> rows = [<Widget>[]];
+    
+    if (isInLandscapemode()) {
+      int rowCount = 0;
+      for (var i = 0; i < testObject.length; i++) {
+        if (i % screensEachRowLandscape() == 0 && i > 0) {
+          rows.add(<Widget>[]);
+          rowCount += 1;
+        }
+        rows[rowCount].add(createScreen(testObject[i]));
+      }
+    } else if (isInPortraitMode()) {
+      int rowCount = 0;
+      for (var i = 0; i < testObject.length; i++) {
+        if (i % screensEachRowPortrait() == 0 && i > 0) {
+          rows.add(<Widget>[]);
+          rowCount += 1;
+        }
+        rows[rowCount].add(createScreen(testObject[i]));
+      }
+    }
+    final List<Widget> outputRows = <Widget>[];
+    for (List<Widget> element in rows) {
+      outputRows.add(Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: element,
+      ));
+    }
+
+    final Column column = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: outputRows,
+    );
+
+    return column;
+  }
+
+  Widget createScreen(Screen screen) {
     return Container(
         margin: const EdgeInsets.all(10.0),
         child: Column(
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(bottom: 10.0),
-              child: Text("Screen 1",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: Text('Screen ' + screen.id.toString(),
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
             ),
             Container(
                 decoration: BoxDecoration(
                     border: Border.all(width: 1),
                     borderRadius: const BorderRadius.all(Radius.circular(5.0))),
                 child: Column(
-                  children: convertScreenInfoToWidget(),
+                  children: <Widget>[
+                    createScreenInfoToWidgets(screen)
+                  ],
                 ))
           ],
         ));
   }
 
-  List<Widget> convertScreenInfoToWidget() {
-    return [
+  Widget createScreenInfoToWidgets(Screen screen) {
+    final List<Widget> screenInfo = [];
+
+    for (var widget in screen.screenContent) {
+      if (widget == 'Text') {
+        screenInfo.add(const Text('hello'));    
+      } else if (widget == 'Flatbutton') {
+        screenInfo.add(const FlatButton(onPressed: null, child: Text('hel')));
+      }
+    }
+
+    return 
       Container(
         margin: const EdgeInsets.only(top: 10.0),
+        height: 150,
+        width: 105,
         child: Column(
-          children: <Widget>[
-            Text("hello"),
-            Text("hello1"),
-            Text("hello2"),
-            FlatButton(onPressed: null, child: Text("Hello 231"))
-          ],
+          children: screenInfo
         ),
-      )
-    ];
+      );
   }
 
   Widget createNewScreenButton() {
