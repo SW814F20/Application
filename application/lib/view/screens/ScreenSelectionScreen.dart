@@ -19,12 +19,6 @@ class ScreenSelectionScreen extends BaseScreen {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    contextObject.setOutput(context);
-    return content();
-  }
-
-  @override
   Widget content() {
     return Scaffold(
         appBar: AppBar(
