@@ -26,6 +26,12 @@ class ScreenSelectionScreen extends BaseScreen {
   final List<Screen> screens = [];
 
   @override
+  Widget build(BuildContext context) {
+    contextObject.setOutput(context);
+    return content();
+  }
+
+  @override
   Widget content() {
     return Scaffold(
         appBar: AppBar(
@@ -51,6 +57,7 @@ class ScreenSelectionScreen extends BaseScreen {
 
   Column getScreenRows() {
     final List<List<Widget>> rows = [<Widget>[]];
+    print(screens.length);
 
     if (isInLandscapemode()) {
       int rowCount = 0;
@@ -107,14 +114,14 @@ class ScreenSelectionScreen extends BaseScreen {
 
   Widget createScreenInfoToWidgets(Screen screen) {
     final List<Widget> screenInfo = [];
-    /*
-    for (var widget in screen.screenContent) {
-      if (widget == 'Text') {
-        screenInfo.add(const Text('hello'));
-      } else if (widget == 'Flatbutton') {
-        screenInfo.add(const FlatButton(onPressed: null, child: Text('hel')));
-      }
-    }
+
+    // for (var widget in screen.screenContent) {
+    //   if (widget == 'Text') {
+    //     screenInfo.add(const Text('hello'));
+    //   } else if (widget == 'Flatbutton') {
+    //     screenInfo.add(const FlatButton(onPressed: null, child: Text('hel')));
+    //   }
+    // }
 
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
@@ -122,13 +129,12 @@ class ScreenSelectionScreen extends BaseScreen {
       width: 105,
       child: Column(children: screenInfo),
     );
-          */
   }
 
   Widget createNewScreenButton() {
     return IconButton(
       icon: FaIcon(FontAwesomeIcons.plus),
-      onPressed: () => {Routes.push(contextObject.getOutput(), NewScreenScreen())},
+      onPressed: () => {Routes.push(contextObject.getOutput(), NewScreenScreen(screenBloc))},
     );
   }
 }

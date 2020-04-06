@@ -35,7 +35,6 @@ class TaskScreen extends BaseScreen {
     final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
     final Widget button = RaisedButton(
         onPressed: () => Routes.push(contextObject.getOutput(), ScreenSelectionScreen(app)), child: const Text('Select Screen'));
-
     notStartedWidgets.add(button);
     final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
     final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));

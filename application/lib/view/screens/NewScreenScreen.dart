@@ -1,3 +1,5 @@
+import 'package:application/blocs/ScreenBloc.dart';
+import 'package:application/di.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/widgets/AppBar.dart';
@@ -8,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NewScreenScreen extends BaseScreen {
+  final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
+
   final RoundedTextField screenName = RoundedTextField(
     'screenNameField',
     'Screen Name',
@@ -23,7 +27,7 @@ class NewScreenScreen extends BaseScreen {
             children: <Widget>[
               screenName,
               PrimaryButton(
-                onPressed: saveScreen,
+                onPressed: createScreen,
                 text: 'Save',
               )
             ],
@@ -41,12 +45,13 @@ class NewScreenScreen extends BaseScreen {
     );
   }
 
-  Future<bool> saveScreen() async {
+  Future<bool> createScreen() async {
     final String screenName = this.screenName.getValue();
-    
+    final bool success = await screenBlock.createScreen(screenName, '{}');
+
     if (screenName.trim().length > 1) {
-      if (true) {
-        // User created successful
+      if (success) {
+        // Screen created successful
         showDialog<Center>(
             barrierDismissible: false,
             context: contextObject.getOutput(),
@@ -59,24 +64,29 @@ class NewScreenScreen extends BaseScreen {
               );
             });
         return true;
+      } else {
+        // Server error
+        showDialog<Center>(
+            barrierDismissible: false,
+            context: contextObject.getOutput(),
+            builder: (BuildContext context) {
+              return const NotifyDialog(
+                  title: 'Server Error',
+                  description: 'Screen creation refused',
+                  key: Key('ServerError'));
+            });
+        return false;
       }
-      // } else {
-      //   // Server error
-      //   showDialog<Center>(
-      //       barrierDismissible: false,
-      //       context: contextObject.getOutput(),
-      //       builder: (BuildContext context) {
-      //         return const NotifyDialog(title: 'Server Error', description: 'Screen creation refused', key: Key('ServerError'));
-      //       });
-      //   return false;
-      // }
     } else {
       //Scree name is empty
       showDialog<Center>(
           barrierDismissible: false,
           context: contextObject.getOutput(),
           builder: (BuildContext context) {
-            return const NotifyDialog(title: 'Input Error', description: 'Screen name cannot be empty', key: Key('screenNameEmpty'));
+            return const NotifyDialog(
+                title: 'Input Error',
+                description: 'Screen name cannot be empty',
+                key: Key('screenNameEmpty'));
           });
       return false;
     }
