@@ -2,7 +2,7 @@ import 'package:application/model/Json.dart';
 
 class Screen implements Json {
   Screen({this.screenName, this.screenContent, this.id});
-  
+
   @override
   Screen.fromJson(Map<String, dynamic> json)
       : screenName = json['screenName'],
@@ -10,7 +10,7 @@ class Screen implements Json {
         id = json['id'];
 
   String screenName;
-  List<String> screenContent;
+  String screenContent;
   int id;
 
   @override

@@ -34,8 +34,7 @@ class TaskScreen extends BaseScreen {
   Widget contentPortrait() {
     final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
     final Widget button = RaisedButton(
-      onPressed: () => Routes.push(contextObject.getOutput(), ScreenSelectionScreen()),
-      child: const Text('Select Screen'));
+        onPressed: () => Routes.push(contextObject.getOutput(), ScreenSelectionScreen(app)), child: const Text('Select Screen'));
 
     notStartedWidgets.add(button);
     final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
@@ -47,7 +46,6 @@ class TaskScreen extends BaseScreen {
         child: SingleChildScrollView(
           child: Column(
             children: notStartedWidgets,
-            
           ),
         ),
         color: const Color.fromRGBO(200, 200, 200, 1),

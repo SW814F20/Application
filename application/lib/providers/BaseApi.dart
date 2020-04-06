@@ -166,6 +166,21 @@ class BaseApi {
     }
   }
 
+  Future<List<Screen>> getScreens(int id, String token) async {
+    final http.Response response = await _performCall('App/GetScreens/$id', [], HttpMethod.GET, '', token: token);
+    if (response.statusCode == 200) {
+      final dynamic body = jsonDecode(response.body);
+      final List<Screen> output = <Screen>[];
+      for (var elem in body) {
+        output.add(Screen.fromJson(elem));
+      }
+      return output;
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      throw Exception('Failed to perform call');
+    }
+  }
+
   /// This method return a list of screens, given the access token of the user
   Future<List<Screen>> getAllScreens(String token) async {
     final http.Response response = await _performCall('Screen', [], HttpMethod.GET, '', token: token);
