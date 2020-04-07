@@ -1,16 +1,18 @@
+import 'dart:convert';
+
 import 'package:application/model/Json.dart';
 
 class Screen implements Json {
   Screen({this.screenName, this.screenContent, this.id});
 
-  @override
-  Screen.fromJson(Map<String, dynamic> json)
-      : screenName = json['screenName'],
-        screenContent = json['screenContent'],
-        id = json['id'];
+  Screen.fromJson(Map<String, dynamic> json) {
+    screenName = json['screenName'];
+    screenContent = jsonDecode(json['screenContent']);
+    id = json['id'];
+  }
 
   String screenName;
-  String screenContent;
+  List<dynamic> screenContent;
   int id;
 
   @override

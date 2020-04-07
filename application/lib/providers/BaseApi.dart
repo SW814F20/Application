@@ -199,7 +199,11 @@ class BaseApi {
 
   /// This is used to create new Screens
   Future<bool> createScreen(String screenName, String screenContent, String token) async {
-    final String data = '''{"screenName": "$screenName","screenContent": "$screenContent"}''';
+    final String data = '''
+    {
+      "screenName": "$screenName",
+      "screenContent": "$screenContent"
+    }''';
     final http.Response response = await _performCall('Screen/Create', [], HttpMethod.POST, data, token: token);
     if (response.statusCode == 200) {
       return true;

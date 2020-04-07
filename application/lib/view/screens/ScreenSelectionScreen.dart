@@ -11,9 +11,11 @@ import '../../routes.dart';
 
 class ScreenSelectionScreen extends BaseScreen {
   ScreenSelectionScreen(this.application) {
-    screenBloc.getScreens(application.id).then((value) => value.forEach((element) {
-          screens.add(element);
-        }));
+    screenBloc
+        .getScreens(application.id)
+        .then((value) => value.forEach((element) {
+              screens.add(element);
+            }));
   }
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
 
@@ -57,7 +59,6 @@ class ScreenSelectionScreen extends BaseScreen {
 
   Column getScreenRows() {
     final List<List<Widget>> rows = [<Widget>[]];
-    print(screens.length);
 
     if (isInLandscapemode()) {
       int rowCount = 0;
@@ -66,7 +67,7 @@ class ScreenSelectionScreen extends BaseScreen {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(createScreen(screens[i]));
+        rows[rowCount].add(createScreen(screens[i], i + 1));
       }
     } else if (isInPortraitMode()) {
       int rowCount = 0;
@@ -75,7 +76,7 @@ class ScreenSelectionScreen extends BaseScreen {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(createScreen(screens[i]));
+        rows[rowCount].add(createScreen(screens[i], i + 1));
       }
     }
     final List<Widget> outputRows = <Widget>[];
@@ -94,17 +95,21 @@ class ScreenSelectionScreen extends BaseScreen {
     return column;
   }
 
-  Widget createScreen(Screen screen) {
+  Widget createScreen(Screen screen, int position) {
     return Container(
         margin: const EdgeInsets.all(10.0),
         child: Column(
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(bottom: 10.0),
-              child: Text('Screen ' + screen.id.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: Text('Screen ' + position.toString(),
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
             ),
             Container(
-                decoration: BoxDecoration(border: Border.all(width: 1), borderRadius: const BorderRadius.all(Radius.circular(5.0))),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1),
+                    borderRadius: const BorderRadius.all(Radius.circular(5.0))),
                 child: Column(
                   children: <Widget>[createScreenInfoToWidgets(screen)],
                 ))
@@ -112,16 +117,25 @@ class ScreenSelectionScreen extends BaseScreen {
         ));
   }
 
+  Widget createWidgetFromType(Map<String, dynamic> widget) {
+    switch (widget['type'].toString().toLowerCase()) {
+      case 'text':
+        return Text(widget['value']);
+      case 'flatbutton':
+        return FlatButton(onPressed: null, child: Text(widget['value']));
+      default:
+        throw Exception('Widget not found. Either add it or ensure no typos');
+    }
+  }
+
   Widget createScreenInfoToWidgets(Screen screen) {
     final List<Widget> screenInfo = [];
-
-    // for (var widget in screen.screenContent) {
-    //   if (widget == 'Text') {
-    //     screenInfo.add(const Text('hello'));
-    //   } else if (widget == 'Flatbutton') {
-    //     screenInfo.add(const FlatButton(onPressed: null, child: Text('hel')));
-    //   }
-    // }
+    for (var i = 0; i < screen.screenContent.length; i++) {
+      screenInfo.add(createWidgetFromType(screen.screenContent[i]));
+      
+    }
+    for (var widget in screen.screenContent) {
+    }
 
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
@@ -134,7 +148,8 @@ class ScreenSelectionScreen extends BaseScreen {
   Widget createNewScreenButton() {
     return IconButton(
       icon: FaIcon(FontAwesomeIcons.plus),
-      onPressed: () => {Routes.push(contextObject.getOutput(), NewScreenScreen(screenBloc))},
+      onPressed: () =>
+          {Routes.push(contextObject.getOutput(), NewScreenScreen())},
     );
   }
 }
