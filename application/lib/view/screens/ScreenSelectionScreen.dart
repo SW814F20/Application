@@ -117,6 +117,7 @@ class ScreenSelectionScreen extends BaseScreen {
         ));
   }
 
+  // We need to add more widgets in this method.
   Widget createWidgetFromType(Map<String, dynamic> widget) {
     switch (widget['type'].toString().toLowerCase()) {
       case 'text':
@@ -133,8 +134,6 @@ class ScreenSelectionScreen extends BaseScreen {
     for (var i = 0; i < screen.screenContent.length; i++) {
       screenInfo.add(createWidgetFromType(screen.screenContent[i]));
       
-    }
-    for (var widget in screen.screenContent) {
     }
 
     return Container(
