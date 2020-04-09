@@ -1,13 +1,14 @@
+import 'dart:convert';
+
 import 'package:application/blocs/ScreenBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
 import 'package:application/model/Screen.dart';
+import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/screens/NewScreenScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../../routes.dart';
 
 class ScreenSelectionScreen extends BaseScreen {
   ScreenSelectionScreen(this.application) {
@@ -21,9 +22,13 @@ class ScreenSelectionScreen extends BaseScreen {
 
   final Application application;
 
-  int screensEachRowPortrait() => isTablet() ? 3 : 3;
+  int screensEachRowPortrait() => isTablet() ? 5 : 3;
 
-  int screensEachRowLandscape() => isTablet() ? 5 : 6;
+  int screensEachRowLandscape() => isTablet() ? 7 : 5;
+
+  double screenHeigth() => isTablet() ? 200 : 150;
+
+  double screenWidth() => isTablet() ? 150 : 105;
 
   final List<Screen> screens = [];
 
@@ -50,7 +55,7 @@ class ScreenSelectionScreen extends BaseScreen {
         body: Container(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
+            child: SingleChildScrollView(
               child: getScreenRows(),
             ),
           ),
@@ -59,7 +64,6 @@ class ScreenSelectionScreen extends BaseScreen {
 
   Column getScreenRows() {
     final List<List<Widget>> rows = [<Widget>[]];
-
     if (isInLandscapemode()) {
       int rowCount = 0;
       for (var i = 0; i < screens.length; i++) {
@@ -67,7 +71,7 @@ class ScreenSelectionScreen extends BaseScreen {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(createScreen(screens[i], i + 1));
+        rows[rowCount].add(createScreen(screens[0], i + 1));
       }
     } else if (isInPortraitMode()) {
       int rowCount = 0;
@@ -76,7 +80,8 @@ class ScreenSelectionScreen extends BaseScreen {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(createScreen(screens[i], i + 1));
+        rows[rowCount].add(createScreen(screens[0], i + 1));
+
       }
     }
     final List<Widget> outputRows = <Widget>[];
@@ -133,13 +138,12 @@ class ScreenSelectionScreen extends BaseScreen {
     final List<Widget> screenInfo = [];
     for (var i = 0; i < screen.screenContent.length; i++) {
       screenInfo.add(createWidgetFromType(screen.screenContent[i]));
-      
     }
 
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
-      height: 150,
-      width: 105,
+      height: screenHeigth(),
+      width: screenWidth(),
       child: Column(children: screenInfo),
     );
   }
