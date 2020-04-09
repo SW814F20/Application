@@ -4,6 +4,7 @@ import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/screens/NewTaskScreen.dart';
 import 'package:application/view/screens/PlaceholderScreen.dart';
+import 'package:application/view/screens/ScreenSelectionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -32,8 +33,12 @@ class TaskScreen extends BaseScreen {
 
   Widget contentPortrait() {
     final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
+    final Widget button = RaisedButton(
+        onPressed: () => Routes.push(contextObject.getOutput(), ScreenSelectionScreen(app)), child: const Text('Select Screen'));
+    notStartedWidgets.add(button);
     final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
     final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
+
     return TabBarView(children: [
       Container(
         alignment: Alignment.topCenter,
@@ -118,6 +123,7 @@ class TaskScreen extends BaseScreen {
     final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
     final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
     final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
+
     return Column(
       children: <Widget>[
         _columnHeader(),
