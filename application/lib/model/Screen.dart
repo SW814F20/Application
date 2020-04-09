@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:application/model/Json.dart';
 
 class Screen implements Json {
