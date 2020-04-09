@@ -10,4 +10,10 @@ class ScreenBloc extends ApiBloc {
     return api.createScreen(
         screenName, screenContent, authenticationBloc.getLoggedInUser().token);
   }
+
+  Future<bool> updateScreen(
+      int id, String screenName, String screenContent) async {
+    return api.updateScreen(id, screenName, screenContent,
+        authenticationBloc.getLoggedInUser().token);
+  }
 }
