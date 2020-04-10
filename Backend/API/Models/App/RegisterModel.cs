@@ -8,7 +8,8 @@ namespace API.Models.App
         public string AppName { get; set; }
 
         [Required]
-        public string AppUrl { get; set; }
+        public string Repository { get; set; }
+        public string User { get; set; }
 
         [Required]
         public string AppColor { get; set; }
