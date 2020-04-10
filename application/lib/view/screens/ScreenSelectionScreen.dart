@@ -5,6 +5,7 @@ import 'package:application/model/Screen.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/screens/NewScreenScreen.dart';
+import 'package:application/view/screens/ScreenEditorScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -79,7 +80,6 @@ class ScreenSelectionScreen extends BaseScreen {
           rowCount += 1;
         }
         rows[rowCount].add(createScreen(screens[0], i + 1));
-
       }
     }
     final List<Widget> outputRows = <Widget>[];
@@ -99,25 +99,31 @@ class ScreenSelectionScreen extends BaseScreen {
   }
 
   Widget createScreen(Screen screen, int position) {
-    return Container(
-        margin: const EdgeInsets.all(10.0),
-        child: Column(
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(bottom: 10.0),
-              child: Text('Screen ' + position.toString(),
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-            ),
-            Container(
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1),
-                    borderRadius: const BorderRadius.all(Radius.circular(5.0))),
-                child: Column(
-                  children: <Widget>[createScreenInfoToWidgets(screen)],
-                ))
-          ],
-        ));
+    return GestureDetector(
+      onTap: () {
+        Routes.push(contextObject.getOutput(), ScreenEditorScreen(screen));
+      },
+      child: Container(
+          margin: const EdgeInsets.all(10.0),
+          child: Column(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(bottom: 10.0),
+                child: Text('Screen ' + position.toString(),
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              ),
+              Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(5.0))),
+                  child: Column(
+                    children: <Widget>[createScreenInfoToWidgets(screen)],
+                  ))
+            ],
+          )),
+    );
   }
 
   // We need to add more widgets in this method.
