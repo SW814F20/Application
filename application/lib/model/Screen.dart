@@ -6,7 +6,7 @@ class Screen implements Json {
 
   Screen.fromJson(Map<String, dynamic> json) {
     screenName = json['screenName'];
-    screenContent = jsonDecode(json['screenContent']);
+    screenContent = jsonDecode(json['screenContent'].toString().replaceAll('\'', '\"'));
     id = json['id'];
   }
 

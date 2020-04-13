@@ -150,7 +150,8 @@ class ScreenEditorScreen extends BaseScreen {
         children: <Widget>[
           Text('You have selected: ' + element.display()),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
             child: nameWidget,
           ),
           RaisedButton(
@@ -196,9 +197,21 @@ class ScreenEditorScreen extends BaseScreen {
     );
   }
 
+  String rewriteToNormalForm() {
+    String result = '[';
+    for (var i = 0; i < screenContent.length; i++) {
+      result += screenContent[i].toJson();
+      if (i != screenContent.length - 1) {
+        result += ',';
+      }
+    }
+    result += ']';
+    return result;
+  }
+
   Future<bool> updateScreen() async {
     final bool success = await screenBloc.updateScreen(
-        screen.id, screen.screenName, screen.screenContent.toString());
+        screen.id, screen.screenName, rewriteToNormalForm());
 
     if (success) {
       // Screen updated successful
