@@ -8,6 +8,7 @@ void main() {
 
   Bootstrap.register();
   WidgetsFlutterBinding.ensureInitialized();
+
   if (_isInDebugMode) {
     // If in DEBUG mode
     environment.setFile('assets/environments.json').whenComplete(() {
