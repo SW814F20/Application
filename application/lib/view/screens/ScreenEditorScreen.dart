@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:application/blocs/ScreenBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/EditorScreenElement.dart';
@@ -5,20 +7,21 @@ import 'package:application/model/Screen.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/widgets/NotifyDIalog.dart';
+import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ScreenEditorScreen extends BaseScreen {
   ScreenEditorScreen(this.screen) {
     for (var widget in screen.screenContent) {
-      screenContent.add(EditorScreenElement(
-          type: widget['type'],
-          textValue: widget['value'],
-          key: widget['key']));
+      screenContent.add(
+          EditorScreenElement(widgetType: widget['type'], key: widget['key']));
     }
   }
 
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
+  final StreamController<EditorScreenElement> selectedElement =
+      StreamController<EditorScreenElement>.broadcast();
 
   final Screen screen;
 
@@ -55,7 +58,7 @@ class ScreenEditorScreen extends BaseScreen {
       listOfWidgets.add(
         GestureDetector(
           onTap: () {
-            addElementToStream(type);
+            addElementToScreenStream(type);
           },
           child: Text(
             type,
@@ -85,19 +88,6 @@ class ScreenEditorScreen extends BaseScreen {
     );
   }
 
-  Expanded createWidgetConfigurationView() {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(color: Colors.red),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[Text('Label Info')],
-        ),
-      ),
-    );
-  }
-
   SizedBox createScreenElements() {
     return SizedBox(
       height: screenContentHeight(),
@@ -109,8 +99,16 @@ class ScreenEditorScreen extends BaseScreen {
             final List<Widget> content = [];
             for (var i = 0; i < snapshot.data.length; i++) {
               content.add(createScreenWidget(snapshot.data[i]));
+              content.add(
+                const SizedBox(
+                  height: 16,
+                ),
+              );
             }
-            return Column(children: content);
+            return Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Column(children: content),
+            );
           }),
     );
   }
@@ -119,15 +117,63 @@ class ScreenEditorScreen extends BaseScreen {
     return GestureDetector(
       child: Text(element.display()),
       onTap: () {
-        print(element.textValue);
+        selectedElement.sink.add(element);
       },
     );
   }
 
-  void addElementToStream(String type) {
-    screenContent.add(EditorScreenElement(key: '', textValue: '', type: type));
+  void addElementToScreenStream(String type) {
+    screenContent.add(EditorScreenElement(
+        key: '', position: screenContent.length, widgetType: type));
     screenBloc.screensStream.sink.add(screenContent);
   }
+
+  Expanded createWidgetConfigurationView() {
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(color: Colors.red),
+        child: StreamBuilder<EditorScreenElement>(
+            stream: selectedElement.stream,
+            builder: (context, snapshot) {
+              return snapshot.data == null
+                  ? Column()
+                  : createWidgetConfigurationLayout(snapshot.data);
+            }),
+      ),
+    );
+  }
+
+  Widget createWidgetConfigurationLayout(EditorScreenElement element) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          Text('You have selected: ' + element.display()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+            child: nameWidget,
+          ),
+          RaisedButton(
+              onPressed: () {
+                element.key = nameWidget.controller.text;
+                updateElementToScreenStream(element);
+              },
+              child: const Text('Save information')),
+        ],
+      ),
+    );
+  }
+
+  void updateElementToScreenStream(EditorScreenElement element) {
+    print(element.position);
+    screenContent[element.position] = element;
+    screenBloc.screensStream.sink.add(screenContent);
+  }
+
+  final RoundedTextField nameWidget = RoundedTextField(
+    'WidgetKeyField',
+    'Widget Name',
+  );
 
   @override
   Widget appBar() {

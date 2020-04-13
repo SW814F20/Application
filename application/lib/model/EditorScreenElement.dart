@@ -1,11 +1,11 @@
 class EditorScreenElement {
-  EditorScreenElement({this.type, this.textValue, this.key});
+  EditorScreenElement({this.widgetType, this.position, this.key});
 
-  String type;
-  String textValue;
+  int position;
+  String widgetType;
   String key;
 
   String display() {
-    return 'Type: $type, key: $key';
+    return 'Type: $widgetType, key: $key';
   }
 }
