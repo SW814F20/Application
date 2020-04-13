@@ -130,17 +130,13 @@ class ScreenSelectionScreen extends BaseScreen {
   Widget createWidgetFromType(Map<String, dynamic> widget) {
     switch (widget['type'].toString().toLowerCase()) {
       case 'text':
-        // return Text(widget['type']);
-        return Text("hel");
+        return const Text('Text');
       case 'label':
-        // return Text(widget['type']);
-        return Text("hel");
-      case 'flatbutton':
-        // return FlatButton(onPressed: null, child: Text(widget['type']));
-        return FlatButton(onPressed: null, child: Text("hej"));
-
+        return const Text('Label');
+      case 'flat button':
+        return const FlatButton(onPressed: null, child: Text('Flat button'));
       default:
-        throw Exception('Widget not found. Either add it or ensure no typos');
+        throw Exception(widget['type'] +' not found. Either add it or ensure no typos');
     }
   }
 

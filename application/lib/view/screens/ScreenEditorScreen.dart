@@ -14,8 +14,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ScreenEditorScreen extends BaseScreen {
   ScreenEditorScreen(this.screen) {
     for (var widget in screen.screenContent) {
-      screenContent.add(
-          EditorScreenElement(widgetType: widget['type'], key: widget['key']));
+      screenContent.add(EditorScreenElement(
+          widgetType: widget['type'],
+          key: widget['key'],
+          position: int.parse(widget['position'])));
     }
   }
 
@@ -166,7 +168,6 @@ class ScreenEditorScreen extends BaseScreen {
   }
 
   void updateElementToScreenStream(EditorScreenElement element) {
-    print(element.position);
     screenContent[element.position] = element;
     screenBloc.screensStream.sink.add(screenContent);
   }
@@ -206,7 +207,7 @@ class ScreenEditorScreen extends BaseScreen {
       }
     }
     result += ']';
-    return result;
+    return result.replaceAll('\n', ' ');
   }
 
   Future<bool> updateScreen() async {

@@ -13,12 +13,6 @@ class EditorScreenElement implements Json {
 
   @override
   String toJson() {
-    return '''
-    {
-      'type': '$widgetType',
-      'key': '$key',
-      'position': '$position'
-    }
-  ''';
+    return "{'type': '$widgetType', 'key': '$key', 'position': '$position'}";
   }
 }
