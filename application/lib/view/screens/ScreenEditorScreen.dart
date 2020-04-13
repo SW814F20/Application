@@ -26,6 +26,9 @@ class ScreenEditorScreen extends BaseScreen {
 
   final List<String> widgets = ['Text', 'Flat button', 'Label'];
 
+  double widgetListWidth() => isTablet() ? 200 : 110;
+  double screenContentHeight() => getScreenHeight() / 2.2;
+
   @override
   Widget content() {
     return Row(
@@ -52,8 +55,7 @@ class ScreenEditorScreen extends BaseScreen {
       listOfWidgets.add(
         GestureDetector(
           onTap: () {
-            screenContent.add(EditorScreenElement(
-                type: type, textValue: '', key: ''));
+            addElementToStream(type);
           },
           child: Text(
             type,
@@ -79,7 +81,7 @@ class ScreenEditorScreen extends BaseScreen {
             ),
             decoration: BoxDecoration(color: Colors.grey)),
       ),
-      width: 200,
+      width: widgetListWidth(),
     );
   }
 
@@ -97,22 +99,34 @@ class ScreenEditorScreen extends BaseScreen {
   }
 
   SizedBox createScreenElements() {
-    final List<Widget> content = [];
-
-    for (var i = 0; i < screenContent.length; i++) {
-      final Widget widget = GestureDetector(
-        child: Text(screenContent[i].display()),
-        onTap: () {
-          print(screenContent[i].textValue);
-        },
-      );
-      content.add(widget);
-    }
-
     return SizedBox(
-      height: 400,
-      child: Column(children: content),
+      height: screenContentHeight(),
+      child: StreamBuilder<List<EditorScreenElement>>(
+          stream: screenBloc.screensStream.stream,
+          initialData: screenContent,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<EditorScreenElement>> snapshot) {
+            final List<Widget> content = [];
+            for (var i = 0; i < snapshot.data.length; i++) {
+              content.add(createScreenWidget(snapshot.data[i]));
+            }
+            return Column(children: content);
+          }),
     );
+  }
+
+  Widget createScreenWidget(EditorScreenElement element) {
+    return GestureDetector(
+      child: Text(element.display()),
+      onTap: () {
+        print(element.textValue);
+      },
+    );
+  }
+
+  void addElementToStream(String type) {
+    screenContent.add(EditorScreenElement(key: '', textValue: '', type: type));
+    screenBloc.screensStream.sink.add(screenContent);
   }
 
   @override
