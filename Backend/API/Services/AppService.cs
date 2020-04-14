@@ -17,7 +17,7 @@ namespace API.Services
         }
 
         /// <summary>
-        /// Get All Aps
+        /// Get All Apps
         /// </summary>
         /// <returns>List of all apps</returns>
         public IEnumerable<App> GetAll()

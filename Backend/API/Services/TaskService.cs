@@ -77,6 +77,8 @@ namespace API.Services
             // Update task description if it is provided within the parameter
             if (!string.IsNullOrWhiteSpace(taskParam.Description))
                 task.Description = taskParam.Description;
+            if (!string.IsNullOrWhiteSpace(taskParam.IssueUrl))
+                task.IssueUrl = taskParam.IssueUrl;
 
             _context.Tasks.Update(task);
             _context.SaveChanges();
