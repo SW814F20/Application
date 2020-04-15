@@ -9,9 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('EditorScreenElement JSON factory element constructor tests', () {
     test('Should be able to construct a Text-widget', (){
-      Map<String, dynamic> data = jsonDecode('{"type": "Text", "name": "AName", "position": 0}');
+      final Map<String, dynamic> data = jsonDecode('{"type": "Text", "name": "AName", "position": 0}');
 
-      var el = EditorScreenElement.fromJson(data);
+      final el = EditorScreenElement.fromJson(data);
 
       expect(el, isNotNull);
       expect(el is TextElement, isTrue);
@@ -20,9 +20,9 @@ void main() {
     });
 
     test('Should be able to construct a Button-widget', (){
-      Map<String, dynamic> data = jsonDecode('{"type": "Button", "name": "AName", "position": 0}');
+      final Map<String, dynamic> data = jsonDecode('{"type": "Button", "name": "AName", "position": 0}');
 
-      var el = EditorScreenElement.fromJson(data);
+      final el = EditorScreenElement.fromJson(data);
 
       expect(el, isNotNull);
       expect(el is ButtonElement, isTrue);
@@ -33,7 +33,7 @@ void main() {
 
   group('EditorScreenElement basic functionalities', (){
     test('Should allow for creating an in-memory Text-widget instance', (){
-      var el = EditorScreenElement.create("Text", 0);
+      final el = EditorScreenElement.create('Text', 0);
 
       expect(el, isNotNull);
       expect(el.name, isNull);
@@ -42,7 +42,7 @@ void main() {
     });
 
     test('Should allow for creating an in-memory Button-widget instance', (){
-      var el = EditorScreenElement.create("Button", 0);
+      final el = EditorScreenElement.create('Button', 0);
 
       expect(el, isNotNull);
       expect(el.name, isNull);
@@ -59,7 +59,7 @@ void main() {
     });
 
     test('Should require a type', (){
-        Map<String, dynamic> data = jsonDecode('{"no-type": "Should fail"}');
+        final Map<String, dynamic> data = jsonDecode('{"no-type": "Should fail"}');
 
         expect(() => EditorScreenElement.fromJson(data), throwsA(predicate<Error>((e) =>
             e is ArgumentError &&
@@ -68,7 +68,7 @@ void main() {
     });
 
     test('Should throw unknown type if type is unknown', (){
-      Map<String, dynamic> data = jsonDecode('{"type": "UnkownElement", "name": "AName", "position": 0}');
+      final Map<String, dynamic> data = jsonDecode('{"type": "UnkownElement", "name": "AName", "position": 0}');
 
       expect(() => EditorScreenElement.fromJson(data), throwsA(predicate<Error>((e) =>
       e is ArgumentError &&
@@ -77,7 +77,7 @@ void main() {
     });
 
     test('Should be able to parse and set the name', () {
-      var el = EditorScreenElement.fromJson(data);
+      final el = EditorScreenElement.fromJson(data);
 
       expect(el, isNotNull);
       expect(el.name, 'IAmATest');
@@ -102,7 +102,7 @@ void main() {
     });
 
     test('Should be able to parse and set position', (){
-      var el = EditorScreenElement.fromJson(data);
+      final el = EditorScreenElement.fromJson(data);
 
       expect(el, isNotNull);
       expect(el.position, 0);
@@ -111,7 +111,7 @@ void main() {
     test('Should be able to parse and set position, if position is given as a int', (){
       data = jsonDecode('{"type": "Text", "name": "IAmATest", "position": 0}');
 
-      var el = EditorScreenElement.fromJson(data);
+      final el = EditorScreenElement.fromJson(data);
 
       expect(el, isNotNull);
       expect(el.position, 0);

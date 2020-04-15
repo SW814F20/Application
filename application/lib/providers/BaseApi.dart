@@ -214,7 +214,6 @@ class BaseApi {
   }
 
   Future<bool> updateScreen(int id, String screenName, String screenContent, String token) async {
-
    final String content = screenContent.replaceAll('\"', '\\"');
    final String data = '''
     {
