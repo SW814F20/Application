@@ -1,18 +1,73 @@
-import 'package:application/model/Json.dart';
+import 'package:application/elements/ButtonElement.dart';
+import 'package:application/elements/TextElement.dart';
+import 'package:application/view/screens/ScreenEditorScreen.dart';
 
-class EditorScreenElement implements Json {
-  EditorScreenElement({this.widgetType, this.position, this.key});
+abstract class EditorScreenElement {
+  EditorScreenElement({this.name, this.position});
 
+  String name;
   int position;
-  String widgetType;
-  String key;
 
-  String display() {
-    return 'Type: $widgetType, key: $key';
+  String display();
+  String toJson();
+
+  static EditorScreenElement create(String type, int position) {
+    type = _validateType(type);
+    position = _validatePosition(position);
+
+    return _factory(type, position);
   }
 
-  @override
-  String toJson() {
-    return "{'type': '$widgetType', 'key': '$key', 'position': '$position'}";
+  static EditorScreenElement fromJson(Map<String, dynamic> json) {
+      final String type = _validateType(json['type']);
+      final String name = _validateName(json['name']);
+      final int position = _validatePosition(json['position']);
+
+      return _factory(type, position, name: name, json: json);
+  }
+
+  static EditorScreenElement _factory (String type, int position, {String name, Map<String, dynamic> json}){
+    switch(type){
+      case 'Text':
+        return TextElement.fromJson(name, position, json);
+        break;
+
+      case 'Button':
+        return ButtonElement.fromJson(name, position, json);
+        break;
+
+      default:
+        throw ArgumentError('EditorScreenElement Factory Error: The type \'$type\' is not known!');
+    }
+  }
+
+  static String _validateType(String input){
+    if (input == null || input == '') {
+      throw ArgumentError('EditorScreenElement Factory Error: Type must be specified and cannot be empty!');
+    }
+
+    return input;
+  }
+
+  static String _validateName(String input){
+    if (input == null || input.isEmpty) {
+      throw ArgumentError('EditorScreenElement Factory Error: A name must be present in the JSON');
+    }
+    return input;
+  }
+
+  static int _validatePosition(dynamic input) {
+    if (input == null || input.toString().isEmpty) {
+      throw ArgumentError('EditorScreenElement Factory Error: A position must be present in the JSON');
+    }
+
+    if(!(input is int)){
+      input = int.tryParse(input);
+      if(input == null) {
+        throw ArgumentError('EditorScreenElement Factory Error: A position must be a digit in the JSON');
+      }
+    }
+
+    return input;
   }
 }

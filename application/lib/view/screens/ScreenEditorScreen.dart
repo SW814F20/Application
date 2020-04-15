@@ -14,10 +14,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ScreenEditorScreen extends BaseScreen {
   ScreenEditorScreen(this.screen) {
     for (var widget in screen.screenContent) {
-      screenContent.add(EditorScreenElement(
-          widgetType: widget['type'],
-          key: widget['key'],
-          position: int.parse(widget['position'])));
+      screenContent.add(EditorScreenElement.fromJson(widget));
     }
   }
 
@@ -29,7 +26,7 @@ class ScreenEditorScreen extends BaseScreen {
 
   final List<EditorScreenElement> screenContent = [];
 
-  final List<String> widgets = ['Text', 'Flat button', 'Label'];
+  final List<String> widgets = ['Text', 'Button'];
 
   double widgetListWidth() => isTablet() ? 200 : 110;
   double screenContentHeight() => getScreenHeight() / 2.2;
@@ -125,8 +122,7 @@ class ScreenEditorScreen extends BaseScreen {
   }
 
   void addElementToScreenStream(String type) {
-    screenContent.add(EditorScreenElement(
-        key: '', position: screenContent.length, widgetType: type));
+    screenContent.add(EditorScreenElement.create(type, screenContent.length));
     screenBloc.screensStream.sink.add(screenContent);
   }
 
@@ -158,7 +154,7 @@ class ScreenEditorScreen extends BaseScreen {
           ),
           RaisedButton(
               onPressed: () {
-                element.key = nameWidget.controller.text;
+                element.name = nameWidget.controller.text;
                 updateElementToScreenStream(element);
               },
               child: const Text('Save information')),

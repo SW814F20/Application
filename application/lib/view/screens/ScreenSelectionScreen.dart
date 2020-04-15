@@ -131,9 +131,7 @@ class ScreenSelectionScreen extends BaseScreen {
     switch (widget['type'].toString().toLowerCase()) {
       case 'text':
         return const Text('Text');
-      case 'label':
-        return const Text('Label');
-      case 'flat button':
+      case 'button':
         return const FlatButton(onPressed: null, child: Text('Flat button'));
       default:
         throw Exception(widget['type'] +' not found. Either add it or ensure no typos');
