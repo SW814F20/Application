@@ -7,16 +7,11 @@ import 'package:application/model/Screen.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/widgets/NotifyDIalog.dart';
-import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ScreenEditorScreen extends BaseScreen {
-  ScreenEditorScreen(this.screen) {
-    for (var widget in screen.screenContent) {
-      screenContent.add(EditorScreenElement.fromJson(widget));
-    }
-  }
+  ScreenEditorScreen(this.screen);
 
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
   final StreamController<EditorScreenElement> selectedElement =
@@ -24,7 +19,7 @@ class ScreenEditorScreen extends BaseScreen {
 
   final Screen screen;
 
-  final List<EditorScreenElement> screenContent = [];
+  List<EditorScreenElement> get screenContent => screen.screenContent;
 
   final List<String> widgets = ['Text', 'Button'];
 
@@ -96,8 +91,8 @@ class ScreenEditorScreen extends BaseScreen {
           builder: (BuildContext context,
               AsyncSnapshot<List<EditorScreenElement>> snapshot) {
             final List<Widget> content = [];
-            for (var i = 0; i < snapshot.data.length; i++) {
-              content.add(createScreenWidget(snapshot.data[i]));
+            for (var widget in snapshot.data) {
+              content.add(createScreenWidget(widget));
               content.add(
                 const SizedBox(
                   height: 16,
@@ -142,22 +137,13 @@ class ScreenEditorScreen extends BaseScreen {
   }
 
   Widget createWidgetConfigurationLayout(EditorScreenElement element) {
+    element.onSave = updateElementToScreenStream;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        children: <Widget>[
+        children: [
           Text('You have selected: ' + element.display()),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-            child: nameWidget,
-          ),
-          RaisedButton(
-              onPressed: () {
-                element.name = nameWidget.controller.text;
-                updateElementToScreenStream(element);
-              },
-              child: const Text('Save information')),
+          ... element.getSettingsWidgets(),
         ],
       ),
     );
@@ -167,11 +153,6 @@ class ScreenEditorScreen extends BaseScreen {
     screenContent[element.position] = element;
     screenBloc.screensStream.sink.add(screenContent);
   }
-
-  final RoundedTextField nameWidget = RoundedTextField(
-    'WidgetKeyField',
-    'Widget Name',
-  );
 
   @override
   Widget appBar() {

@@ -3,9 +3,45 @@ import 'dart:convert';
 import 'package:application/elements/ButtonElement.dart';
 import 'package:application/elements/TextElement.dart';
 import 'package:application/model/EditorScreenElement.dart';
+import 'package:application/view/widgets/RoundedTextField.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+class mockElement extends EditorScreenElement{
 
+  bool isCalled = false;
+
+  @override
+  String display() {
+    // TODO: implement display
+    throw UnimplementedError();
+  }
+
+  @override
+  List<Widget> getSettingsWidgets() {
+    // TODO: implement getSettingsWidgets
+    throw UnimplementedError();
+  }
+
+  @override
+  String toJson() {
+    // TODO: implement toJson
+    throw UnimplementedError();
+  }
+
+  @override
+  void saveSettings(){
+    super.saveSettings();
+  }
+
+  @override
+  Widget render() {
+    // TODO: implement render
+    throw UnimplementedError();
+  }
+
+}
 void main() {
   group('EditorScreenElement JSON factory element constructor tests', () {
     test('Should be able to construct a Text-widget', (){
@@ -49,7 +85,43 @@ void main() {
       expect(el is ButtonElement, isTrue);
       expect(el.position, 0);
     });
+
+    test('Should be able to retrieve a settingsWidget', (){
+      final el = EditorScreenElement.create('Text', 0);
+
+      expect(el.getSettingsWidgets() is List<Widget>, isTrue);
+    });
+
+    test('Should be able to build the nameInputField', (){
+      final el = EditorScreenElement.create('Text', 0);
+
+      final RoundedTextField nameField = el.nameWidget();
+
+      expect(nameField.hintText, 'Widget Name');
+    });
+
+    test('Should be able to build a saveButton-widget with onPressed-function', (){
+      Function pres = () => { print('Hello world') };
+      final el = EditorScreenElement.create('Text', 0);
+
+      final RaisedButton saveBtn = el.saveSettingsWidget(pres);
+
+      expect(saveBtn.onPressed, pres);
+      expect(saveBtn.child is Text, isTrue);
+      expect((saveBtn.child as Text).data, 'Save information');
+    });
+
+    test('Should invoke onSave, when calling saveSettings', (){
+      final el = mockElement();
+      var cb = (mockElement el) {
+        el.isCalled = true;
+      };
+      el.onSave = cb;
+      el.saveSettings();
+      expectLater(el.isCalled, isTrue);
+    });
   });
+
 
   group('EditorScreenElement JSON factory data-parsing tests', () {
     Map<String, dynamic> data;

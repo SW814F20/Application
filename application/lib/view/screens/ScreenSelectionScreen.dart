@@ -1,6 +1,7 @@
 import 'package:application/blocs/ScreenBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
+import 'package:application/model/EditorScreenElement.dart';
 import 'package:application/model/Screen.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
@@ -126,22 +127,10 @@ class ScreenSelectionScreen extends BaseScreen {
     );
   }
 
-  // We need to add more widgets in this method.
-  Widget createWidgetFromType(Map<String, dynamic> widget) {
-    switch (widget['type'].toString().toLowerCase()) {
-      case 'text':
-        return const Text('Text');
-      case 'button':
-        return const FlatButton(onPressed: null, child: Text('Flat button'));
-      default:
-        throw Exception(widget['type'] +' not found. Either add it or ensure no typos');
-    }
-  }
-
   Widget createScreenInfoToWidgets(Screen screen) {
     final List<Widget> screenInfo = [];
-    for (var i = 0; i < screen.screenContent.length; i++) {
-      screenInfo.add(createWidgetFromType(screen.screenContent[i]));
+    for (EditorScreenElement item in screen.screenContent) {
+      screenInfo.add(item.render());
     }
 
     return Container(

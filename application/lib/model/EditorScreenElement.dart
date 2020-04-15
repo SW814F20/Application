@@ -1,5 +1,8 @@
 import 'package:application/elements/ButtonElement.dart';
 import 'package:application/elements/TextElement.dart';
+import 'package:application/view/widgets/RoundedTextField.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 enum elementType { Text, Button }
 
@@ -8,9 +11,31 @@ abstract class EditorScreenElement {
 
   String name;
   int position;
+  Function onSave;
 
   String display();
   String toJson();
+  List<Widget> getSettingsWidgets();
+  Widget render();
+
+  @protected
+  Widget nameWidget() => RoundedTextField(
+      'WidgetKeyField',
+      'Widget Name',
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+  );
+
+  @protected
+  Widget saveSettingsWidget(Function onPressed) => RaisedButton(
+      onPressed: onPressed,
+      child: const Text('Save information'));
+
+  @protected
+  void saveSettings(){
+    if(onSave != null){
+      onSave(this);
+    }
+  }
 
   static EditorScreenElement create(String type, int position) {
     type = _validateType(type);
