@@ -39,10 +39,7 @@ class Task implements Json {
   bool newInformation = false;
   List<int> screenId;
   Issue githubIssue;
-  // TODO(ALL): Implement github url, depends on https://github.com/SW814F20/Application/issues/37
-  // TODO(ALL): Implement github url https://github.com/SW814F20/Application/issues/38
   String issueUrl;
-  // TODO(ALL): Implement github api, https://github.com/SW814F20/Application/issues/36
 
   Future<Task> getGithubInformation() async {
     githubIssue = await application.githubApi.getIssue(issueUrl);
