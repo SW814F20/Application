@@ -216,7 +216,7 @@ class Sw814Api extends BaseApi {
     }
   }
 
-  Future<bool> createTask(String name, int appId, List<int> screenId, String description, String issueUrl, String token) async {
+  Future<String> createTask(String name, int appId, List<int> screenId, String description, String issueUrl, String token) async {
     final String ids = jsonEncode(screenId);
     final String data = '''
     {
@@ -229,7 +229,7 @@ class Sw814Api extends BaseApi {
     ''';
     final http.Response response = await performCall('Task/Create', [], HttpMethod.POST, body: data, token: token);
     if (response.statusCode == 200) {
-      return true;
+      return response.body;
     } else {
       // If the server did not return a 200 OK response, then throw an exception.
       throw Exception('Failed to perform call');

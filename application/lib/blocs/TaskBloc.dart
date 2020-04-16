@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:application/blocs/ApiBloc.dart';
 import 'package:application/model/Application.dart';
@@ -12,11 +13,15 @@ class TaskBloc extends ApiBloc {
   Application application;
   final BehaviorSubject<List<Task>> _tasks = BehaviorSubject<List<Task>>.seeded(<Task>[]);
   Stream<List<Task>> get tasks => _tasks.stream;
-
+  List<Task> taskList = <Task>[];
   Future<bool> createTask(String taskName, int appId, List<int> screenId, String description, Priority priority) async {
     application.githubApi.createIssue(taskName, '', priority).then((newIssue) {
       api.createTask(taskName, appId, screenId, description, newIssue.url, authenticationBloc.getLoggedInUser().token).then((onValue) {
-        getTasks();
+        final Task newTask = Task.fromJson(application, jsonDecode(onValue));
+        newTask.getGithubInformation().then((task) {
+          taskList.add(newTask);
+          _tasks.add(taskList);
+        });
       });
     });
     return true;
@@ -25,6 +30,7 @@ class TaskBloc extends ApiBloc {
   void getTasks() {
     api.getTasks(application, authenticationBloc.getLoggedInUser().token).then((value) {
       updateTasks(value);
+      taskList = value;
     });
   }
 
