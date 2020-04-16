@@ -16,8 +16,15 @@ class Issue {
     title = json['title'];
     number = json['number'];
     user = User.fromJson(json['user']);
-    json['labels'].map((dynamic label) => labels.add(Label.fromJson(label)));
+    setLabels(json['labels']);
     milestone = json['milestone'] == null ? null : Milestone.fromJson(json['milestone']);
+    comments = json['comments'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    closedAt = json['closed_at'];
+    authorAssociation = json['author_association'];
+    pullRequest = json['pull_request'];
+    body = json['body'];
   }
 
   String url;
@@ -44,4 +51,11 @@ class Issue {
   String authorAssociation;
   String pullRequest;
   String body;
+
+  void setLabels(dynamic inputs) {
+    for (dynamic inputJson in inputs) {
+      labels.add(Label.fromJson(inputJson));
+    }
+    return;
+  }
 }

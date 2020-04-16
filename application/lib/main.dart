@@ -2,6 +2,7 @@ import 'package:application/view/screens/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:application/bootstrap.dart';
 import 'package:application/providers/environment_provider.dart' as environment;
+import 'package:application/providers/github_provider.dart' as github_provider;
 
 void main() {
   // Register all dependencies for injector
@@ -11,13 +12,17 @@ void main() {
 
   if (_isInDebugMode) {
     // If in DEBUG mode
-    environment.setFile('assets/environments.json').whenComplete(() {
-      _runApp();
+    github_provider.setFile('assets/github.json').whenComplete(() {
+      environment.setFile('assets/environments.json').whenComplete(() {
+        _runApp();
+      });
     });
   } else {
     // Else Production
-    environment.setFile('assets/environments.prod.json').whenComplete(() {
-      _runApp();
+    github_provider.setFile('assets/github.json').whenComplete(() {
+      environment.setFile('assets/environments.prod.json').whenComplete(() {
+        _runApp();
+      });
     });
   }
 }

@@ -13,7 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewAppScreen extends BaseScreen {
   final RoundedTextField appNameInput = RoundedTextField('app_name', 'Application name');
-  final RoundedTextField appUrlInput = RoundedTextField('app_url', 'Application URL');
+  final RoundedTextField appUser = RoundedTextField('User', 'Username of owner of repository');
   final ApplicationBloc applicationBloc = di.getDependency<ApplicationBloc>();
 
   @override
@@ -24,7 +24,7 @@ class NewAppScreen extends BaseScreen {
         child: Column(
           children: <Widget>[
             appNameInput,
-            appUrlInput,
+            appUser,
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Button(
@@ -39,10 +39,10 @@ class NewAppScreen extends BaseScreen {
   }
 
   void createApplication() async {
-    final String applicationName = appNameInput.controller.text;
-    final String applicationUrl = appUrlInput.controller.text;
+    final String applicationName = appNameInput.controller.text.replaceAll('\t', '');
+    final String applicationUser = appUser.controller.text.replaceAll('\t', '');
     final bool success = await applicationBloc.addApplication(
-        8, applicationName, Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1), applicationUrl);
+        8, applicationName, Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1), applicationUser);
     if (success) {
       showDialog<Center>(
           barrierDismissible: false,

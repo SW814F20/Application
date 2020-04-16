@@ -6,6 +6,7 @@ import 'package:application/model/Screen.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/model/User.dart';
 import 'package:application/providers/BaseApi.dart';
+import 'package:application/providers/GithubApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -69,17 +70,21 @@ class Sw814Api extends BaseApi {
     }
   }
 
-  Future<bool> createApplications(String appName, String appUrl, Color color, String token) async {
+  Future<bool> createApplication(String appName, String user, Color color, String token) async {
     final String appColor = color.toString();
+    final String repositoryName = appName.replaceAll(' ', '-');
     final String data = '''
     {
       "appName": "$appName",
-      "appUrl": "$appUrl",
+      "repository": "$repositoryName",
+      "user": "$user",
       "appColor": "$appColor"
     }
     ''';
     final http.Response response = await performCall('App/Create', [], HttpMethod.POST, body: data, token: token);
     if (response.statusCode == 200) {
+      final GithubApi api = GithubApi(user, repositoryName);
+      await api.createRepo(repositoryName).then((bool t) => {api.createMissingLabels()});
       return true;
     } else {
       // If the server did not return a 200 OK response, then throw an exception.
@@ -195,13 +200,14 @@ class Sw814Api extends BaseApi {
     }
   }
 
-  Future<List<Task>> getTasks(int applicationId, String token) async {
+  Future<List<Task>> getTasks(Application application, String token) async {
+    final int applicationId = application.id;
     final http.Response response = await performCall('App/GetTask/$applicationId', [], HttpMethod.GET, token: token);
     if (response.statusCode == 200) {
       final dynamic body = jsonDecode(response.body);
       final List<Task> output = <Task>[];
       for (var elem in body) {
-        output.add(Task.fromJson(elem));
+        output.add(Task.fromJson(application, elem));
       }
       return output;
     } else {
@@ -210,14 +216,15 @@ class Sw814Api extends BaseApi {
     }
   }
 
-  Future<bool> createTask(String name, int appId, List<int> screenId, String description, String token) async {
+  Future<bool> createTask(String name, int appId, List<int> screenId, String description, String issueUrl, String token) async {
     final String ids = jsonEncode(screenId);
     final String data = '''
     {
       "name": "$name",
       "appId": $appId,
       "screenId": $ids,
-      "description": "$description"
+      "description": "$description",
+      "issueUrl": "$issueUrl"
     }
     ''';
     final http.Response response = await performCall('Task/Create', [], HttpMethod.POST, body: data, token: token);

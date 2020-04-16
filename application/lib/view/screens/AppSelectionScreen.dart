@@ -1,5 +1,6 @@
 import 'package:application/blocs/ApplicationBloc.dart';
 import 'package:application/blocs/AuthenticationBloc.dart';
+import 'package:application/blocs/TaskBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
 import 'package:application/model/Output.dart';
@@ -77,7 +78,7 @@ class AppSelectionScreen extends BaseScreen {
         padding: const EdgeInsets.all(8),
         child: Container(
           child: GestureDetector(
-            onTap: () => {Routes.push(contextObject.getOutput(), TaskScreen(application))},
+            onTap: () => {Routes.push(contextObject.getOutput(), TaskScreen(application, TaskBloc(application)))},
             child: Center(
               child: Container(
                 height: appContainerSize(),

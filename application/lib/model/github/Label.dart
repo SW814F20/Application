@@ -14,6 +14,6 @@ class Label {
   String url;
   String name;
   String color;
-  String defaultValue;
+  bool defaultValue;
   String description;
 }

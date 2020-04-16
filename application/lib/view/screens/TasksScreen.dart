@@ -1,16 +1,16 @@
+import 'package:application/blocs/TaskBloc.dart';
 import 'package:application/model/Application.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/screens/NewTaskScreen.dart';
 import 'package:application/view/screens/PlaceholderScreen.dart';
-import 'package:application/view/screens/ScreenSelectionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TaskScreen extends BaseScreen {
-  TaskScreen(this.app);
-
+  TaskScreen(this.app, this.taskBloc);
+  final TaskBloc taskBloc;
   final Application app;
 
   @override
@@ -32,42 +32,43 @@ class TaskScreen extends BaseScreen {
   }
 
   Widget contentPortrait() {
-    final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
-    final Widget button = RaisedButton(
-        onPressed: () => Routes.push(contextObject.getOutput(), ScreenSelectionScreen(app)), child: const Text('Select Screen'));
-    notStartedWidgets.add(button);
-    final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
-    final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
-
-    return TabBarView(children: [
-      Container(
-        alignment: Alignment.topCenter,
-        child: SingleChildScrollView(
-          child: Column(
-            children: notStartedWidgets,
+    return StreamBuilder<List<Task>>(
+      stream: taskBloc.tasks,
+      builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
+        final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.notStarted));
+        final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.workInProgress));
+        final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.done));
+        return TabBarView(children: [
+          Container(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              child: Column(
+                children: notStartedWidgets,
+              ),
+            ),
+            color: const Color.fromRGBO(200, 200, 200, 1),
           ),
-        ),
-        color: const Color.fromRGBO(200, 200, 200, 1),
-      ),
-      Container(
-        alignment: Alignment.topCenter,
-        child: SingleChildScrollView(
-          child: Column(
-            children: workInProgressWidgets,
+          Container(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              child: Column(
+                children: workInProgressWidgets,
+              ),
+            ),
+            color: Colors.white,
           ),
-        ),
-        color: Colors.white,
-      ),
-      Container(
-        alignment: Alignment.topCenter,
-        child: SingleChildScrollView(
-          child: Column(
-            children: doneWidgets,
+          Container(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              child: Column(
+                children: doneWidgets,
+              ),
+            ),
+            color: Colors.lightGreen,
           ),
-        ),
-        color: Colors.lightGreen,
-      ),
-    ]);
+        ]);
+      },
+    );
   }
 
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
@@ -111,61 +112,61 @@ class TaskScreen extends BaseScreen {
     return tasks.map((task) => convertTaskToWidget(task)).toList();
   }
 
-  List<Task> getTasks(Status status) {
-    return app.tasks.where((task) => task.taskStatus == status).toList();
-  }
-
-  List<Task> getAllTasks(Status status) {
-    return app.tasks;
+  List<Task> getTasks(List<Task> tasksToSearchIn, Status status) {
+    return tasksToSearchIn.where((task) => task.taskStatus == status).toList();
   }
 
   Widget contentLandscape() {
-    final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(Status.notStarted));
-    final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(Status.workInProgress));
-    final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(Status.done));
-
-    return Column(
-      children: <Widget>[
-        _columnHeader(),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return StreamBuilder(
+      stream: taskBloc.tasks,
+      builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
+        final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.notStarted));
+        final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.workInProgress));
+        final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.done));
+        return Column(
           children: <Widget>[
-            Expanded(
-                flex: 33,
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: notStartedWidgets,
-                    ),
-                  ),
-                  color: const Color.fromRGBO(200, 200, 200, 1),
-                )),
-            Expanded(
-                flex: 33,
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: workInProgressWidgets,
-                    ),
-                  ),
-                  color: Colors.white,
-                )),
-            Expanded(
-                flex: 33,
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: doneWidgets,
-                    ),
-                  ),
-                  color: Colors.lightGreen,
-                )),
+            _columnHeader(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                    flex: 33,
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: notStartedWidgets,
+                        ),
+                      ),
+                      color: const Color.fromRGBO(200, 200, 200, 1),
+                    )),
+                Expanded(
+                    flex: 33,
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: workInProgressWidgets,
+                        ),
+                      ),
+                      color: Colors.white,
+                    )),
+                Expanded(
+                    flex: 33,
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: doneWidgets,
+                        ),
+                      ),
+                      color: Colors.lightGreen,
+                    )),
+              ],
+            )
           ],
-        )
-      ],
+        );
+      },
     );
   }
 
@@ -276,7 +277,7 @@ class TaskScreen extends BaseScreen {
   Widget createNewTaskButton() {
     return IconButton(
       icon: FaIcon(FontAwesomeIcons.plus),
-      onPressed: () => {Routes.push(contextObject.getOutput(), NewTaskScreen(app))},
+      onPressed: () => {Routes.push(contextObject.getOutput(), NewTaskScreen(taskBloc))},
     );
   }
 }
