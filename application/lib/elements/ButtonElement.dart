@@ -1,6 +1,5 @@
 import 'package:application/model/EditorScreenElement.dart';
 import 'package:application/view/widgets/RoundedTextField.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 
 class ButtonElement extends EditorScreenElement{
@@ -33,6 +32,7 @@ class ButtonElement extends EditorScreenElement{
     ];
   }
 
+  @override
   void saveSettings() {
     name = _nameInput.controller.text;
 

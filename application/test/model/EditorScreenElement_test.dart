@@ -8,36 +8,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class mockElement extends EditorScreenElement{
+class MockElement extends EditorScreenElement{
 
   bool isCalled = false;
 
   @override
   String display() {
-    // TODO: implement display
     throw UnimplementedError();
   }
 
   @override
   List<Widget> getSettingsWidgets() {
-    // TODO: implement getSettingsWidgets
     throw UnimplementedError();
   }
 
   @override
   String toJson() {
-    // TODO: implement toJson
     throw UnimplementedError();
   }
 
   @override
-  void saveSettings(){
-    super.saveSettings();
-  }
-
-  @override
   Widget render() {
-    // TODO: implement render
     throw UnimplementedError();
   }
 
@@ -101,19 +92,19 @@ void main() {
     });
 
     test('Should be able to build a saveButton-widget with onPressed-function', (){
-      Function pres = () => { print('Hello world') };
+      final Function onClick = () => { print('Hello world') };
       final el = EditorScreenElement.create('Text', 0);
 
-      final RaisedButton saveBtn = el.saveSettingsWidget(pres);
-
-      expect(saveBtn.onPressed, pres);
+      final RaisedButton saveBtn = el.saveSettingsWidget(onClick);
+      final Text saveBtnChild = saveBtn.child;
+      expect(saveBtn.onPressed, onClick);
       expect(saveBtn.child is Text, isTrue);
-      expect((saveBtn.child as Text).data, 'Save information');
+      expect(saveBtnChild.data, 'Save information');
     });
 
     test('Should invoke onSave, when calling saveSettings', (){
-      final el = mockElement();
-      var cb = (mockElement el) {
+      final el = MockElement();
+      final cb = (MockElement el) {
         el.isCalled = true;
       };
       el.onSave = cb;
@@ -121,7 +112,6 @@ void main() {
       expectLater(el.isCalled, isTrue);
     });
   });
-
 
   group('EditorScreenElement JSON factory data-parsing tests', () {
     Map<String, dynamic> data;

@@ -7,9 +7,10 @@ class Screen implements Json {
 
   Screen.fromJson(Map<String, dynamic> json) {
     screenName = json['screenName'];
-    screenContent = [];
-    List<dynamic> screenContentJson = jsonDecode(json['screenContent'].toString().replaceAll('\'', '\"'));
     id = json['id'];
+    screenContent = [];
+    final List<dynamic> screenContentJson = jsonDecode(json['screenContent'].toString().replaceAll('\'', '\"'));
+
     for (Map<String, dynamic> widget in screenContentJson) {
       screenContent.add(EditorScreenElement.fromJson(widget));
     }

@@ -31,6 +31,7 @@ class TextElement extends EditorScreenElement{
     ];
   }
 
+  @override
   void saveSettings() {
     name = _nameInput.controller.text;
 

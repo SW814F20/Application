@@ -35,12 +35,13 @@ void main() {
     });
 
     test('Should provide save settings as last widget', (){
-      expect((el.getSettingsWidgets().last is RaisedButton), isTrue);
-      expect((el.getSettingsWidgets().last as RaisedButton).onPressed, el.saveSettings);
+      final RaisedButton btn = el.getSettingsWidgets().last; 
+      expect(btn is RaisedButton, isTrue);
+      expect(btn.onPressed, el.saveSettings);
     });
 
     test('Should set name when clicking save-button', () {
-      RoundedTextField nameField = el.getSettingsWidgets()[0];
+      final RoundedTextField nameField = el.getSettingsWidgets()[0];
 
       nameField.controller.text = 'New name';
 
@@ -53,12 +54,18 @@ void main() {
       el.onSave = (TextElement cbEl) {
         cbEl.name = 'Success!';
       };
-      RoundedTextField nameField = el.getSettingsWidgets()[0];
+      final RoundedTextField nameField = el.getSettingsWidgets()[0];
       nameField.controller.text = 'This name should get overridden by super call';
 
       el.saveSettings();
 
       expect(el.name, 'Success!');
+    });
+
+    test('Should call render, and return correct format', (){
+      final Text content = el.render();
+      expect(content.data, 'Text');
+      expect(content is Text, isTrue);
     });
 
   });

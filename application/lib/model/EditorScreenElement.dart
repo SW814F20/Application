@@ -18,19 +18,16 @@ abstract class EditorScreenElement {
   List<Widget> getSettingsWidgets();
   Widget render();
 
-  @protected
   Widget nameWidget() => RoundedTextField(
       'WidgetKeyField',
       'Widget Name',
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
   );
 
-  @protected
   Widget saveSettingsWidget(Function onPressed) => RaisedButton(
       onPressed: onPressed,
       child: const Text('Save information'));
 
-  @protected
   void saveSettings(){
     if(onSave != null){
       onSave(this);
