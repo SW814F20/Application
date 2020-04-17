@@ -1,22 +1,3 @@
-/*
-      "url": "https://api.github.com/repos/aau-giraf/weekplanner/milestones/8",
-            "html_url": "https://github.com/aau-giraf/weekplanner/milestone/8",
-            "labels_url": "https://api.github.com/repos/aau-giraf/weekplanner/milestones/8/labels",
-            "id": 5283526,
-            "node_id": "MDk6TWlsZXN0b25lNTI4MzUyNg==",
-            "number": 8,
-            "title": "2020S2",
-            "description": "",
-            "creator": {
-            },
-            "open_issues": 29,
-            "closed_issues": 0,
-            "state": "open",
-            "created_at": "2020-04-07T06:56:01Z",
-            "updated_at": "2020-04-09T12:42:53Z",
-            "due_on": "2020-05-01T07:00:00Z",
-            "closed_at": null
- */
 import 'package:application/model/User.dart';
 
 class Milestone {

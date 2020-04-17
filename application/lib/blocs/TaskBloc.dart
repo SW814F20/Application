@@ -10,10 +10,12 @@ class TaskBloc extends ApiBloc {
   TaskBloc(this.application) {
     getTasks();
   }
+  
   Application application;
   final BehaviorSubject<List<Task>> _tasks = BehaviorSubject<List<Task>>.seeded(<Task>[]);
   Stream<List<Task>> get tasks => _tasks.stream;
   List<Task> taskList = <Task>[];
+  
   Future<bool> createTask(String taskName, int appId, List<int> screenId, String description, Priority priority) async {
     application.githubApi.createIssue(taskName, '', priority).then((newIssue) {
       api.createTask(taskName, appId, screenId, description, newIssue.url, authenticationBloc.getLoggedInUser().token).then((onValue) {

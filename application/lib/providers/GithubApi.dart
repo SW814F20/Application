@@ -160,19 +160,19 @@ class GithubApi extends BaseApi {
     });
 
     if (!critialPriority) {
-      createLabel('Priority: Critical', 'fc0303', 'This is the critical prority created by the ProductOwnerBot');
+      createLabel('Priority: Critical', 'fc0303', 'This is the critical priority created by the ProductOwnerBot');
     }
 
     if (!highPriority) {
-      createLabel('Priority: High', 'ffa600', 'This is the high prority created by the ProductOwnerBot');
+      createLabel('Priority: High', 'ffa600', 'This is the high priority created by the ProductOwnerBot');
     }
 
     if (!mediumPriority) {
-      createLabel('Priority: Medium', 'ffff00', 'This is the medium prority created by the ProductOwnerBot');
+      createLabel('Priority: Medium', 'ffff00', 'This is the medium priority created by the ProductOwnerBot');
     }
 
     if (!lowPriority) {
-      createLabel('Priority: Low', '99ff00', 'This is the low prority created by the ProductOwnerBot');
+      createLabel('Priority: Low', '99ff00', 'This is the low priority created by the ProductOwnerBot');
     }
 
     if (!notStartedStatus) {
