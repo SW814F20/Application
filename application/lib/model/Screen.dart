@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:application/model/EditorScreenElement.dart';
 import 'package:application/model/Json.dart';
 
 class Screen implements Json {
@@ -6,12 +7,17 @@ class Screen implements Json {
 
   Screen.fromJson(Map<String, dynamic> json) {
     screenName = json['screenName'];
-    screenContent = jsonDecode(json['screenContent']);
     id = json['id'];
+    screenContent = [];
+    final List<dynamic> screenContentJson = jsonDecode(json['screenContent'].toString().replaceAll('\'', '\"'));
+
+    for (Map<String, dynamic> widget in screenContentJson) {
+      screenContent.add(EditorScreenElement.fromJson(widget));
+    }
   }
 
   String screenName;
-  List<dynamic> screenContent;
+  List<EditorScreenElement> screenContent;
   int id;
 
   @override
@@ -19,7 +25,7 @@ class Screen implements Json {
     return '''
     {
       "screenName": "$screenName",
-      "screenContent": "$screenContent"
+      "screenContent": "${screenContent.map((e) => e.toJson())}"
     }
     ''';
   }

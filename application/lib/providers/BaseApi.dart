@@ -214,11 +214,13 @@ class BaseApi {
   }
 
   Future<bool> updateScreen(int id, String screenName, String screenContent, String token) async {
-    final String data = '''
+   final String content = screenContent.replaceAll('\"', '\\"');
+   final String data = '''
     {
-      "screenName": "$screenName",
-      "screenContent": "$screenContent"
-    }''';
+      \"screenName\": \"$screenName\",
+      \"screenContent\": \"$content\"
+    }
+    ''';
     final http.Response response = await _performCall('Screen/$id', [], HttpMethod.PUT, data, token: token);
     if (response.statusCode == 200) {
       return true;
