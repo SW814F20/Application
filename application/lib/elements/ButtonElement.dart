@@ -4,12 +4,12 @@ import 'package:flutter/widgets.dart';
 
 class ButtonElement extends EditorScreenElement{
 
-  ButtonElement(String name, int position): super(name: name, position: position);
+  ButtonElement(String name, int position, String type): super(name: name, position: position, type: type);
 
   RoundedTextField _nameInput;
 
   static ButtonElement fromJson(String name, int position, Map<String, dynamic> json) {
-    return ButtonElement(name, position);
+    return ButtonElement(name, position, 'Button');
   }
 
   @override

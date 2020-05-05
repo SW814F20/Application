@@ -7,9 +7,10 @@ import 'package:flutter/widgets.dart';
 enum elementType { Text, Button }
 
 abstract class EditorScreenElement {
-  EditorScreenElement({this.name, this.position});
+  EditorScreenElement({this.name, this.position, this.type});
 
   String name;
+  String type;
   int position;
   Function onSave;
 

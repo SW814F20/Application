@@ -2,18 +2,20 @@ import 'package:application/model/EditorScreenElement.dart';
 import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/widgets.dart';
 
-class TextElement extends EditorScreenElement{
-  TextElement(String name, int position): super(name: name, position: position);
+class TextElement extends EditorScreenElement {
+  TextElement(String name, int position, String type)
+      : super(name: name, position: position, type: type);
 
   RoundedTextField _nameInput;
 
-  static TextElement fromJson(String name, int position, Map<String, dynamic> json){
-    return TextElement(name, position);
+  static TextElement fromJson(
+      String name, int position, Map<String, dynamic> json) {
+    return TextElement(name, position, 'Text');
   }
 
   @override
   String display() {
-    return 'Text: '+((name != null) ? name : position.toString());
+    return 'Text: ' + ((name != null) ? name : position.toString());
   }
 
   @override
@@ -25,10 +27,7 @@ class TextElement extends EditorScreenElement{
   List<Widget> getSettingsWidgets() {
     _nameInput = nameWidget();
     _nameInput.controller.text = name;
-    return [
-      _nameInput,
-      saveSettingsWidget(saveSettings)
-    ];
+    return [_nameInput, saveSettingsWidget(saveSettings)];
   }
 
   @override
@@ -42,5 +41,4 @@ class TextElement extends EditorScreenElement{
   Widget render() {
     return const Text('Text');
   }
-
 }
