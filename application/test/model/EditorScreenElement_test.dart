@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:application/elements/ButtonElement.dart';
 import 'package:application/elements/TextElement.dart';
 import 'package:application/model/EditorScreenElement.dart';
-import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,11 +13,6 @@ class MockElement extends EditorScreenElement{
 
   @override
   String display() {
-    throw UnimplementedError();
-  }
-
-  @override
-  List<Widget> getSettingsWidgets() {
     throw UnimplementedError();
   }
 
