@@ -20,7 +20,7 @@ class ScreenEditorScreen extends BaseScreen {
 
   List<EditorScreenElement> get screenContent => screen.screenContent;
 
-  final List<String> widgets = ['Text', 'Button'];
+  final List<String> widgets = ['Text', 'Button', 'TextInput'];
 
   double widgetListWidth() => isTablet() ? 200 : 110;
   double screenContentHeight() => getScreenHeight() / 2.2;

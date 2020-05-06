@@ -1,5 +1,6 @@
 import 'package:application/elements/ButtonElement.dart';
 import 'package:application/elements/TextElement.dart';
+import 'package:application/elements/TextInputElement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -39,6 +40,9 @@ abstract class EditorScreenElement {
         break;
       case 'Button':
         return ButtonElement.fromJson(name, position, json);
+        break;
+      case 'TextInput':
+        return TextInputElement.fromJson(name, position, json);
         break;
       default:
         throw ArgumentError(
