@@ -9,5 +9,6 @@ namespace API.Entities
         public int AppId { get; set; }
         public List<int> ScreenId { get; set; }
         public string Description { get; set; }
+        public string IssueUrl { get; set; }
     }
 }

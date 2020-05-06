@@ -11,6 +11,8 @@ class RoundedTextField extends StatelessWidget {
 
   final EdgeInsets padding;
 
+  String get hintText => _hintText;
+
   @override
   Widget build(BuildContext context) {
     return Padding(

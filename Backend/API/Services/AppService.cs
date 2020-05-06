@@ -17,7 +17,7 @@ namespace API.Services
         }
 
         /// <summary>
-        /// Get All Aps
+        /// Get All Apps
         /// </summary>
         /// <returns>List of all apps</returns>
         public IEnumerable<App> GetAll()
@@ -39,15 +39,17 @@ namespace API.Services
             // validation
             if (string.IsNullOrWhiteSpace(app.AppName))
                 throw new AppException("The AppName is required");
-            if (string.IsNullOrWhiteSpace(app.AppUrl))
-                throw new AppException("The AppUrl is required");
+            if (string.IsNullOrWhiteSpace(app.Repository))
+                throw new AppException("The Repository is required");
             if (string.IsNullOrWhiteSpace(app.AppColor))
                 throw new AppException("The AppColor is required");
+            if (string.IsNullOrWhiteSpace(app.User))
+                throw new AppException("The User is required");
 
             if (_context.Apps.Any(x => x.AppName == app.AppName))
-                throw new AppException("An app with name \"" + app.AppName + "\" already exists");
-            if (_context.Apps.Any(x => x.AppUrl == app.AppUrl))
-                throw new AppException("An app with url \"" + app.AppUrl + "\" already exists");
+                throw new AppException("An app with name " + app.AppName + " already exists");
+            if (_context.Apps.Any(x => x.Repository == app.Repository))
+                throw new AppException("An app with repository " + app.Repository +  " already exists");
 
             _context.Apps.Add(app);
             _context.SaveChanges();
@@ -75,6 +77,12 @@ namespace API.Services
                 app.AppName = appParam.AppName;
             }
             app.AppColor = appParam.AppColor;
+
+            if (!_context.Apps.Any(x => x.Repository == app.Repository))
+                app.Repository = appParam.Repository;
+
+            if (!string.IsNullOrWhiteSpace(appParam.User))
+                app.User = appParam.User;
 
             _context.Apps.Update(app);
             _context.SaveChanges();

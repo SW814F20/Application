@@ -13,5 +13,6 @@ namespace API.Models.Task
         public List<int> ScreenId { get; set; }
         [Required]
         public string Description { get; set; }
+        public string IssueUrl { get; set; }
     }
 }

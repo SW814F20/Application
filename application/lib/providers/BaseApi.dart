@@ -64,31 +64,32 @@ class BaseApi {
     }
   }
 
-  static task.Status convertStringToStatus(String status) {
-    switch (status) {
-      case 'Status: Done':
-        return task.Status.done;
-      case 'Status: Work in Progress':
-        return task.Status.workInProgress;
-      case 'Status: Not Started':
-        return task.Status.notStarted;
-      default:
-        throw Exception('Invalid input');
+  Future<bool> createUser(String username, String firstname, String lastname, String password) async {
+    final String data =
+        '{\"firstName\": \"$firstname\", \"lastName\": \"$lastname\", \"username\": \"$username\",\"password\": \"$password\"}';
+    final http.Response response = await _performCall('User/Register', [], HttpMethod.POST, data);
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response, then the user has been created.
+      return true;
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      throw Exception('Failed to perform call');
     }
   }
 
-  static String convertPriorityToString(task.Priority priority) {
-    switch (priority) {
-      case task.Priority.low:
-        return 'Priority: Low';
-      case task.Priority.medium:
-        return 'Priority: Medium';
-      case task.Priority.high:
-        return 'Priority: High';
-      case task.Priority.critical:
-        return 'Priority: Critical';
-      default:
-        throw Exception('Invalid string');
+  Future<List<Application>> getApplications(String token) async {
+    final http.Response response = await _performCall('App', [], HttpMethod.GET, '', token: token);
+    if (response.statusCode == 200) {
+      final dynamic body = jsonDecode(response.body);
+      final List<Application> output = <Application>[];
+      for (var elem in body) {
+        output.add(Application.fromJson(elem));
+      }
+      return output;
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      throw Exception('Failed to perform call');
     }
   }
 
