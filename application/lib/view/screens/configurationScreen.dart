@@ -134,6 +134,7 @@ class _ConfigurationTextScreenState extends ConfigState {
 class _ConfigurationTextInputScreenState extends ConfigState {
   _ConfigurationTextInputScreenState({this.element}) {
     readOnly = element.readOnly;
+    widgetName.controller.text = element.name;
     obscureText = (element.obscureText == null) ? false : element.obscureText;
     autoCorrect = (element.autoCorrect == null) ? false : element.autoCorrect;
     enableSuggestions =
@@ -159,8 +160,6 @@ class _ConfigurationTextInputScreenState extends ConfigState {
 
   @override
   Widget build(BuildContext context) {
-    widgetName.controller.text = element.name;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings for: ' + element.display()),

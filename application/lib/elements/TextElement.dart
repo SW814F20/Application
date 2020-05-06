@@ -18,7 +18,7 @@ class TextElement extends EditorScreenElement {
 
   @override
   String display() {
-    return 'Text: ' + ((name != null) ? name : position.toString());
+    return 'Text' + ((name != null) ? ': $name' : '');
   }
 
   @override

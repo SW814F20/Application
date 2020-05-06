@@ -17,7 +17,7 @@ class ButtonElement extends EditorScreenElement {
 
   @override
   String display() {
-    return 'Button: ' + ((name != null) ? name : position.toString());
+    return 'Button' + ((name != null) ? ': $name' : '');
   }
 
   @override

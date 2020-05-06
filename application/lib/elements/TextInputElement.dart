@@ -7,7 +7,7 @@ class TextInputElement extends EditorScreenElement {
       this.obscureText = false,
       this.autoCorrect = true,
       this.enableSuggestions = true,
-      this.enabled})
+      this.enabled = true})
       : super(name: name, position: position, type: type);
 
   bool readOnly;
@@ -32,12 +32,12 @@ class TextInputElement extends EditorScreenElement {
 
   @override
   String display() {
-    return 'TextInput: ' + ((name != null) ? name : position.toString());
+    return 'TextInput' + ((name != null) ? ': $name' : '');
   }
 
   @override
   String toJson() {
-    return '{"type": "TextInput", "name": "$name", "readOnly": $readOnly, "obscureText": $obscureText, "autoCorrect": $autoCorrect, "enableSuggestions": $enableSuggestions, "enabled": $enabled, "position": $position}';
+    return '{"type": "TextInput", "name": "$name", "readOnly": $readOnly, "obscureText": $obscureText, "autoCorrect": $autoCorrect, "enableSuggestions": $enableSuggestions, "enabled": ${(enabled == null) ? null : false}, "position": $position}';
   }
 
   @override
