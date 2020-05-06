@@ -1,42 +1,28 @@
 import 'package:application/model/EditorScreenElement.dart';
-import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/widgets.dart';
 
-class ButtonElement extends EditorScreenElement{
+class ButtonElement extends EditorScreenElement {
+  ButtonElement(String name, int position, String type, {this.text = ''})
+      : super(name: name, position: position, type: type);
+  String text;
 
-  ButtonElement(String name, int position, String type): super(name: name, position: position, type: type);
-
-  RoundedTextField _nameInput;
-
-  static ButtonElement fromJson(String name, int position, Map<String, dynamic> json) {
-    return ButtonElement(name, position, 'Button');
+  static ButtonElement fromJson(
+      String name, int position, Map<String, dynamic> json) {
+    if (json == null || json['text'] == null) {
+      return ButtonElement(name, position, 'Button');
+    } else {
+      return ButtonElement(name, position, 'Button', text: json['text']);
+    }
   }
 
   @override
   String display() {
-    return 'Button: '+ ((name != null) ? name : position.toString());
+    return 'Button: ' + ((name != null) ? name : position.toString());
   }
 
   @override
   String toJson() {
-    return '{"type": "Button", "name": "$name", "position": $position}';
-  }
-
-  @override
-  List<Widget> getSettingsWidgets() {
-    _nameInput = nameWidget();
-    _nameInput.controller.text = name;
-    return [
-      _nameInput,
-      saveSettingsWidget(saveSettings)
-    ];
-  }
-
-  @override
-  void saveSettings() {
-    name = _nameInput.controller.text;
-
-    super.saveSettings();
+    return '{"type": "Button", "name": "$name", "text": "$text", "position": $position}';
   }
 
   @override

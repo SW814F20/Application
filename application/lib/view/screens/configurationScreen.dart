@@ -1,3 +1,5 @@
+import 'package:application/elements/ButtonElement.dart';
+import 'package:application/elements/TextElement.dart';
 import 'package:application/model/EditorScreenElement.dart';
 import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,9 @@ abstract class ConfigState extends State<ConfigurationScreen> {
 }
 
 class ConfigurationScreen extends StatefulWidget {
-  ConfigurationScreen({Key key, this.element}) : super(key: key);
+  const ConfigurationScreen({this.element});
 
-  EditorScreenElement element;
+  final EditorScreenElement element;
 
   @override
   ConfigState createState() {
@@ -32,23 +34,32 @@ class ConfigurationScreen extends StatefulWidget {
 class _ConfigurationButtonScreenState extends ConfigState {
   _ConfigurationButtonScreenState({this.element});
 
-  EditorScreenElement element;
-  final RoundedTextField test = RoundedTextField('textInput', 'Widget name');
+  ButtonElement element;
+
+  final RoundedTextField widgetName =
+      RoundedTextField('widgetNameField', 'Widget name');
+  final RoundedTextField widgetText =
+      RoundedTextField('widgetTextField', 'Widget Text');
 
   @override
   Widget build(BuildContext context) {
-    test.controller.text = element.name;
+    widgetName.controller.text = element.name;
+    widgetText.controller.text = element.text;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings for: ' + element.display()),
       ),
       body: Column(
         children: <Widget>[
-          test,
+          const Text('Widget Name'),
+          widgetName,
+          const Text('Widget Text'),
+          widgetText,
           RaisedButton(
             onPressed: () {
-              element.name = test.controller.text;
-              print(element.name);
+              element.name = widgetName.controller.text;
+              element.text = widgetText.controller.text;
               Navigator.pop(context);
             },
             child: const Text('Save'),
@@ -62,28 +73,42 @@ class _ConfigurationButtonScreenState extends ConfigState {
 class _ConfigurationTextScreenState extends ConfigState {
   _ConfigurationTextScreenState({this.element});
 
-  EditorScreenElement element;
-  final RoundedTextField test = RoundedTextField('textInput', 'Widget name');
+  final TextElement element;
+  final RoundedTextField widgetName =
+      RoundedTextField('widgetNameField', 'Widget name');
+  final RoundedTextField widgetText =
+      RoundedTextField('widgetTextField', 'Widget Text');
 
   @override
   Widget build(BuildContext context) {
-    test.controller.text = element.name;
+    widgetName.controller.text = element.name;
+    widgetText.controller.text = element.text;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings for: ' + element.display()),
       ),
-      body: Column(
-        children: <Widget>[
-          test,
-          RaisedButton(
-            onPressed: () {
-              element.name = test.controller.text;
-              print(element.name);
-              Navigator.pop(context);
-            },
-            child: const Text('Save'),
-          )
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text('Widget Name'),
+            widgetName,
+            const Text('Widget Text'),
+            widgetText,
+            Center(
+              child: RaisedButton(
+                onPressed: () {
+                  element.name = widgetName.controller.text;
+                  element.text = widgetText.controller.text;
+                  Navigator.pop(context);
+                },
+                child: const Text('Save'),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

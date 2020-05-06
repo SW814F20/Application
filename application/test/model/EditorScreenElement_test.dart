@@ -76,41 +76,6 @@ void main() {
       expect(el is ButtonElement, isTrue);
       expect(el.position, 0);
     });
-
-    test('Should be able to retrieve a settingsWidget', (){
-      final el = EditorScreenElement.create('Text', 0);
-
-      expect(el.getSettingsWidgets() is List<Widget>, isTrue);
-    });
-
-    test('Should be able to build the nameInputField', (){
-      final el = EditorScreenElement.create('Text', 0);
-
-      final RoundedTextField nameField = el.nameWidget();
-
-      expect(nameField.hintText, 'Widget Name');
-    });
-
-    test('Should be able to build a saveButton-widget with onPressed-function', (){
-      final Function onClick = () => { print('Hello world') };
-      final el = EditorScreenElement.create('Text', 0);
-
-      final RaisedButton saveBtn = el.saveSettingsWidget(onClick);
-      final Text saveBtnChild = saveBtn.child;
-      expect(saveBtn.onPressed, onClick);
-      expect(saveBtn.child is Text, isTrue);
-      expect(saveBtnChild.data, 'Save information');
-    });
-
-    test('Should invoke onSave, when calling saveSettings', (){
-      final el = MockElement();
-      final cb = (MockElement el) {
-        el.isCalled = true;
-      };
-      el.onSave = cb;
-      el.saveSettings();
-      expectLater(el.isCalled, isTrue);
-    });
   });
 
   group('EditorScreenElement JSON factory data-parsing tests', () {
