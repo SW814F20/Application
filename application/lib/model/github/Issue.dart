@@ -1,7 +1,6 @@
 import 'package:application/model/github/Label.dart';
+import 'package:application/model/github/Milestone.dart';
 import 'package:application/model/github/User.dart';
-
-import 'Milestone.dart';
 
 class Issue {
   Issue.fromJson(Map<String, dynamic> json) {
