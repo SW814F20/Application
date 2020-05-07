@@ -6,7 +6,8 @@ import 'package:application/model/Screen.dart';
 
 class ScreenBloc extends ApiBloc {
 
-  final StreamController<List<EditorScreenElement>> screensStream  = StreamController<List<EditorScreenElement>>.broadcast();
+  final StreamController<List<EditorScreenElement>> editorScreenStream  = StreamController<List<EditorScreenElement>>.broadcast();
+  final StreamController<List<Screen>> screensStream  = StreamController<List<Screen>>.broadcast();
 
   Future<List<Screen>> getScreens(int id) {
     return api.getScreens(id, authenticationBloc.getLoggedInUser().token);

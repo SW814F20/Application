@@ -82,7 +82,7 @@ class ScreenEditorScreen extends BaseScreen {
 
   Widget createScreenElements() {
     return StreamBuilder<List<EditorScreenElement>>(
-        stream: screenBloc.screensStream.stream,
+        stream: screenBloc.editorScreenStream.stream,
         initialData: screenContent,
         builder: (BuildContext context,
             AsyncSnapshot<List<EditorScreenElement>> snapshot) {
@@ -115,7 +115,7 @@ class ScreenEditorScreen extends BaseScreen {
 
   void addElementToScreenStream(String type) {
     screenContent.add(EditorScreenElement.create(type, screenContent.length));
-    screenBloc.screensStream.sink.add(screenContent);
+    screenBloc.editorScreenStream.sink.add(screenContent);
   }
 
   @override
