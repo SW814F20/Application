@@ -1,10 +1,10 @@
 import 'package:application/di.dart';
 import 'package:application/model/KeyValuePair.dart';
 import 'package:application/model/User.dart';
-import 'package:application/providers/BaseApi.dart';
+import 'package:application/providers/Sw814Api.dart';
 
 class AuthenticationBloc {
-  final BaseApi _api = di.getDependency<BaseApi>();
+  final Sw814Api _api = di.getDependency<Sw814Api>();
   User _user;
   bool loggedIn() => _user.getLoggedIn();
 
