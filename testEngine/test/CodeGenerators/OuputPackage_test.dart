@@ -201,19 +201,6 @@ void main(){
       expect(helpers.length, 1);
       expect(helpers[0], 'Widget getTestWidget();');
     });
-
-        /**
-     * TODO: Move this to another test file that is associated with CodeGenerator/flutter/adapterGenerator.dart
-
-
-    test('Should output helper signature alphabeticaly', () {
-      package.addHelperSignature('Widget b()');
-      package.addHelperSignature('Widget a()');
-      package.addHelperSignature('Widget c()');
-      var helpers = package.getHelperMethods;
-      expect(helpers, 'Widget a();\nWidget b();\nWidget c();\n');
-    });
-  **/
   });
 
   group('Output document formatting', () {
