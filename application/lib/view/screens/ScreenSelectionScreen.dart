@@ -12,11 +12,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ScreenSelectionScreen extends BaseScreen {
   ScreenSelectionScreen(this.application) {
-    screenBloc
-        .getScreens(application.id)
-        .then((value) => value.forEach((element) {
-              screens.add(element);
-            }));
+    screenBloc.getScreens(application.id).then((value) {
+      value.forEach((element) {
+        screens.add(element);
+      });
+      screenBloc.screensStream.sink.add(screens);
+    });
   }
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
 
@@ -56,7 +57,14 @@ class ScreenSelectionScreen extends BaseScreen {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
-              child: getScreenRows(),
+              child: 
+              StreamBuilder<List<Screen>>(
+                  stream: screenBloc.screensStream.stream,
+                  initialData: screens,
+                  builder: (context, snapshot) {
+                    print(snapshot.data);
+                    return getScreenRows();
+                  }),
             ),
           ),
         ));

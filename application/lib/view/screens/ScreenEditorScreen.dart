@@ -12,13 +12,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ScreenEditorScreen extends BaseScreen {
-  ScreenEditorScreen(this.screen);
+  ScreenEditorScreen(this.screen) {
+    oldScreenContent.addAll(screen.screenContent);
+  }
 
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
 
   final Screen screen;
 
   List<EditorScreenElement> get screenContent => screen.screenContent;
+
+  final List<EditorScreenElement> oldScreenContent = [];
 
   final List<String> widgets = ['Text', 'Button', 'TextInput'];
 
@@ -82,7 +86,7 @@ class ScreenEditorScreen extends BaseScreen {
 
   Widget createScreenElements() {
     return StreamBuilder<List<EditorScreenElement>>(
-        stream: screenBloc.screensStream.stream,
+        stream: screenBloc.editorScreenStream.stream,
         initialData: screenContent,
         builder: (BuildContext context,
             AsyncSnapshot<List<EditorScreenElement>> snapshot) {
@@ -115,7 +119,7 @@ class ScreenEditorScreen extends BaseScreen {
 
   void addElementToScreenStream(String type) {
     screenContent.add(EditorScreenElement.create(type, screenContent.length));
-    screenBloc.screensStream.sink.add(screenContent);
+    screenBloc.editorScreenStream.sink.add(screenContent);
   }
 
   @override
@@ -128,7 +132,10 @@ class ScreenEditorScreen extends BaseScreen {
         ],
         leading: IconButton(
           icon: FaIcon(FontAwesomeIcons.arrowLeft),
-          onPressed: () => Routes.pop(contextObject.getOutput()),
+          onPressed: () {
+            screen.screenContent = oldScreenContent;
+            Routes.pop(contextObject.getOutput());
+          },
         ));
   }
 
