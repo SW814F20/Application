@@ -23,3 +23,5 @@ doc/api/
 # Do not track binary and object files from dotnet
 Backend/API/bin/**
 Backend/API/obj/**
+
+.DS_Store
