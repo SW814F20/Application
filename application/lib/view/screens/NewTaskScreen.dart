@@ -1,4 +1,4 @@
-import 'package:application/model/Application.dart';
+import 'package:application/blocs/TaskBloc.dart';
 import 'package:application/model/KeyValuePair.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/routes.dart';
@@ -11,10 +11,8 @@ import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/material.dart';
 
 class NewTaskScreen extends BaseScreen {
-  NewTaskScreen(this.app);
-
-  final Application app;
-
+  NewTaskScreen(this.taskBloc);
+  final TaskBloc taskBloc;
   final RoundedTextField taskName = RoundedTextField(
     'taskNameFieldKey',
     'Task name',
@@ -60,12 +58,15 @@ class NewTaskScreen extends BaseScreen {
   }
 
   void createTask() {
-    app.taskBloc.createTask(taskName.getValue(), app.id, [0], description.getValue()).then((value) => {returnCall(value)});
+    final String taskNameString = taskName.getValue().replaceAll('\t', '');
+    final String descriptionString = description.getValue().replaceAll('\t', '');
+    taskBloc
+        .createTask(taskNameString, taskBloc.application.id, [0], descriptionString, taskPriority.getValue())
+        .then((value) => {returnCall(value)});
   }
 
   void returnCall(bool success) {
     if (success) {
-      app.tasks.add(Task(taskName: taskName.getValue()));
       showDialog<Center>(
           barrierDismissible: false,
           context: contextObject.getOutput(),
@@ -95,7 +96,7 @@ class NewTaskScreen extends BaseScreen {
   @override
   Widget appBar() {
     return CustomAppBar(
-      title: app.appName + ' - Create new task',
+      title: taskBloc.application.appName + ' - Create new task',
       centerTitle: true,
     );
   }

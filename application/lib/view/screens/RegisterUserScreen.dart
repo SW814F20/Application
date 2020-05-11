@@ -1,5 +1,5 @@
 import 'package:application/di.dart';
-import 'package:application/providers/BaseApi.dart';
+import 'package:application/providers/Sw814Api.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/widgets/AppBar.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RegisterUserScreen extends BaseScreen {
-  final BaseApi api = di.getDependency<BaseApi>();
+  final Sw814Api api = di.getDependency<Sw814Api>();
 
   final RoundedTextField username = RoundedTextField(
     'usernameField',

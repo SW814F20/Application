@@ -58,7 +58,7 @@ class ConfigurationTextInputScreenState extends ConfigState {
               ),
               Row(
                 children: <Widget>[
-                  const Text('Should be obscure text'),
+                  const Text('Should text be obscured?'),
                   Switch(
                       value: obscureText,
                       onChanged: (value) {
@@ -70,7 +70,7 @@ class ConfigurationTextInputScreenState extends ConfigState {
               ),
               Row(
                 children: <Widget>[
-                  const Text('Should use auto correct'),
+                  const Text('Should use auto correct?'),
                   Switch(
                       value: autoCorrect,
                       onChanged: (value) {
@@ -82,7 +82,7 @@ class ConfigurationTextInputScreenState extends ConfigState {
               ),
               Row(
                 children: <Widget>[
-                  const Text('Should use come with suggestions'),
+                  const Text('Should come with suggestions?'),
                   Switch(
                       value: enableSuggestions,
                       onChanged: (value) {
@@ -94,7 +94,7 @@ class ConfigurationTextInputScreenState extends ConfigState {
               ),
               Row(
                 children: <Widget>[
-                  const Text('Should be enabled'),
+                  const Text('Should be enabled?'),
                   Switch(
                       value: enabled,
                       onChanged: (value) {
