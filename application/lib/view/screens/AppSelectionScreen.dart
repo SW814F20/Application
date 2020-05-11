@@ -1,13 +1,12 @@
 import 'package:application/blocs/ApplicationBloc.dart';
 import 'package:application/blocs/AuthenticationBloc.dart';
-import 'package:application/blocs/TaskBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
 import 'package:application/model/Output.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
+import 'package:application/view/screens/DashboardScreen.dart';
 import 'package:application/view/screens/NewAppScreen.dart';
-import 'package:application/view/screens/TasksScreen.dart';
 import 'package:application/view/widgets/ConfirmDIalog.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +77,7 @@ class AppSelectionScreen extends BaseScreen {
         padding: const EdgeInsets.all(8),
         child: Container(
           child: GestureDetector(
-            onTap: () => {Routes.push(contextObject.getOutput(), TaskScreen(application, TaskBloc(application)))},
+            onTap: () => {Routes.push(contextObject.getOutput(), DashboardScreen(application))},
             child: Center(
               child: Container(
                 height: appContainerSize(),
