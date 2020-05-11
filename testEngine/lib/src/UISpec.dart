@@ -22,9 +22,13 @@ class UISpec extends CanGenerate {
     }
 
     var elements = <UIElement>{};
-    for(var element in dataElements){
-      elements.add(UIElement.fromJson(element));
+
+    if((dataElements is Iterable)) {
+      for(var element in dataElements){
+        elements.add(UIElement.fromJson(element));
+      }
     }
+
 
     return UISpec(id: data['id'], name: data['name'], elements: elements.toList());
   }
