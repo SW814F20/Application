@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:application/elements/ButtonElement.dart';
 import 'package:application/elements/TextElement.dart';
 import 'package:application/model/EditorScreenElement.dart';
-import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,11 +13,6 @@ class MockElement extends EditorScreenElement{
 
   @override
   String display() {
-    throw UnimplementedError();
-  }
-
-  @override
-  List<Widget> getSettingsWidgets() {
     throw UnimplementedError();
   }
 
@@ -75,41 +69,6 @@ void main() {
       expect(el.name, isNull);
       expect(el is ButtonElement, isTrue);
       expect(el.position, 0);
-    });
-
-    test('Should be able to retrieve a settingsWidget', (){
-      final el = EditorScreenElement.create('Text', 0);
-
-      expect(el.getSettingsWidgets() is List<Widget>, isTrue);
-    });
-
-    test('Should be able to build the nameInputField', (){
-      final el = EditorScreenElement.create('Text', 0);
-
-      final RoundedTextField nameField = el.nameWidget();
-
-      expect(nameField.hintText, 'Widget Name');
-    });
-
-    test('Should be able to build a saveButton-widget with onPressed-function', (){
-      final Function onClick = () => { print('Hello world') };
-      final el = EditorScreenElement.create('Text', 0);
-
-      final RaisedButton saveBtn = el.saveSettingsWidget(onClick);
-      final Text saveBtnChild = saveBtn.child;
-      expect(saveBtn.onPressed, onClick);
-      expect(saveBtn.child is Text, isTrue);
-      expect(saveBtnChild.data, 'Save information');
-    });
-
-    test('Should invoke onSave, when calling saveSettings', (){
-      final el = MockElement();
-      final cb = (MockElement el) {
-        el.isCalled = true;
-      };
-      el.onSave = cb;
-      el.saveSettings();
-      expectLater(el.isCalled, isTrue);
     });
   });
 

@@ -1,38 +1,21 @@
 import 'package:application/elements/ButtonElement.dart';
 import 'package:application/elements/TextElement.dart';
-import 'package:application/view/widgets/RoundedTextField.dart';
+import 'package:application/elements/TextInputElement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 enum elementType { Text, Button }
 
 abstract class EditorScreenElement {
-  EditorScreenElement({this.name, this.position});
+  EditorScreenElement({this.name, this.position, this.type});
 
   String name;
+  String type;
   int position;
-  Function onSave;
 
   String display();
   String toJson();
-  List<Widget> getSettingsWidgets();
   Widget render();
-
-  Widget nameWidget() => RoundedTextField(
-      'WidgetKeyField',
-      'Widget Name',
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-  );
-
-  Widget saveSettingsWidget(Function onPressed) => RaisedButton(
-      onPressed: onPressed,
-      child: const Text('Save information'));
-
-  void saveSettings(){
-    if(onSave != null){
-      onSave(this);
-    }
-  }
 
   static EditorScreenElement create(String type, int position) {
     type = _validateType(type);
@@ -57,6 +40,9 @@ abstract class EditorScreenElement {
         break;
       case 'Button':
         return ButtonElement.fromJson(name, position, json);
+        break;
+      case 'TextInput':
+        return TextInputElement.fromJson(name, position, json);
         break;
       default:
         throw ArgumentError(

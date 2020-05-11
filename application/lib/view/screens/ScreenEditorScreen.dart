@@ -6,22 +6,25 @@ import 'package:application/model/EditorScreenElement.dart';
 import 'package:application/model/Screen.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
+import 'package:application/view/screens/configurationScreen.dart';
 import 'package:application/view/widgets/NotifyDIalog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ScreenEditorScreen extends BaseScreen {
-  ScreenEditorScreen(this.screen);
+  ScreenEditorScreen(this.screen) {
+    oldScreenContent.addAll(screen.screenContent);
+  }
 
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
-  final StreamController<EditorScreenElement> selectedElement =
-      StreamController<EditorScreenElement>.broadcast();
 
   final Screen screen;
 
   List<EditorScreenElement> get screenContent => screen.screenContent;
 
-  final List<String> widgets = ['Text', 'Button'];
+  final List<EditorScreenElement> oldScreenContent = [];
+
+  final List<String> widgets = ['Text', 'Button', 'TextInput'];
 
   double widgetListWidth() => isTablet() ? 200 : 110;
   double screenContentHeight() => getScreenHeight() / 2.2;
@@ -36,7 +39,6 @@ class ScreenEditorScreen extends BaseScreen {
             child: Column(
               children: <Widget>[
                 createScreenElements(),
-                createWidgetConfigurationView()
               ],
             ),
           ),
@@ -82,76 +84,42 @@ class ScreenEditorScreen extends BaseScreen {
     );
   }
 
-  SizedBox createScreenElements() {
-    return SizedBox(
-      height: screenContentHeight(),
-      child: StreamBuilder<List<EditorScreenElement>>(
-          stream: screenBloc.screensStream.stream,
-          initialData: screenContent,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<EditorScreenElement>> snapshot) {
-            final List<Widget> content = [];
-            for (var widget in snapshot.data) {
-              content.add(createScreenWidget(widget));
-              content.add(
-                const SizedBox(
-                  height: 16,
-                ),
-              );
-            }
-            return Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Column(children: content),
+  Widget createScreenElements() {
+    return StreamBuilder<List<EditorScreenElement>>(
+        stream: screenBloc.editorScreenStream.stream,
+        initialData: screenContent,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<EditorScreenElement>> snapshot) {
+          final List<Widget> content = [];
+          for (var widget in snapshot.data) {
+            content.add(createScreenWidget(widget));
+            content.add(
+              const SizedBox(
+                height: 16,
+              ),
             );
-          }),
-    );
+          }
+          return Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Column(children: content),
+          );
+        });
   }
 
   Widget createScreenWidget(EditorScreenElement element) {
     return GestureDetector(
       child: Text(element.display()),
-      onTap: () {
-        selectedElement.sink.add(element);
-      },
+      onTap: () => Routes.push(
+          contextObject.getOutput(),
+          ConfigurationScreen(
+            element: element,
+          )),
     );
   }
 
   void addElementToScreenStream(String type) {
     screenContent.add(EditorScreenElement.create(type, screenContent.length));
-    screenBloc.screensStream.sink.add(screenContent);
-  }
-
-  Expanded createWidgetConfigurationView() {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(color: Colors.red),
-        child: StreamBuilder<EditorScreenElement>(
-            stream: selectedElement.stream,
-            builder: (context, snapshot) {
-              return snapshot.data == null
-                  ? Column()
-                  : createWidgetConfigurationLayout(snapshot.data);
-            }),
-      ),
-    );
-  }
-
-  Widget createWidgetConfigurationLayout(EditorScreenElement element) {
-    element.onSave = updateElementToScreenStream;
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Text('You have selected: ' + element.display()),
-          ... element.getSettingsWidgets(),
-        ],
-      ),
-    );
-  }
-
-  void updateElementToScreenStream(EditorScreenElement element) {
-    screenContent[element.position] = element;
-    screenBloc.screensStream.sink.add(screenContent);
+    screenBloc.editorScreenStream.sink.add(screenContent);
   }
 
   @override
@@ -164,7 +132,10 @@ class ScreenEditorScreen extends BaseScreen {
         ],
         leading: IconButton(
           icon: FaIcon(FontAwesomeIcons.arrowLeft),
-          onPressed: () => Routes.pop(contextObject.getOutput()),
+          onPressed: () {
+            screen.screenContent = oldScreenContent;
+            Routes.pop(contextObject.getOutput());
+          },
         ));
   }
 
