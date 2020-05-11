@@ -8,9 +8,9 @@ class ConfigurationTextScreenState extends ConfigState {
 
   final TextElement element;
   final RoundedTextField widgetName =
-      RoundedTextField('textNameField', 'Text name');
+      RoundedTextField('textNameField', 'Name');
   final RoundedTextField widgetText =
-      RoundedTextField('textTextField', 'Text body');
+      RoundedTextField('textTextField', 'Body');
 
   @override
   void dispose() {

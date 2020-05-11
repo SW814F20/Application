@@ -37,7 +37,17 @@ class TextInputElement extends EditorScreenElement {
 
   @override
   String toJson() {
-    return '{"type": "TextInput", "name": "$name", "readOnly": $readOnly, "obscureText": $obscureText, "autoCorrect": $autoCorrect, "enableSuggestions": $enableSuggestions, "enabled": ${(enabled == null) ? null : false}, "position": $position}';
+    return '''
+    {
+    "type": "TextInput",
+    "name": "$name",
+    "readOnly": $readOnly,
+    "obscureText": $obscureText,
+    "autoCorrect": $autoCorrect,
+    "enableSuggestions": $enableSuggestions,
+    "enabled": ${(enabled == null) ? null : false},
+    "position": $position
+    }''';
   }
 
   @override

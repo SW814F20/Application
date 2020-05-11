@@ -23,7 +23,12 @@ class TextElement extends EditorScreenElement {
 
   @override
   String toJson() {
-    return '{"type": "Text", "name": "$name", "data": "$text", "position": $position}';
+    return '''{
+    "type": "Text",
+    "name": "$name",
+    "data": "$text",
+    "position": $position
+    }''';
   }
 
   @override

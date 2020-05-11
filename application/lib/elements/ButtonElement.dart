@@ -22,7 +22,13 @@ class ButtonElement extends EditorScreenElement {
 
   @override
   String toJson() {
-    return '{"type": "Button", "name": "$name", "text": "$text", "position": $position}';
+    return '''
+    {
+    "type": "Button",
+    "name": "$name",
+    "text": "$text",
+    "position": $position
+    }''';
   }
 
   @override

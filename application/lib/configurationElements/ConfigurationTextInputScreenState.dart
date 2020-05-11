@@ -58,7 +58,7 @@ class ConfigurationTextInputScreenState extends ConfigState {
               ),
               Row(
                 children: <Widget>[
-                  const Text('Should be obscure text'),
+                  const Text('Should text be obscured?'),
                   Switch(
                       value: obscureText,
                       onChanged: (value) {
