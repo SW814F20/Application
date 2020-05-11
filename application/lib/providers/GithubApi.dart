@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:application/model/Task.dart';
+import 'package:application/model/github/Comment.dart';
 import 'package:application/model/github/Issue.dart';
 import 'package:application/model/github/Label.dart';
 import 'package:application/providers/BaseApi.dart';
@@ -26,6 +27,24 @@ class GithubApi extends BaseApi {
         issues.add(Issue.fromJson(elem));
       }
       return issues;
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      throw Exception('Failed to perform call.\nhttp status code:' + response.statusCode.toString());
+    }
+  }
+
+  Future<List<Comment>> getComments(int issueNumber) async {
+    final http.Response response = await performCall('issues/$issueNumber/comments', [], HttpMethod.GET);
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response, then parse the JSON.
+      final dynamic json = jsonDecode(
+        response.body,
+      );
+      final List<Comment> comments = <Comment>[];
+      for (var elem in json) {
+        comments.add(Comment.fromJson(elem));
+      }
+      return comments;
     } else {
       // If the server did not return a 200 OK response, then throw an exception.
       throw Exception('Failed to perform call.\nhttp status code:' + response.statusCode.toString());
