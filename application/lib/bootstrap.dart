@@ -1,5 +1,6 @@
 import 'package:application/blocs/ApplicationBloc.dart';
 import 'package:application/blocs/AuthenticationBloc.dart';
+import 'package:application/blocs/NewTaskBloc.dart';
 import 'package:application/blocs/ScreenBloc.dart';
 import 'package:application/providers/Sw814Api.dart';
 import 'package:injector/injector.dart';
@@ -28,6 +29,9 @@ class Bootstrap {
 
     di.registerSingleton((Injector i) {
       return ApplicationBloc();
+    });
+    di.registerSingleton((Injector i) {
+      return NewTaskBloc();
     });
   }
 }

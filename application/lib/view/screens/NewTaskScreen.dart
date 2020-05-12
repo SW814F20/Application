@@ -1,10 +1,13 @@
+import 'package:application/blocs/NewTaskBloc.dart';
 import 'package:application/blocs/TaskBloc.dart';
+import 'package:application/di.dart';
 import 'package:application/model/KeyValuePair.dart';
 import 'package:application/model/Output.dart';
 import 'package:application/model/Screen.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
+import 'package:application/view/screens/NewScreenScreen.dart';
 import 'package:application/view/screens/ScreenSelectionScreen.dart';
 import 'package:application/view/widgets/AppBar.dart';
 import 'package:application/view/widgets/ButtonWidget.dart';
@@ -15,7 +18,11 @@ import 'package:flutter/material.dart';
 
 class NewTaskScreen extends BaseScreen {
   NewTaskScreen(this.taskBloc);
+
   final TaskBloc taskBloc;
+
+  final NewTaskBloc newTaskBloc = di.getDependency<NewTaskBloc>();
+
   final RoundedTextField taskName = RoundedTextField(
     'taskNameFieldKey',
     'Task name',
@@ -37,6 +44,7 @@ class NewTaskScreen extends BaseScreen {
     labelText: 'Priority',
   );
   final Output<Screen> returnObject = Output<Screen>(Screen());
+
   @override
   Widget content() {
     return Padding(
@@ -49,13 +57,42 @@ class NewTaskScreen extends BaseScreen {
               taskName,
               description,
               taskPriority,
-              Button(
-                //text: returnObject.getOutput().id.toString(),
-                text: returnObject.getOutput().id.toString() == 'null' ? 'Select screen' : ('Selected Screen: ' + returnObject.getOutput().id.toString()),
-                onPressed: () {
-                    Routes.push(contextObject.getOutput(), ScreenSelectionScreen(taskBloc.application, returnScreen: true, returnObject: returnObject, showNewButton: true));
-                  },
+              Row(
+                children: <Widget>[
+                  Button(
+                    text: returnObject.getOutput().id == null
+                        ? 'Select screen'
+                        : ('Selected Screen: ' +
+                            returnObject.getOutput().id.toString()),
+                    onPressed: () {
+                      Routes.push(
+                          contextObject.getOutput(),
+                          ScreenSelectionScreen(taskBloc.application,
+                              returnScreen: true));
+                    },
+                  ),
+                  Button(
+                    text: returnObject.getOutput().id == null
+                        ? 'Create screen'
+                        : ('Selected Screen: ' +
+                            returnObject.getOutput().id.toString()),
+                    onPressed: () {
+                      Routes.push(contextObject.getOutput(),
+                          NewScreenScreen(returnScreen: true));
+                    },
+                  ),
+                ],
               ),
+              StreamBuilder<Screen>(
+                  stream: newTaskBloc.newScreensStream.stream,
+                  builder: (context, snapshot) {
+                    print(snapshot.data);
+                    if (snapshot.data != null) {
+                      return Text(
+                          'Selected screen: ' + snapshot.data.id.toString());
+                    }
+                    return Container();
+                  }),
             ],
           ),
         ),
@@ -65,9 +102,11 @@ class NewTaskScreen extends BaseScreen {
 
   void createTask() {
     final String taskNameString = taskName.getValue().replaceAll('\t', '');
-    final String descriptionString = description.getValue().replaceAll('\t', '');
+    final String descriptionString =
+        description.getValue().replaceAll('\t', '');
     taskBloc
-        .createTask(taskNameString, taskBloc.application.id, [0], descriptionString, taskPriority.getValue())
+        .createTask(taskNameString, taskBloc.application.id, [0],
+            descriptionString, taskPriority.getValue())
         .then((value) => {returnCall(value)});
   }
 
@@ -91,7 +130,8 @@ class NewTaskScreen extends BaseScreen {
           builder: (BuildContext context) {
             return NotifyDialog(
               title: 'Task creation failed',
-              description: 'The task was not created, because an error happened.\nPlease check your connection and try again',
+              description:
+                  'The task was not created, because an error happened.\nPlease check your connection and try again',
               key: const Key('applicationCreatedKey'),
               function: () => <void>{},
             );

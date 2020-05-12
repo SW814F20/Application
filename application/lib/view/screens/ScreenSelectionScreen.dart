@@ -1,8 +1,8 @@
+import 'package:application/blocs/NewTaskBloc.dart';
 import 'package:application/blocs/ScreenBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
 import 'package:application/model/EditorScreenElement.dart';
-import 'package:application/model/Output.dart';
 import 'package:application/model/Screen.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ScreenSelectionScreen extends BaseScreen {
-  ScreenSelectionScreen(this.application, {this.showNewButton = false, this.returnScreen = false, this.returnObject}) {
+  ScreenSelectionScreen(this.application, {this.showNewButton = false, this.returnScreen = false}) {
     screenBloc.getScreens(application.id).then((value) {
       value.forEach((element) {
         screens.add(element);
@@ -21,13 +21,12 @@ class ScreenSelectionScreen extends BaseScreen {
     });
   }
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
-
+  final NewTaskBloc newTaskBloc = di.getDependency<NewTaskBloc>();
   final Application application;
 
   final bool showNewButton;
-  final bool returnScreen;
 
-  final Output<Screen> returnObject;
+  final bool returnScreen;
 
   int screensEachRowPortrait() => isTablet() ? 5 : 3;
 
@@ -44,6 +43,7 @@ class ScreenSelectionScreen extends BaseScreen {
     contextObject.setOutput(context);
     return content();
   }
+
 
   @override
   Widget content() {
@@ -117,7 +117,7 @@ class ScreenSelectionScreen extends BaseScreen {
     return GestureDetector(
       onTap: () {
         if (returnScreen) {
-          returnObject.setOutput(screen);
+          newTaskBloc.newScreensStream.add(screen);
           Navigator.pop(contextObject.getOutput());
         } else {
           Routes.push(contextObject.getOutput(), ScreenEditorScreen(screen));

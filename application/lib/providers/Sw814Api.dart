@@ -170,15 +170,16 @@ class Sw814Api extends BaseApi {
   }
 
   /// This is used to create new Screens
-  Future<bool> createScreen(String screenName, String screenContent, String token) async {
+  Future<Screen> createScreen(String screenName, String screenContent, String token) async {
     final String data = '''
     {
       "screenName": "$screenName",
       "screenContent": "$screenContent"
-    }''';
+    }
+''';
     final http.Response response = await performCall('Screen/Create', [], HttpMethod.POST, body: data, token: token);
     if (response.statusCode == 200) {
-      return true;
+      return Screen.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response, then throw an exception.
       throw Exception('Failed to perform call');
