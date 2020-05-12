@@ -155,7 +155,7 @@ class ScreenEditorScreen extends BaseScreen {
       }
     }
     result += ']';
-    return result.replaceAll('\n', ' ');
+    return result.replaceAll('\n', ' ').replaceAll('\"', '\'');
   }
 
   Future<bool> updateScreen() async {
