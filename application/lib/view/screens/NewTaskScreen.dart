@@ -17,7 +17,9 @@ import 'package:application/view/widgets/RoundedTextField.dart';
 import 'package:flutter/material.dart';
 
 class NewTaskScreen extends BaseScreen {
-  NewTaskScreen(this.taskBloc);
+  NewTaskScreen(this.taskBloc) {
+    newTaskBloc.selectedScreen = null;
+  }
 
   final TaskBloc taskBloc;
 
@@ -47,53 +49,67 @@ class NewTaskScreen extends BaseScreen {
 
   @override
   Widget content() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: <Widget>[
-              taskName,
-              description,
-              taskPriority,
-              Row(
-                children: <Widget>[
-                  Button(
-                    text: returnObject.getOutput().id == null
-                        ? 'Select screen'
-                        : ('Selected Screen: ' +
-                            returnObject.getOutput().id.toString()),
-                    onPressed: () {
-                      Routes.push(
-                          contextObject.getOutput(),
-                          ScreenSelectionScreen(taskBloc.application,
-                              returnScreen: true));
-                    },
-                  ),
-                  Button(
-                    text: returnObject.getOutput().id == null
-                        ? 'Create screen'
-                        : ('Selected Screen: ' +
-                            returnObject.getOutput().id.toString()),
-                    onPressed: () {
-                      Routes.push(contextObject.getOutput(),
-                          NewScreenScreen(returnScreen: true));
-                    },
-                  ),
-                ],
-              ),
-              StreamBuilder<Screen>(
-                  stream: newTaskBloc.newScreensStream.stream,
-                  builder: (context, snapshot) {
-                    print(snapshot.data);
-                    if (snapshot.data != null) {
-                      return Text(
-                          'Selected screen: ' + snapshot.data.id.toString());
-                    }
-                    return Container();
-                  }),
-            ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: <Widget>[
+                taskName,
+                description,
+                taskPriority,
+                Row(
+                  children: <Widget>[
+                    Button(
+                      text: returnObject.getOutput().id == null
+                          ? 'Select screen'
+                          : ('Selected Screen: ' +
+                              returnObject.getOutput().id.toString()),
+                      onPressed: () {
+                        Routes.push(
+                            contextObject.getOutput(),
+                            ScreenSelectionScreen(taskBloc.application,
+                                returnScreen: true));
+                      },
+                    ),
+                    Button(
+                      text: returnObject.getOutput().id == null
+                          ? 'Create screen'
+                          : ('Selected Screen: ' +
+                              returnObject.getOutput().id.toString()),
+                      onPressed: () {
+                        Routes.push(contextObject.getOutput(),
+                            NewScreenScreen(returnScreen: true));
+                      },
+                    ),
+                  ],
+                ),
+                StreamBuilder<Screen>(
+                    stream: newTaskBloc.newScreensStream.stream,
+                    builder: (context, snapshot) {
+                      print(snapshot.data);
+                      if (snapshot.data != null) {
+                        newTaskBloc.selectedScreen = snapshot.data;
+                        return Column(children: [
+                          Text('Selected screen: ' + snapshot.data.id.toString()),
+                          Button(
+                            isEnabled: true,
+                            text: 'Create Task',
+                            onPressed: createTask,
+                          )
+                        ]);
+                      } else {
+                        return Button(
+                          isEnabled: false,
+                          text: 'Create Task',
+                          onPressed: createTask,
+                        );
+                      }
+                    }),
+              ],
+            ),
           ),
         ),
       ),
@@ -102,10 +118,14 @@ class NewTaskScreen extends BaseScreen {
 
   void createTask() {
     final String taskNameString = taskName.getValue().replaceAll('\t', '');
+    final List<int> screens = <int>[];
+
+    screens.add(newTaskBloc.selectedScreen.id);
+
     final String descriptionString =
         description.getValue().replaceAll('\t', '');
     taskBloc
-        .createTask(taskNameString, taskBloc.application.id, [0],
+        .createTask(taskNameString, taskBloc.application.id, screens,
             descriptionString, taskPriority.getValue())
         .then((value) => {returnCall(value)});
   }

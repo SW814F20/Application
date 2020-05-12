@@ -68,7 +68,7 @@ class ScreenSelectionScreen extends BaseScreen {
                   stream: screenBloc.screensStream.stream,
                   initialData: screens,
                   builder: (context, snapshot) {
-                    print(snapshot.data);
+                    //print(snapshot.data);
                     return getScreenRows();
                   }),
             ),
@@ -85,7 +85,7 @@ class ScreenSelectionScreen extends BaseScreen {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(createScreen(screens[0], i + 1));
+        rows[rowCount].add(createScreen(screens[i], i + 1));
       }
     } else if (isInPortraitMode()) {
       int rowCount = 0;
@@ -94,7 +94,7 @@ class ScreenSelectionScreen extends BaseScreen {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(createScreen(screens[0], i + 1));
+        rows[rowCount].add(createScreen(screens[i], i + 1));
       }
     }
     final List<Widget> outputRows = <Widget>[];
