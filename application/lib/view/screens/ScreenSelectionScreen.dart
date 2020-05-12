@@ -2,6 +2,7 @@ import 'package:application/blocs/ScreenBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
 import 'package:application/model/EditorScreenElement.dart';
+import 'package:application/model/Output.dart';
 import 'package:application/model/Screen.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ScreenSelectionScreen extends BaseScreen {
-  ScreenSelectionScreen(this.application) {
+  ScreenSelectionScreen(this.application, {this.showNewButton = false, this.returnScreen = false, this.returnObject}) {
     screenBloc.getScreens(application.id).then((value) {
       value.forEach((element) {
         screens.add(element);
@@ -22,6 +23,11 @@ class ScreenSelectionScreen extends BaseScreen {
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
 
   final Application application;
+
+  final bool showNewButton;
+  final bool returnScreen;
+
+  final Output<Screen> returnObject;
 
   int screensEachRowPortrait() => isTablet() ? 5 : 3;
 
@@ -50,7 +56,7 @@ class ScreenSelectionScreen extends BaseScreen {
             onPressed: () => Routes.pop(contextObject.getOutput()),
           ),
           actions: <Widget>[
-            createNewScreenButton(),
+            showNewButton ? createNewScreenButton() : Container(),
           ],
         ),
         body: Container(
@@ -110,7 +116,12 @@ class ScreenSelectionScreen extends BaseScreen {
   Widget createScreen(Screen screen, int position) {
     return GestureDetector(
       onTap: () {
-        Routes.push(contextObject.getOutput(), ScreenEditorScreen(screen));
+        if (returnScreen) {
+          returnObject.setOutput(screen);
+          Navigator.pop(contextObject.getOutput());
+        } else {
+          Routes.push(contextObject.getOutput(), ScreenEditorScreen(screen));
+        }
       },
       child: Container(
           margin: const EdgeInsets.all(10.0),

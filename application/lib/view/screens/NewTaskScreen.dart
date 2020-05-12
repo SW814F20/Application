@@ -1,8 +1,11 @@
 import 'package:application/blocs/TaskBloc.dart';
 import 'package:application/model/KeyValuePair.dart';
+import 'package:application/model/Output.dart';
+import 'package:application/model/Screen.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
+import 'package:application/view/screens/ScreenSelectionScreen.dart';
 import 'package:application/view/widgets/AppBar.dart';
 import 'package:application/view/widgets/ButtonWidget.dart';
 import 'package:application/view/widgets/NotifyDIalog.dart';
@@ -33,7 +36,7 @@ class NewTaskScreen extends BaseScreen {
     label: true,
     labelText: 'Priority',
   );
-
+  final Output<Screen> returnObject = Output<Screen>(Screen());
   @override
   Widget content() {
     return Padding(
@@ -47,8 +50,11 @@ class NewTaskScreen extends BaseScreen {
               description,
               taskPriority,
               Button(
-                text: 'Create Task',
-                onPressed: createTask,
+                //text: returnObject.getOutput().id.toString(),
+                text: returnObject.getOutput().id.toString() == 'null' ? 'Select screen' : ('Selected Screen: ' + returnObject.getOutput().id.toString()),
+                onPressed: () {
+                    Routes.push(contextObject.getOutput(), ScreenSelectionScreen(taskBloc.application, returnScreen: true, returnObject: returnObject, showNewButton: true));
+                  },
               ),
             ],
           ),
