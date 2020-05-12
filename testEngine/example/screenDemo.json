@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "name": "Login-Page",
+  "elements": [
+    {"type": "Text", "name": "LoginText", "data": "Login"},
+    {"type": "TextInput", "name":"Username", "readOnly": false, "obscureText":  false, "autoCorrect":  true, "enableSuggestions": true, "enabled": null},
+    {"type": "TextInput", "name":"Password", "readOnly": false, "obscureText":  true, "autoCorrect":  true, "enableSuggestions": true, "enabled": null},
+    {"type": "Button", "name":"LoginBTN", "text":"Login", "isEnabled": true},
+    {"type": "Button", "name":"registerBtn", "text":"Register", "isEnabled": false}
+  ]
+}
