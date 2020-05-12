@@ -49,7 +49,6 @@ class DashboardScreen extends BaseScreen {
             children: <Widget>[
               getOption('Show screens', ScreenSelectionScreen(selectedApplication), Colors.green , 'SC'),
               getOption('Show tasks', TaskScreen(selectedApplication, TaskBloc(selectedApplication)), Colors.blue, 'TA'),
-              getOption('Show current release', PlaceholderScreen(), Colors.purple, 'TA'),
             ],
           )),
         ),
