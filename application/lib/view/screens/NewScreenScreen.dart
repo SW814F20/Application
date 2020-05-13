@@ -1,5 +1,7 @@
+import 'package:application/blocs/NewTaskBloc.dart';
 import 'package:application/blocs/ScreenBloc.dart';
 import 'package:application/di.dart';
+import 'package:application/model/Screen.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/widgets/AppBar.dart';
@@ -10,7 +12,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NewScreenScreen extends BaseScreen {
+  NewScreenScreen({this.returnScreen = false});
+
+  final bool returnScreen;
+
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
+  final NewTaskBloc newTaskBloc = di.getDependency<NewTaskBloc>();
 
   final RoundedTextField screenName = RoundedTextField(
     'screenNameField',
@@ -47,10 +54,10 @@ class NewScreenScreen extends BaseScreen {
 
   Future<bool> createScreen() async {
     final String screenName = this.screenName.getValue();
-    final bool success = await screenBloc.createScreen(screenName, '{}');
+    final Screen createdScreen = await screenBloc.createScreen(screenName, '[]');
 
     if (screenName.trim().length > 1) {
-      if (success) {
+      if (createdScreen != null) {
         // Screen created successful
         showDialog<Center>(
             barrierDismissible: false,
@@ -60,7 +67,12 @@ class NewScreenScreen extends BaseScreen {
                 title: 'Success',
                 description: 'Screen created successfuly!',
                 key: const Key('ScreenCreated'),
-                function: () => {Routes.pop(contextObject.getOutput())},
+                function: () {
+                  if (returnScreen) {
+                    newTaskBloc.newScreensStream.add(createdScreen);
+                  }
+                  Routes.pop(contextObject.getOutput());
+                },
               );
             });
         return true;

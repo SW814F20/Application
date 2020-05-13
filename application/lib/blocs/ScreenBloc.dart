@@ -13,7 +13,7 @@ class ScreenBloc extends ApiBloc {
     return api.getScreens(id, authenticationBloc.getLoggedInUser().token);
   }
 
-  Future<bool> createScreen(String screenName, String screenContent) async {
+  Future<Screen> createScreen(String screenName, String screenContent) async {
     return api.createScreen(
         screenName, screenContent, authenticationBloc.getLoggedInUser().token);
   }

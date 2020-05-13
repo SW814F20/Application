@@ -1,3 +1,4 @@
+import 'package:application/blocs/NewTaskBloc.dart';
 import 'package:application/blocs/ScreenBloc.dart';
 import 'package:application/di.dart';
 import 'package:application/model/Application.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ScreenSelectionScreen extends BaseScreen {
-  ScreenSelectionScreen(this.application) {
+  ScreenSelectionScreen(this.application, {this.showNewButton = false, this.returnScreen = false}) {
     screenBloc.getScreens(application.id).then((value) {
       value.forEach((element) {
         screens.add(element);
@@ -20,8 +21,12 @@ class ScreenSelectionScreen extends BaseScreen {
     });
   }
   final ScreenBloc screenBloc = di.getDependency<ScreenBloc>();
-
+  final NewTaskBloc newTaskBloc = di.getDependency<NewTaskBloc>();
   final Application application;
+
+  final bool showNewButton;
+
+  final bool returnScreen;
 
   int screensEachRowPortrait() => isTablet() ? 5 : 3;
 
@@ -39,6 +44,7 @@ class ScreenSelectionScreen extends BaseScreen {
     return content();
   }
 
+
   @override
   Widget content() {
     return Scaffold(
@@ -50,7 +56,7 @@ class ScreenSelectionScreen extends BaseScreen {
             onPressed: () => Routes.pop(contextObject.getOutput()),
           ),
           actions: <Widget>[
-            createNewScreenButton(),
+            showNewButton ? createNewScreenButton() : Container(),
           ],
         ),
         body: Container(
@@ -62,7 +68,6 @@ class ScreenSelectionScreen extends BaseScreen {
                   stream: screenBloc.screensStream.stream,
                   initialData: screens,
                   builder: (context, snapshot) {
-                    print(snapshot.data);
                     return getScreenRows();
                   }),
             ),
@@ -79,7 +84,7 @@ class ScreenSelectionScreen extends BaseScreen {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(createScreen(screens[0], i + 1));
+        rows[rowCount].add(createScreen(screens[i], i + 1));
       }
     } else if (isInPortraitMode()) {
       int rowCount = 0;
@@ -88,7 +93,7 @@ class ScreenSelectionScreen extends BaseScreen {
           rows.add(<Widget>[]);
           rowCount += 1;
         }
-        rows[rowCount].add(createScreen(screens[0], i + 1));
+        rows[rowCount].add(createScreen(screens[i], i + 1));
       }
     }
     final List<Widget> outputRows = <Widget>[];
@@ -110,7 +115,12 @@ class ScreenSelectionScreen extends BaseScreen {
   Widget createScreen(Screen screen, int position) {
     return GestureDetector(
       onTap: () {
-        Routes.push(contextObject.getOutput(), ScreenEditorScreen(screen));
+        if (returnScreen) {
+          newTaskBloc.newScreensStream.add(screen);
+          Navigator.pop(contextObject.getOutput());
+        } else {
+          Routes.push(contextObject.getOutput(), ScreenEditorScreen(screen));
+        }
       },
       child: Container(
           margin: const EdgeInsets.all(10.0),
