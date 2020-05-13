@@ -125,7 +125,7 @@ class AppSelectionScreen extends BaseScreen {
       return strings[0].substring(0, 2).toUpperCase() + '-' + appId.toString();
     } else if (strings.length >= 2) {
       return strings[0].substring(0, 1).toUpperCase() +
-          strings[1].substring(0, 1).toUpperCase()+ '-' + appId.toString();;
+          strings[1].substring(0, 1).toUpperCase()+ '-' + appId.toString();
     } else {
       return '-';
     }

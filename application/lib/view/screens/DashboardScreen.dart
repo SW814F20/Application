@@ -2,7 +2,6 @@ import 'package:application/blocs/TaskBloc.dart';
 import 'package:application/model/Application.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
-import 'package:application/view/screens/PlaceholderScreen.dart';
 import 'package:application/view/screens/ScreenSelectionScreen.dart';
 import 'package:application/view/screens/TasksScreen.dart';
 import 'package:auto_size_text/auto_size_text.dart';
