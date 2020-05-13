@@ -68,7 +68,6 @@ class ScreenSelectionScreen extends BaseScreen {
                   stream: screenBloc.screensStream.stream,
                   initialData: screens,
                   builder: (context, snapshot) {
-                    //print(snapshot.data);
                     return getScreenRows();
                   }),
             ),
