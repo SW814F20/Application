@@ -14,10 +14,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppSelectionScreen extends BaseScreen {
   AppSelectionScreen(this.apps);
-  final AuthenticationBloc authenticationBloc = di.getDependency<AuthenticationBloc>();
+
+  final AuthenticationBloc authenticationBloc =
+      di.getDependency<AuthenticationBloc>();
   final ApplicationBloc applicationBloc = di.getDependency<ApplicationBloc>();
 
   final Output<List<Application>> apps;
+
   int appsEachRowPortrait() => isTablet() ? 3 : 3;
 
   int appsEachRowLandscape() => isTablet() ? 5 : 6;
@@ -25,8 +28,10 @@ class AppSelectionScreen extends BaseScreen {
   double appCircleSize() => appContainerSize() * 0.8;
 
   double appContainerSize() => isInLandscapemode()
-      ? (getScreenWidth() * 0.9 - (8 * appsEachRowLandscape())) / appsEachRowLandscape()
-      : (getScreenWidth() * 0.9 - (8 * appsEachRowPortrait())) / appsEachRowPortrait();
+      ? (getScreenWidth() * 0.9 - (8 * appsEachRowLandscape())) /
+          appsEachRowLandscape()
+      : (getScreenWidth() * 0.9 - (8 * appsEachRowPortrait())) /
+          appsEachRowPortrait();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,8 @@ class AppSelectionScreen extends BaseScreen {
       actions: <Widget>[
         IconButton(
           icon: FaIcon(FontAwesomeIcons.plus),
-          onPressed: () => {Routes.push(contextObject.getOutput(), NewAppScreen())},
+          onPressed: () =>
+              {Routes.push(contextObject.getOutput(), NewAppScreen())},
         ),
       ],
     );
@@ -77,7 +83,10 @@ class AppSelectionScreen extends BaseScreen {
         padding: const EdgeInsets.all(8),
         child: Container(
           child: GestureDetector(
-            onTap: () => {Routes.push(contextObject.getOutput(), DashboardScreen(application))},
+            onTap: () => {
+              Routes.push(
+                  contextObject.getOutput(), DashboardScreen(application))
+            },
             child: Center(
               child: Container(
                 height: appContainerSize(),
@@ -90,7 +99,7 @@ class AppSelectionScreen extends BaseScreen {
                       child: CircleAvatar(
                         backgroundColor: application.color,
                         child: Text(
-                          getAvatarString(application.appName),
+                          getAvatarString(application.appName, application.id),
                           style: const TextStyle(fontSize: 46),
                         ),
                       ),
@@ -110,12 +119,13 @@ class AppSelectionScreen extends BaseScreen {
     );
   }
 
-  String getAvatarString(String appName) {
+  String getAvatarString(String appName, int appId) {
     final List<String> strings = appName.split(' ');
     if (strings.length == 1) {
-      return strings[0].substring(0, 2).toUpperCase();
+      return strings[0].substring(0, 2).toUpperCase() + '-' + appId.toString();
     } else if (strings.length >= 2) {
-      return strings[0].substring(0, 1).toUpperCase() + strings[1].substring(0, 1).toUpperCase();
+      return strings[0].substring(0, 1).toUpperCase() +
+          strings[1].substring(0, 1).toUpperCase()+ '-' + appId.toString();;
     } else {
       return '-';
     }

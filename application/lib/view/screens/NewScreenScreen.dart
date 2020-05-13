@@ -54,7 +54,7 @@ class NewScreenScreen extends BaseScreen {
 
   Future<bool> createScreen() async {
     final String screenName = this.screenName.getValue();
-    final Screen createdScreen = await screenBloc.createScreen(screenName, '{}');
+    final Screen createdScreen = await screenBloc.createScreen(screenName, '[]');
 
     if (screenName.trim().length > 1) {
       if (createdScreen != null) {
