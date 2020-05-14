@@ -3,8 +3,8 @@ import 'package:application/model/Application.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
+import 'package:application/view/screens/DetailTaskScreen.dart';
 import 'package:application/view/screens/NewTaskScreen.dart';
-import 'package:application/view/screens/PlaceholderScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -78,7 +78,7 @@ class TaskScreen extends BaseScreen {
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(border: Border.all()),
       child: GestureDetector(
-        onTap: () => Routes.push(contextObject.getOutput(), PlaceholderScreen()),
+        onTap: () => Routes.push(contextObject.getOutput(), DetailTaskScreen(task, app)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
           child: Row(
