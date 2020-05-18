@@ -1,5 +1,6 @@
 import 'package:application/blocs/TaskBloc.dart';
 import 'package:application/model/Application.dart';
+import 'package:application/model/EditorScreenElement.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
@@ -35,6 +36,9 @@ class TaskScreen extends BaseScreen {
     return StreamBuilder<List<Task>>(
       stream: taskBloc.tasks,
       builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
+        if(snapshot.data == null){
+          return const Text('Fetching tasks...');
+        }
         final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.notStarted));
         final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.workInProgress));
         final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.done));
@@ -74,11 +78,32 @@ class TaskScreen extends BaseScreen {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
   Widget convertTaskToWidget(Task task) {
+    if(task.taskStatus != Status.notStarted){
+      return _createTaskWidgetItem(task);
+    } else {
+      return Dismissible(
+        key: Key('task-'+task.id.toString()),
+        background: Container(
+          color: Colors.red,
+          padding: const EdgeInsets.all(8),
+          child: FaIcon(FontAwesomeIcons.trash, color: Colors.white,),
+          alignment: AlignmentDirectional.centerEnd,
+        ),
+        direction: DismissDirection.endToStart,
+        child: _createTaskWidgetItem(task),
+        onDismissed: (_) {
+          taskBloc.deleteTask(task);
+        },
+      );
+    }
+  }
+
+  Widget _createTaskWidgetItem(Task task){
     return Container(
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(border: Border.all()),
       child: GestureDetector(
-        onTap: () => Routes.push(contextObject.getOutput(), DetailTaskScreen(task, app)),
+        onTap: () => Routes.push(contextObject.getOutput(), DetailTaskScreen(task, taskBloc, app)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
           child: Row(
@@ -120,6 +145,9 @@ class TaskScreen extends BaseScreen {
     return StreamBuilder(
       stream: taskBloc.tasks,
       builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
+        if(snapshot.data == null){
+          return const Text('Fetching tasks...');
+        }
         final List<Widget> notStartedWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.notStarted));
         final List<Widget> workInProgressWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.workInProgress));
         final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.done));

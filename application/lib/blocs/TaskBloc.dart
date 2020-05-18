@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:application/blocs/ApiBloc.dart';
 import 'package:application/model/Application.dart';
 import 'package:application/model/Task.dart';
+import 'package:application/model/github/Issue.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TaskBloc extends ApiBloc {
@@ -42,6 +43,23 @@ class TaskBloc extends ApiBloc {
         task.setGithubInformation(issues.where((issue) => issue.url == task.issueUrl).first);
       });
       _tasks.add(taskList);
+    });
+  }
+
+  void deleteTask(Task task) {
+
+    if(task.taskStatus != Status.notStarted){
+      throw Exception('You can only delete task that has not been started yet !');
+    }
+
+    Issue githubIssue = task.githubIssue;
+    githubIssue.state = 'closed';
+
+    api.deleteTask(task.id.toString(), authenticationBloc.getLoggedInUser().token).then((_){
+      application.githubApi.updateIssue(githubIssue).then((_) {
+        taskList.remove(task);
+        _tasks.add(taskList);
+      });
     });
   }
 }
