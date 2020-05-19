@@ -5,6 +5,7 @@ import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
 import 'package:application/view/screens/DetailTaskScreen.dart';
 import 'package:application/view/screens/NewTaskScreen.dart';
+import 'package:application/view/widgets/ConfirmDIalog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -43,6 +44,7 @@ class TaskScreen extends BaseScreen {
         final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.done));
         return TabBarView(children: [
           Container(
+            padding: const EdgeInsets.all(20),
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
               child: Column(
@@ -52,6 +54,7 @@ class TaskScreen extends BaseScreen {
             color: const Color.fromRGBO(200, 200, 200, 1),
           ),
           Container(
+            padding: const EdgeInsets.all(20),
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
               child: Column(
@@ -61,6 +64,7 @@ class TaskScreen extends BaseScreen {
             color: Colors.white,
           ),
           Container(
+            padding: const EdgeInsets.all(20),
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
               child: Column(
@@ -89,9 +93,22 @@ class TaskScreen extends BaseScreen {
           alignment: AlignmentDirectional.centerEnd,
         ),
         direction: DismissDirection.endToStart,
+        dismissThresholds: const { DismissDirection.endToStart: 0.4 },
         child: _createTaskWidgetItem(task),
-        onDismissed: (_) {
-          taskBloc.deleteTask(task);
+        confirmDismiss: (_) async {
+          return await showDialog(
+              barrierDismissible: false,
+              context: contextObject.getOutput(),
+              builder: (BuildContext context) {
+                return ConfirmDialog(
+                  title: 'Delete',
+                  description: 'Are you sure you want to delete?',
+                  functionAbort: () => <void>{},
+                  functionConfirm: () => { taskBloc.deleteTask(task) }
+                );
+              });
+
+
         },
       );
     }
@@ -100,7 +117,8 @@ class TaskScreen extends BaseScreen {
   Widget _createTaskWidgetItem(Task task){
     return Container(
       alignment: Alignment.topCenter,
-      decoration: BoxDecoration(border: Border.all()),
+      margin: const EdgeInsets.only(top: 10),
+      decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 1))),
       child: GestureDetector(
         onTap: () => Routes.push(contextObject.getOutput(), DetailTaskScreen(task, taskBloc, app)),
         child: Padding(
