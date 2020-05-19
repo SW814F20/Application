@@ -57,4 +57,34 @@ class Issue {
     }
     return;
   }
+
+  String toJson() {
+    String labelString = '';
+    String assigneesString = '';
+
+    labels.forEach((element) {
+      labelString += '"'+element.name+'",';
+    });
+
+    assignees.forEach((element) {
+      assigneesString += '"'+element.login+'",';
+    });
+
+    if(assigneesString.isNotEmpty){
+      assigneesString = assigneesString.substring(0, assigneesString.length-1);
+    }
+
+    if(labelString.isNotEmpty){
+      labelString = labelString.substring(0, labelString.length-1);
+    }
+
+    return '''{
+    "title": "$title",
+    "body": "$body",
+    "assignees": [$assigneesString],
+    "milestone": $milestone,
+    "state": "$state",
+    "labels": [$labelString]
+  }''';
+  }
 }

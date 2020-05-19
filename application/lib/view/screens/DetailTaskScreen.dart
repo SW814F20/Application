@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:application/blocs/TaskBloc.dart';
 import 'package:application/model/Application.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/model/github/Comment.dart';
@@ -9,13 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetailTaskScreen extends BaseScreen {
-  DetailTaskScreen(this.task, this.application) {
+  DetailTaskScreen(this.task, this.taskBloc, this.application) {
     application.githubApi
         .getComments(task.githubIssue.number)
         .then((comments) => commentsStream.sink.add(comments));
   }
 
   final Task task;
+  final TaskBloc taskBloc;
   final Application application;
 
   final StreamController<List<Comment>> commentsStream =
@@ -125,6 +127,23 @@ class DetailTaskScreen extends BaseScreen {
         leading: IconButton(
           icon: FaIcon(FontAwesomeIcons.arrowLeft),
           onPressed: () => Routes.pop(contextObject.getOutput()),
-        ));
+        ),
+        actions: <Widget>[
+          _showDeleteIconIfAllowed(),
+        ],);
+  }
+
+  Widget _showDeleteIconIfAllowed() {
+    if(task.taskStatus == Status.notStarted){
+      return IconButton(
+        icon: FaIcon(FontAwesomeIcons.trash),
+        onPressed: () {
+          taskBloc.deleteTask(task);
+          Routes.pop(contextObject.getOutput());
+        },
+      );
+    }
+
+    return Container();
   }
 }

@@ -232,20 +232,19 @@ class Sw814Api extends BaseApi {
     if (response.statusCode == 200) {
       return response.body;
     } else {
+      print(response.body);
       // If the server did not return a 200 OK response, then throw an exception.
       throw Exception('Failed to perform call');
     }
+  }
 
-    // TODO(tricky12321): This needs to be implemented, https://github.com/SW814F20/Application/issues/34
-    // ignore: dead_code, unused_element
-    Future<bool> deleteTask(String id, String token) async {
-      final http.Response response = await performCall('Task/$id', [], HttpMethod.DELETE, token: token);
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        // If the server did not return a 200 OK response, then throw an exception.
-        throw Exception('Failed to perform call');
-      }
+  Future<bool> deleteTask(String id, String token) async {
+    final http.Response response = await performCall('Task/$id', [], HttpMethod.DELETE, token: token);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      throw Exception('Failed to perform call');
     }
   }
 }

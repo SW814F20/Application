@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:application/model/Task.dart' as task;
 import 'package:http/http.dart' as http;
 
-enum HttpMethod { GET, POST, PUT, DELETE }
+enum HttpMethod { GET, POST, PUT, DELETE, PATCH }
 
 class BaseApi {
   BaseApi(this._url);
@@ -44,6 +44,9 @@ class BaseApi {
         break;
       case HttpMethod.DELETE:
         response = await http.delete(url, headers: headers);
+        break;
+      case HttpMethod.PATCH:
+        response = await http.patch(url, body: body, headers: headers);
         break;
     }
     return response;

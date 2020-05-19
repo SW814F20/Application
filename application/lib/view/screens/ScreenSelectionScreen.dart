@@ -130,7 +130,7 @@ class ScreenSelectionScreen extends BaseScreen {
                 margin: const EdgeInsets.only(bottom: 10.0),
                 child: Text('Screen ' + position.toString(),
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                        const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               ),
               Container(
                   decoration: BoxDecoration(
