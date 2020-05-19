@@ -96,7 +96,7 @@ class TaskScreen extends BaseScreen {
         dismissThresholds: const { DismissDirection.endToStart: 0.4 },
         child: _createTaskWidgetItem(task),
         confirmDismiss: (_) async {
-          return await showDialog(
+          return showDialog(
               barrierDismissible: false,
               context: contextObject.getOutput(),
               builder: (BuildContext context) {
