@@ -52,7 +52,7 @@ class TaskBloc extends ApiBloc {
       throw Exception('You can only delete task that has not been started yet !');
     }
 
-    Issue githubIssue = task.githubIssue;
+    final Issue githubIssue = task.githubIssue;
     githubIssue.state = 'closed';
 
     api.deleteTask(task.id.toString(), authenticationBloc.getLoggedInUser().token).then((_){

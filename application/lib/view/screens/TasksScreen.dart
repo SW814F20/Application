@@ -1,6 +1,5 @@
 import 'package:application/blocs/TaskBloc.dart';
 import 'package:application/model/Application.dart';
-import 'package:application/model/EditorScreenElement.dart';
 import 'package:application/model/Task.dart';
 import 'package:application/routes.dart';
 import 'package:application/view/screens/BaseScreen.dart';
