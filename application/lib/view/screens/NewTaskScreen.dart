@@ -125,7 +125,7 @@ class NewTaskScreen extends BaseScreen {
     final String descriptionString =
         description.getValue().replaceAll('\t', '');
 
-    if (descriptionString != '' && taskNameString != '') {
+    if (descriptionString.trim() != '' && taskNameString.trim() != '') {
       taskBloc
           .createTask(taskNameString, taskBloc.application.id, screens,
           descriptionString, taskPriority.getValue())
