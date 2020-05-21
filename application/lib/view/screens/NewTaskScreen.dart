@@ -124,10 +124,27 @@ class NewTaskScreen extends BaseScreen {
 
     final String descriptionString =
         description.getValue().replaceAll('\t', '');
-    taskBloc
-        .createTask(taskNameString, taskBloc.application.id, screens,
-            descriptionString, taskPriority.getValue())
-        .then((value) => {returnCall(value)});
+
+    if (descriptionString.trim() != '' && taskNameString.trim() != '') {
+      taskBloc
+          .createTask(taskNameString, taskBloc.application.id, screens,
+          descriptionString, taskPriority.getValue())
+          .then((value) => {returnCall(value)});
+    } else {
+      showDialog<Center>(
+          barrierDismissible: false,
+          context: contextObject.getOutput(),
+          builder: (BuildContext context) {
+            return NotifyDialog(
+              title: 'Task creation failed',
+              description:
+              '\'Task name\' and \'Task description\' cannot be empty!',
+              key: const Key('applicationCreatedKey'),
+              function: () => <void>{},
+            );
+          });
+    }
+
   }
 
   void returnCall(bool success) {
