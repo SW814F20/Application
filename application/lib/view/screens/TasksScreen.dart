@@ -44,7 +44,7 @@ class TaskScreen extends BaseScreen {
         final List<Widget> doneWidgets = convertTasksToWidgets(getTasks(snapshot.data, Status.done));
         return TabBarView(children: [
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.only(right: 20),
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
               child: Column(
@@ -54,7 +54,7 @@ class TaskScreen extends BaseScreen {
             color: const Color.fromRGBO(200, 200, 200, 1),
           ),
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.only(right: 20),
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
               child: Column(
@@ -64,7 +64,7 @@ class TaskScreen extends BaseScreen {
             color: Colors.white,
           ),
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.only(right: 20),
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
               child: Column(
