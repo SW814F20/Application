@@ -63,6 +63,19 @@ class GithubApi extends BaseApi {
     }
   }
 
+  Future<Issue> updateIssue(Issue issue) async {
+    final http.Response response = await performCallToUrl(issue.url, [], HttpMethod.PATCH, body: issue.toJson(), oauthToken: oauthToken());
+    if (response.statusCode == 200) {
+      return Issue.fromJson(jsonDecode(
+        response.body,
+      ));
+    }else {
+      print(response.body);
+      print(issue.toJson());
+      throw Exception('Failed to perform call.\nhttp status code:' + response.statusCode.toString());
+    }
+  }
+
   Future<Issue> createIssue(String title, String body, Priority priority) async {
     final String statusString = BaseApi.convertStatusToString(Status.notStarted);
     final String priotiryString = BaseApi.convertPriorityToString(priority);
