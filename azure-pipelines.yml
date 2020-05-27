@@ -1,0 +1,33 @@
+# Android
+# Build your Android project with Gradle.
+# Add steps that test, sign, and distribute the APK, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/android
+variables:
+  projectDirectory: .
+pool: flutter
+steps:
+      - task: Bash@3
+        displayName: 'Linter'
+        inputs:
+          workingDirectory: $(projectDirectory)/application
+          targetType: inline
+          script: /root/flutter/bin/flutter analyze
+      - task: Bash@3
+        displayName: 'Flutter Build'
+        inputs:
+          workingDirectory: $(projectDirectory)/application
+          targetType: inline
+          script: /root/flutter/bin/flutter build apk
+      #- task: Bash@3
+      #  displayName: 'Flutter Test'
+      #  inputs:
+      #    targetType: inline
+      #    script: $(projectDirectory)/root/flutter/bin/flutter test
+      - task: CopyFiles@2
+        inputs:
+          contents: '**/*.apk'
+          targetFolder: '$(build.artifactStagingDirectory)'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          artifactName: Android

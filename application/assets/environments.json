@@ -1,0 +1,7 @@
+{
+  "SERVER_HOST": "https://sw814f20.lundsgaardkammersgaard.dk/",
+  "DEBUG": true,
+  "USERNAME": "Graatand",
+  "PASSWORD": "password",
+  "MOCK": false
+}
