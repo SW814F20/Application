@@ -27,7 +27,7 @@ class Sw814Api{
   Future<List<Map<String, dynamic>>> getScreens(int appId, String token) async {
     final response = await _performCall('App/GetScreens/$appId', [], HttpMethod.GET, token: token);
     if (response.statusCode == 200) {
-      List<dynamic> res = jsonDecode(response.body);
+      final dynamic res = jsonDecode(response.body);
 
       if(res.isEmpty){
         throw Exception('Was not able to fetch screens, either none exists yet or the id of the app is not correct.');
@@ -35,7 +35,7 @@ class Sw814Api{
 
       final list = List<Map<String, dynamic>>();
       for(var item in res){
-        item['screenContent'] = jsonDecode(item['screenContent']);
+        item['screenContent'] = jsonDecode(item['screenContent'].toString().replaceAll('\'', '\"'));
         list.add(item);
       }
       return list;
