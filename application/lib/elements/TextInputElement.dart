@@ -45,7 +45,7 @@ class TextInputElement extends EditorScreenElement {
     "obscureText": $obscureText,
     "autoCorrect": $autoCorrect,
     "enableSuggestions": $enableSuggestions,
-    "enabled": ${(enabled == null) ? null : false},
+    "enabled": ${(enabled == null || enabled == true) ? null : false},
     "position": $position
     }''';
   }
